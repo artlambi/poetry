@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poetry Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+            padding: 60px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #2a2a2a;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .page-header .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent);
+            margin: 0 auto;
+        }
+
+        .poem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 280px);
+            gap: 160px min(180px, calc((100vw - 480px - 840px) / 2));
+            margin: 0 240px;
+            justify-content: center;
+        }
+
+        @media (max-width: 1320px) {
+            .poem-grid {
+                gap: 160px 80px;
+                margin: 0 120px;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .poem-grid {
+                grid-template-columns: repeat(2, 280px);
+                gap: 120px 80px;
+                margin: 0 80px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .poem-grid {
+                grid-template-columns: 280px;
+                gap: 80px;
+                margin: 0 20px;
+            }
+        }
+
+        .poem-card {
+            background: #fff;
+            padding: 35px 40px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.2s ease;
+            position: relative;
+            width: 280px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .poem-card-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .poem-card-wrapper:hover {
+            transform: scale(1.111);
+            z-index: 10;
+        }
+
+        .poem-card-wrapper:hover .poem-card {
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.02), 0 15px 30px rgba(0, 0, 0, 0.01);
+        }
+
+        .poem-card-wrapper .hover-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #2a2a2a;
+            margin-top: 40px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            text-align: center;
+        }
+
+        .poem-card-wrapper:hover .hover-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .poem-card .number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            color: rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .poem-card .title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #2a2a2a;
+            margin-bottom: 6px;
+            letter-spacing: 0.01em;
+        }
+
+        .poem-card .author {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(0, 0, 0, 0.4);
+            margin-bottom: 25px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .poem-card .preview {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.5);
+            line-height: 1.8;
+            flex: 1;
+            overflow: hidden;
+            white-space: pre-line;
+        }
+
+        /* Fullscreen Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .modal-paper {
+            position: fixed;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 35px 40px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            opacity: 1;
+        }
+
+        .modal-paper .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+
+        .modal-paper .number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            color: rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-paper .title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #2a2a2a;
+            margin-bottom: 6px;
+            letter-spacing: 0.01em;
+            transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        margin-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-paper .author {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: rgba(0, 0, 0, 0.4);
+            margin-bottom: 25px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: margin-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-paper .poem-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.5);
+            line-height: 1.8;
+            white-space: pre-line;
+            transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        line-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-paper.fullscreen {
+            padding: 80px 120px;
+            justify-content: flex-start;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-paper.fullscreen .card-content {
+            overflow: visible;
+        }
+
+        .modal-paper.fullscreen .title {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .modal-paper.fullscreen .author {
+            font-size: 0.8rem;
+            margin-bottom: 40px;
+        }
+
+        .modal-paper.fullscreen .poem-text {
+            font-size: 1.25rem;
+            color: rgba(0, 0, 0, 0.65);
+            line-height: 2;
+            padding-bottom: 200px;
+        }
+
+        .modal-content {
+            display: none;
+        }
+
+        .modal-close {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease, opacity 0.3s ease 0.3s;
+            opacity: 0;
+            z-index: 1001;
+        }
+
+        .modal-overlay.active .modal-close {
+            opacity: 1;
+        }
+
+        .modal-close:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .modal-close svg {
+            width: 20px;
+            height: 20px;
+            stroke: rgba(0,0,0,0.4);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .modal-nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.3s;
+            z-index: 1001;
+        }
+
+        .modal-overlay.active .modal-nav {
+            opacity: 1;
+        }
+
+        .modal-nav button {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-nav button:hover {
+            border-color: rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .modal-nav button svg {
+            width: 16px;
+            height: 16px;
+            stroke: rgba(0,0,0,0.5);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .modal-number {
+            display: none;
+        }
+
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: #2a2a2a;
+            margin-bottom: 8px;
+            letter-spacing: 0.01em;
+        }
+
+        .modal-author {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: rgba(0, 0, 0, 0.4);
+            margin-bottom: 40px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .modal-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.65);
+            line-height: 2;
+            white-space: pre-line;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 15px;
+            }
+
+            .poem-card {
+                padding: 28px 24px;
+            }
+
+            .poem-card .title {
+                font-size: 1.3rem;
+            }
+
+            .modal-content {
+                padding: 50px 35px;
+            }
+
+            .modal-title {
+                font-size: 1.6rem;
+            }
+
+            .modal-text {
+                font-size: 1.1rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <h1>Poetry</h1>
+        <div class="divider"></div>
+    </header>
+
+    <div class="poem-grid" id="grid">
+        <!-- Poems will be inserted here -->
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-paper" id="modalPaper">
+            <div class="card-content">
+                <div class="number" id="modalNumber"></div>
+                <h2 class="title" id="modalTitle"></h2>
+                <p class="author" id="modalAuthor"></p>
+                <div class="poem-text" id="modalText"></div>
+            </div>
+        </div>
+        <button class="modal-close" id="closeBtn" aria-label="Close">
+            <svg viewBox="0 0 24 24">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="modal-nav">
+            <button id="prevBtn" aria-label="Previous poem">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                </svg>
+            </button>
+            <button id="nextBtn" aria-label="Next poem">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const poems = [
+            {
+                title: "The Road Not Taken",
+                author: "Robert Frost",
+                text: `Two roads diverged in a yellow wood,
+And sorry I could not travel both
+And be one traveler, long I stood
+And looked down one as far as I could
+To where it bent in the undergrowth;
+
+Then took the other, as just as fair,
+And having perhaps the better claim,
+Because it was grassy and wanted wear;
+Though as for that the passing there
+Had worn them really about the same,
+
+And both that morning equally lay
+In leaves no step had trodden black.
+Oh, I kept the first for another day!
+Yet knowing how way leads on to way,
+I doubted if I should ever come back.
+
+I shall be telling this with a sigh
+Somewhere ages and ages hence:
+Two roads diverged in a wood, and I—
+I took the one less traveled by,
+And that has made all the difference.`
+            },
+            {
+                title: "Hope is the thing with feathers",
+                author: "Emily Dickinson",
+                text: `Hope is the thing with feathers
+That perches in the soul,
+And sings the tune without the words,
+And never stops at all,
+
+And sweetest in the gale is heard;
+And sore must be the storm
+That could abash the little bird
+That kept so many warm.
+
+I've heard it in the chillest land,
+And on the strangest sea;
+Yet, never, in extremity,
+It asked a crumb of me.`
+            },
+            {
+                title: "Invictus",
+                author: "William Ernest Henley",
+                text: `Out of the night that covers me,
+Black as the pit from pole to pole,
+I thank whatever gods may be
+For my unconquerable soul.
+
+In the fell clutch of circumstance
+I have not winced nor cried aloud.
+Under the bludgeonings of chance
+My head is bloody, but unbowed.
+
+Beyond this place of wrath and tears
+Looms but the Horror of the shade,
+And yet the menace of the years
+Finds and shall find me unafraid.
+
+It matters not how strait the gate,
+How charged with punishments the scroll,
+I am the master of my fate,
+I am the captain of my soul.`
+            },
+            {
+                title: "Sonnet 18",
+                author: "William Shakespeare",
+                text: `Shall I compare thee to a summer's day?
+Thou art more lovely and more temperate.
+Rough winds do shake the darling buds of May,
+And summer's lease hath all too short a date.
+
+Sometime too hot the eye of heaven shines,
+And often is his gold complexion dimmed;
+And every fair from fair sometime declines,
+By chance, or nature's changing course, untrimmed;
+
+But thy eternal summer shall not fade,
+Nor lose possession of that fair thou ow'st;
+Nor shall death brag thou wand'rest in his shade,
+When in eternal lines to Time thou grow'st.
+
+So long as men can breathe or eyes can see,
+So long lives this, and this gives life to thee.`
+            },
+            {
+                title: "Do Not Go Gentle",
+                author: "Dylan Thomas",
+                text: `Do not go gentle into that good night,
+Old age should burn and rave at close of day;
+Rage, rage against the dying of the light.
+
+Though wise men at their end know dark is right,
+Because their words had forked no lightning they
+Do not go gentle into that good night.
+
+Good men, the last wave by, crying how bright
+Their frail deeds might have danced in a green bay,
+Rage, rage against the dying of the light.
+
+Wild men who caught and sang the sun in flight,
+And learn, too late, they grieved it on its way,
+Do not go gentle into that good night.
+
+Grave men, near death, who see with blinding sight
+Blind eyes could blaze like meteors and be gay,
+Rage, rage against the dying of the light.
+
+And you, my father, there on the sad height,
+Curse, bless, me now with your fierce tears, I pray.
+Do not go gentle into that good night.
+Rage, rage against the dying of the light.`
+            },
+            {
+                title: "Still I Rise",
+                author: "Maya Angelou",
+                text: `You may write me down in history
+With your bitter, twisted lies,
+You may trod me in the very dirt
+But still, like dust, I'll rise.
+
+Does my sassiness upset you?
+Why are you beset with gloom?
+'Cause I walk like I've got oil wells
+Pumping in my living room.
+
+Just like moons and like suns,
+With the certainty of tides,
+Just like hopes springing high,
+Still I'll rise.
+
+Did you want to see me broken?
+Bowed head and lowered eyes?
+Shoulders falling down like teardrops,
+Weakened by my soulful cries?
+
+You may shoot me with your words,
+You may cut me with your eyes,
+You may kill me with your hatefulness,
+But still, like air, I'll rise.`
+            }
+        ];
+
+        let currentIndex = 0;
+        let clickedCard = null;
+        const grid = document.getElementById('grid');
+        const modal = document.getElementById('modal');
+        const modalPaper = document.getElementById('modalPaper');
+
+        // Create grid cards
+        poems.forEach((poem, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'poem-card-wrapper';
+            
+            const card = document.createElement('div');
+            card.className = 'poem-card';
+            card.dataset.index = index;
+            card.innerHTML = `
+                <div class="number">${String(index + 1).padStart(2, '0')}</div>
+                <h2 class="title">${poem.title}</h2>
+                <p class="author">${poem.author}</p>
+                <p class="preview">${poem.text.split('\n').slice(0, 6).join('\n')}</p>
+            `;
+            card.addEventListener('click', (e) => openModal(index, card));
+            
+            const hoverTitle = document.createElement('div');
+            hoverTitle.className = 'hover-title';
+            hoverTitle.textContent = poem.title;
+            
+            wrapper.appendChild(card);
+            wrapper.appendChild(hoverTitle);
+            grid.appendChild(wrapper);
+        });
+
+        function openModal(index, card) {
+            currentIndex = index;
+            clickedCard = card;
+            
+            const poem = poems[currentIndex];
+            
+            // Set full content immediately (overflow hidden will clip it)
+            document.getElementById('modalNumber').textContent = String(index + 1).padStart(2, '0');
+            document.getElementById('modalTitle').textContent = poem.title;
+            document.getElementById('modalAuthor').textContent = poem.author;
+            document.getElementById('modalText').textContent = poem.text;
+            
+            // Hide card
+            card.style.opacity = '0';
+            
+            // Get the clicked card's position
+            const rect = card.getBoundingClientRect();
+            
+            // Set initial position to match the card
+            modalPaper.style.transition = 'none';
+            modalPaper.classList.remove('fullscreen');
+            modalPaper.style.top = rect.top + 'px';
+            modalPaper.style.left = rect.left + 'px';
+            modalPaper.style.width = rect.width + 'px';
+            modalPaper.style.height = rect.height + 'px';
+            
+            // Force reflow
+            modalPaper.offsetHeight;
+            
+            // Show modal and animate to fullscreen
+            modal.classList.add('active');
+            
+            // Animate to fullscreen
+            modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            modalPaper.style.top = '0';
+            modalPaper.style.left = '0';
+            modalPaper.style.width = '100vw';
+            modalPaper.style.height = '100vh';
+            modalPaper.classList.add('fullscreen');
+            
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            if (clickedCard) {
+                const rect = clickedCard.getBoundingClientRect();
+                
+                // Hide controls
+                document.querySelector('.modal-close').style.opacity = '0';
+                document.querySelector('.modal-nav').style.opacity = '0';
+                
+                // Animate back to card position
+                modalPaper.classList.remove('fullscreen');
+                modalPaper.style.top = rect.top + 'px';
+                modalPaper.style.left = rect.left + 'px';
+                modalPaper.style.width = rect.width + 'px';
+                modalPaper.style.height = rect.height + 'px';
+                
+                // Fade out modal paper and show card at the end
+                setTimeout(() => {
+                    modalPaper.style.opacity = '0';
+                    clickedCard.style.opacity = '1';
+                }, 400);
+                
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                    modalPaper.style.opacity = '1';
+                    document.body.style.overflow = '';
+                    // Reset controls
+                    document.querySelector('.modal-close').style.opacity = '';
+                    document.querySelector('.modal-nav').style.opacity = '';
+                }, 550);
+            } else {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function updateModalContent() {
+            const poem = poems[currentIndex];
+            document.getElementById('modalNumber').textContent = String(currentIndex + 1).padStart(2, '0');
+            document.getElementById('modalTitle').textContent = poem.title;
+            document.getElementById('modalAuthor').textContent = poem.author;
+            document.getElementById('modalText').textContent = poem.text;
+        }
+
+        function nextPoem() {
+            currentIndex = (currentIndex + 1) % poems.length;
+            clickedCard = document.querySelector(`.poem-card[data-index="${currentIndex}"]`);
+            updateModalContent();
+        }
+
+        function prevPoem() {
+            currentIndex = (currentIndex - 1 + poems.length) % poems.length;
+            clickedCard = document.querySelector(`.poem-card[data-index="${currentIndex}"]`);
+            updateModalContent();
+        }
+
+        document.getElementById('closeBtn').addEventListener('click', closeModal);
+        document.getElementById('nextBtn').addEventListener('click', nextPoem);
+        document.getElementById('prevBtn').addEventListener('click', prevPoem);
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!modal.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') closeModal();
+            if (e.key === 'ArrowRight') nextPoem();
+            if (e.key === 'ArrowLeft') prevPoem();
+        });
+    </script>
+</body>
+</html>
