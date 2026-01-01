@@ -86,6 +86,18 @@
             text-align: center;
         }
 
+        .poem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+        }
+
         .poem-card-wrapper {
             position: relative;
             display: flex;
@@ -129,7 +141,7 @@
 
         .poem-card .title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.25rem;
+            font-size: 17px;
             font-weight: 500;
             color: #2a2a2a;
             margin-bottom: 6px;
@@ -148,7 +160,7 @@
 
         .poem-card .preview {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05rem;
+            font-size: 15px;
             font-style: italic;
             color: rgba(0, 0, 0, 0.5);
             line-height: 1.8;
@@ -193,6 +205,18 @@
             opacity: 1;
         }
 
+        .modal-paper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+        }
+
         .modal-paper .card-content {
             display: flex;
             flex-direction: column;
@@ -212,7 +236,7 @@
 
         .modal-paper .title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.25rem;
+            font-size: 17px;
             font-weight: 500;
             color: #2a2a2a;
             margin-bottom: 6px;
@@ -235,7 +259,7 @@
 
         .modal-paper .poem-text {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05rem;
+            font-size: 15px;
             font-style: italic;
             color: rgba(0, 0, 0, 0.5);
             line-height: 1.8;
@@ -271,10 +295,6 @@
             color: rgba(0, 0, 0, 0.65);
             line-height: 2;
             padding-bottom: 200px;
-        }
-
-        .modal-content {
-            display: none;
         }
 
         .modal-close {
@@ -352,37 +372,8 @@
             stroke-width: 2;
         }
 
-        .modal-number {
+        .modal-content {
             display: none;
-        }
-
-        .modal-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 500;
-            color: #2a2a2a;
-            margin-bottom: 8px;
-            letter-spacing: 0.01em;
-        }
-
-        .modal-author {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 300;
-            color: rgba(0, 0, 0, 0.4);
-            margin-bottom: 40px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .modal-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.25rem;
-            font-weight: 400;
-            font-style: italic;
-            color: rgba(0, 0, 0, 0.65);
-            line-height: 2;
-            white-space: pre-line;
         }
 
         @media (max-width: 768px) {
@@ -398,15 +389,15 @@
                 font-size: 1.3rem;
             }
 
-            .modal-content {
-                padding: 50px 35px;
+            .modal-paper.fullscreen {
+                padding: 60px 40px;
             }
 
-            .modal-title {
+            .modal-paper.fullscreen .title {
                 font-size: 1.6rem;
             }
 
-            .modal-text {
+            .modal-paper.fullscreen .poem-text {
                 font-size: 1.1rem;
             }
 
