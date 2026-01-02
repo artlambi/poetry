@@ -54,14 +54,14 @@
         .poem-grid {
             display: grid;
             grid-template-columns: repeat(3, 280px);
-            gap: 160px min(180px, calc((100vw - 480px - 840px) / 2));
+            gap: 80px min(180px, calc((100vw - 480px - 840px) / 2));
             margin: 0 240px;
             justify-content: center;
         }
 
         @media (max-width: 1320px) {
             .poem-grid {
-                gap: 160px 80px;
+                gap: 80px 80px;
                 margin: 0 120px;
             }
         }
@@ -69,7 +69,7 @@
         @media (max-width: 1100px) {
             .poem-grid {
                 grid-template-columns: repeat(2, 280px);
-                gap: 120px 80px;
+                gap: 80px 80px;
                 margin: 0 80px;
             }
         }
@@ -94,7 +94,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01);
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0);
         }
 
         .poem-card-wrapper {
@@ -105,13 +105,20 @@
             transition: transform 0.3s ease;
         }
 
-        .poem-card-wrapper:hover {
-            transform: scale(1.111);
-            z-index: 10;
-        }
+        @media (hover: hover) and (pointer: fine) {
+            .poem-card-wrapper:hover {
+                transform: scale(1.111);
+                z-index: 10;
+            }
 
-        .poem-card-wrapper:hover .poem-card {
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.02), 0 15px 30px rgba(0, 0, 0, 0.01);
+            .poem-card-wrapper:hover .poem-card {
+                box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01), 0 30px 60px rgba(0, 0, 0, 0.02), 0 15px 30px rgba(0, 0, 0, 0.01);
+            }
+
+            .poem-card-wrapper:hover .hover-title {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .poem-card-wrapper .hover-title {
@@ -124,11 +131,6 @@
             transform: translateY(-10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
             text-align: center;
-        }
-
-        .poem-card-wrapper:hover .hover-title {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .poem-card .number {
@@ -259,9 +261,8 @@
         .modal-paper.fullscreen {
             padding: 80px 120px;
             justify-content: flex-start;
-            overflow-y: scroll;
+            overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            overscroll-behavior: auto;
         }
 
         .modal-paper.fullscreen .card-content {
@@ -282,7 +283,7 @@
             font-size: 1.25rem;
             color: rgba(0, 0, 0, 0.65);
             line-height: 2;
-            padding-bottom: 200px;
+            padding-bottom: 88px;
         }
 
         .modal-close {
@@ -315,47 +316,6 @@
             width: 20px;
             height: 20px;
             stroke: rgba(0,0,0,0.4);
-            fill: none;
-            stroke-width: 2;
-        }
-
-        .modal-nav {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            gap: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease 0.3s;
-            z-index: 1001;
-        }
-
-        .modal-overlay.active .modal-nav {
-            opacity: 1;
-        }
-
-        .modal-nav button {
-            width: 36px;
-            height: 36px;
-            border: 1px solid rgba(0,0,0,0.1);
-            background: #fff;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .modal-nav button:hover {
-            border-color: rgba(0,0,0,0.2);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .modal-nav button svg {
-            width: 16px;
-            height: 16px;
-            stroke: rgba(0,0,0,0.5);
             fill: none;
             stroke-width: 2;
         }
@@ -420,18 +380,6 @@
                 <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
         </button>
-        <div class="modal-nav">
-            <button id="prevBtn" aria-label="Previous poem">
-                <svg viewBox="0 0 24 24">
-                    <polyline points="15,18 9,12 15,6"></polyline>
-                </svg>
-            </button>
-            <button id="nextBtn" aria-label="Next poem">
-                <svg viewBox="0 0 24 24">
-                    <polyline points="9,18 15,12 9,6"></polyline>
-                </svg>
-            </button>
-        </div>
     </div>
 
     <script>
@@ -585,9 +533,32 @@ But still, like air, I'll rise.`
 
         let currentIndex = 0;
         let clickedCard = null;
+        let savedScrollPosition = 0;
         const grid = document.getElementById('grid');
         const modal = document.getElementById('modal');
         const modalPaper = document.getElementById('modalPaper');
+
+        // Deep linking helper functions
+        function getSlug(title) {
+            return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        }
+
+        function updateHash() {
+            try {
+                const slug = getSlug(poems[currentIndex].title);
+                history.replaceState(null, '', '#' + slug);
+            } catch (e) {
+                // Ignore errors in iframe/restricted contexts
+            }
+        }
+
+        function clearHash() {
+            try {
+                history.replaceState(null, '', window.location.pathname);
+            } catch (e) {
+                // Ignore errors in iframe/restricted contexts
+            }
+        }
 
         // Create grid cards
         poems.forEach((poem, index) => {
@@ -603,7 +574,10 @@ But still, like air, I'll rise.`
                 <p class="author">${poem.author}</p>
                 <p class="preview">${poem.text.split('\n').slice(0, 6).join('\n')}</p>
             `;
-            card.addEventListener('click', (e) => openModal(index, card));
+            card.addEventListener('click', function() {
+                openModal(index, card);
+                updateHash();
+            });
             
             const hoverTitle = document.createElement('div');
             hoverTitle.className = 'hover-title';
@@ -625,6 +599,9 @@ But still, like air, I'll rise.`
             document.getElementById('modalTitle').textContent = poem.title;
             document.getElementById('modalAuthor').textContent = poem.author;
             document.getElementById('modalText').textContent = poem.text;
+            
+            // Save scroll position before hiding body
+            savedScrollPosition = window.scrollY;
             
             // Hide card
             card.style.opacity = '0';
@@ -654,16 +631,22 @@ But still, like air, I'll rise.`
             modalPaper.style.height = '100vh';
             modalPaper.classList.add('fullscreen');
             
+            // Lock body scroll with saved position
+            document.body.style.top = `-${savedScrollPosition}px`;
             document.body.classList.add('modal-open');
         }
 
         function closeModal() {
             if (clickedCard) {
+                // Restore scroll position before getting rect
+                document.body.classList.remove('modal-open');
+                document.body.style.top = '';
+                window.scrollTo(0, savedScrollPosition);
+                
                 const rect = clickedCard.getBoundingClientRect();
                 
                 // Hide controls
                 document.querySelector('.modal-close').style.opacity = '0';
-                document.querySelector('.modal-nav').style.opacity = '0';
                 
                 // Animate back to card position
                 modalPaper.classList.remove('fullscreen');
@@ -681,52 +664,55 @@ But still, like air, I'll rise.`
                 setTimeout(() => {
                     modal.classList.remove('active');
                     modalPaper.style.opacity = '1';
-                    document.body.classList.remove('modal-open');
                     // Reset controls
                     document.querySelector('.modal-close').style.opacity = '';
-                    document.querySelector('.modal-nav').style.opacity = '';
                 }, 550);
             } else {
                 modal.classList.remove('active');
                 document.body.classList.remove('modal-open');
+                document.body.style.top = '';
+                window.scrollTo(0, savedScrollPosition);
             }
         }
 
-        function updateModalContent() {
-            const poem = poems[currentIndex];
-            document.getElementById('modalNumber').textContent = String(currentIndex + 1).padStart(2, '0');
-            document.getElementById('modalTitle').textContent = poem.title;
-            document.getElementById('modalAuthor').textContent = poem.author;
-            document.getElementById('modalText').textContent = poem.text;
-        }
-
-        function nextPoem() {
-            currentIndex = (currentIndex + 1) % poems.length;
-            clickedCard = document.querySelector(`.poem-card[data-index="${currentIndex}"]`);
-            updateModalContent();
-        }
-
-        function prevPoem() {
-            currentIndex = (currentIndex - 1 + poems.length) % poems.length;
-            clickedCard = document.querySelector(`.poem-card[data-index="${currentIndex}"]`);
-            updateModalContent();
-        }
-
-        document.getElementById('closeBtn').addEventListener('click', closeModal);
-        document.getElementById('nextBtn').addEventListener('click', nextPoem);
-        document.getElementById('prevBtn').addEventListener('click', prevPoem);
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            closeModal();
+            setTimeout(clearHash, 550);
+        });
 
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
+            if (e.target === modal) {
+                closeModal();
+                setTimeout(clearHash, 550);
+            }
         });
 
         document.addEventListener('keydown', (e) => {
             if (!modal.classList.contains('active')) return;
             
-            if (e.key === 'Escape') closeModal();
-            if (e.key === 'ArrowRight') nextPoem();
-            if (e.key === 'ArrowLeft') prevPoem();
+            if (e.key === 'Escape') {
+                closeModal();
+                setTimeout(clearHash, 550);
+            }
         });
+
+        function openPoemByHash() {
+            const hash = window.location.hash.slice(1);
+            if (hash) {
+                const index = poems.findIndex(p => getSlug(p.title) === hash);
+                if (index !== -1) {
+                    const card = document.querySelector(`.poem-card[data-index="${index}"]`);
+                    if (card) {
+                        openModal(index, card);
+                        updateHash();
+                    }
+                }
+            }
+        }
+
+        // Check for hash on page load
+        window.addEventListener('load', openPoemByHash);
+        window.addEventListener('hashchange', openPoemByHash);
     </script>
 </body>
 </html>
