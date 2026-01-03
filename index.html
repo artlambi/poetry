@@ -4,12 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poetry Collection</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #f5f5f5;
+            --paper-color: #fff;
+            --text-primary: #2a2a2a;
+            --text-secondary: rgba(0, 0, 0, 0.4);
+            --text-muted: rgba(0, 0, 0, 0.2);
+            --text-body: rgba(0, 0, 0, 0.5);
+            --text-body-full: rgba(0, 0, 0, 0.65);
+            --divider-color: rgba(0, 0, 0, 0.3);
+            --shadow-spread: rgba(0, 0, 0, 0);
+            --shadow-spread-hover: rgba(0, 0, 0, 0.01);
+            --shadow-soft: rgba(0, 0, 0, 0.02);
+            --shadow-softer: rgba(0, 0, 0, 0.01);
+            --close-btn-hover: rgba(0, 0, 0, 0.05);
+            --close-btn-stroke: rgba(0, 0, 0, 0.4);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #1a1a1a;
+                --paper-color: #2a2a2a;
+                --text-primary: #e5e5e5;
+                --text-secondary: rgba(255, 255, 255, 0.5);
+                --text-muted: rgba(255, 255, 255, 0.2);
+                --text-body: rgba(255, 255, 255, 0.6);
+                --text-body-full: rgba(255, 255, 255, 0.75);
+                --divider-color: rgba(255, 255, 255, 0.2);
+                --shadow-spread: rgba(0, 0, 0, 0);
+                --shadow-spread-hover: rgba(255, 255, 255, 0.05);
+                --shadow-soft: rgba(0, 0, 0, 0.3);
+                --shadow-softer: rgba(0, 0, 0, 0.2);
+                --close-btn-hover: rgba(255, 255, 255, 0.1);
+                --close-btn-stroke: rgba(255, 255, 255, 0.5);
+            }
         }
 
         html, body {
@@ -18,7 +54,7 @@
 
         body {
             min-height: 100vh;
-            background: #f5f5f5;
+            background: var(--bg-color);
             font-family: 'Inter', sans-serif;
             padding: 60px 20px;
         }
@@ -31,24 +67,27 @@
 
         .page-header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 104px;
+        }
+
+        .page-header .subtitle {
+            font-family: 'EB Garamond', serif;
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 40px;
+            color: #000000;
+            margin-bottom: 8px;
         }
 
         .page-header h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            font-weight: 400;
-            color: #2a2a2a;
-            letter-spacing: 0.2em;
+            font-family: 'Afacad Flux', sans-serif;
+            font-size: 44px;
+            font-weight: 900;
+            line-height: 64px;
+            color: #000000;
             text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .page-header .divider {
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent);
-            margin: 0 auto;
+            letter-spacing: 6px;
+            margin: 0;
         }
 
         .poem-grid {
@@ -83,7 +122,7 @@
         }
 
         .poem-card {
-            background: #fff;
+            background: var(--paper-color);
             padding: 35px 40px;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.2s ease;
@@ -94,7 +133,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0);
+            box-shadow: 0 0 0 1px var(--shadow-spread);
         }
 
         .poem-card-wrapper {
@@ -112,7 +151,7 @@
             }
 
             .poem-card-wrapper:hover .poem-card {
-                box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01), 0 30px 60px rgba(0, 0, 0, 0.02), 0 15px 30px rgba(0, 0, 0, 0.01);
+                box-shadow: 0 0 0 1px var(--shadow-spread-hover), 0 30px 60px var(--shadow-soft), 0 15px 30px var(--shadow-softer);
             }
 
             .poem-card-wrapper:hover .hover-title {
@@ -125,7 +164,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.1rem;
             font-weight: 500;
-            color: #2a2a2a;
+            color: var(--text-primary);
             margin-top: 40px;
             opacity: 0;
             transform: translateY(-10px);
@@ -136,7 +175,7 @@
         .poem-card .number {
             font-family: 'Cormorant Garamond', serif;
             font-size: 0.85rem;
-            color: rgba(0,0,0,0.2);
+            color: var(--text-muted);
             margin-bottom: 20px;
         }
 
@@ -144,7 +183,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 17px;
             font-weight: 500;
-            color: #2a2a2a;
+            color: var(--text-primary);
             margin-bottom: 6px;
             letter-spacing: 0.01em;
         }
@@ -153,7 +192,7 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.75rem;
             font-weight: 300;
-            color: rgba(0, 0, 0, 0.4);
+            color: var(--text-secondary);
             margin-bottom: 25px;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -163,7 +202,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 15px;
             font-style: italic;
-            color: rgba(0, 0, 0, 0.5);
+            color: var(--text-body);
             line-height: 1.8;
             flex: 1;
             overflow: hidden;
@@ -195,7 +234,7 @@
 
         .modal-paper {
             position: fixed;
-            background: #fff;
+            background: var(--paper-color);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -218,7 +257,7 @@
         .modal-paper .number {
             font-family: 'Cormorant Garamond', serif;
             font-size: 0.85rem;
-            color: rgba(0,0,0,0.2);
+            color: var(--text-muted);
             margin-bottom: 20px;
             transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -227,7 +266,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 17px;
             font-weight: 500;
-            color: #2a2a2a;
+            color: var(--text-primary);
             margin-bottom: 6px;
             letter-spacing: 0.01em;
             transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1),
@@ -238,7 +277,7 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.75rem;
             font-weight: 300;
-            color: rgba(0, 0, 0, 0.4);
+            color: var(--text-secondary);
             margin-bottom: 25px;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -250,7 +289,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 15px;
             font-style: italic;
-            color: rgba(0, 0, 0, 0.5);
+            color: var(--text-body);
             line-height: 1.8;
             white-space: pre-line;
             transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
@@ -281,7 +320,7 @@
 
         .modal-paper.fullscreen .poem-text {
             font-size: 1.25rem;
-            color: rgba(0, 0, 0, 0.65);
+            color: var(--text-body-full);
             line-height: 2;
             padding-bottom: 88px;
         }
@@ -309,13 +348,13 @@
         }
 
         .modal-close:hover {
-            background: rgba(0,0,0,0.05);
+            background: var(--close-btn-hover);
         }
 
         .modal-close svg {
             width: 20px;
             height: 20px;
-            stroke: rgba(0,0,0,0.4);
+            stroke: var(--close-btn-stroke);
             fill: none;
             stroke-width: 2;
         }
@@ -326,6 +365,84 @@
 
         .page-footer {
             height: 120px;
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+            }
+
+            .page-header .subtitle {
+                color: #e5e5e5;
+            }
+
+            .page-header h1 {
+                color: #e5e5e5;
+            }
+
+            .poem-card {
+                background: #2a2a2a;
+                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
+            }
+
+            .poem-card .number {
+                color: rgba(255,255,255,0.2);
+            }
+
+            .poem-card .title {
+                color: #e5e5e5;
+            }
+
+            .poem-card .author {
+                color: rgba(255, 255, 255, 0.4);
+            }
+
+            .poem-card .preview {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            .poem-card-wrapper .hover-title {
+                color: #e5e5e5;
+            }
+
+            .modal-paper {
+                background: #2a2a2a;
+            }
+
+            .modal-paper .number {
+                color: rgba(255,255,255,0.2);
+            }
+
+            .modal-paper .title {
+                color: #e5e5e5;
+            }
+
+            .modal-paper .author {
+                color: rgba(255, 255, 255, 0.4);
+            }
+
+            .modal-paper .poem-text {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            .modal-paper.fullscreen .poem-text {
+                color: rgba(255, 255, 255, 0.65);
+            }
+
+            .modal-close svg {
+                stroke: rgba(255,255,255,0.4);
+            }
+
+            .modal-close:hover {
+                background: rgba(255,255,255,0.05);
+            }
+        }
+
+        @media (prefers-color-scheme: dark) and (hover: hover) and (pointer: fine) {
+            .poem-card-wrapper:hover .poem-card {
+                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 60px rgba(0, 0, 0, 0.15), 0 15px 30px rgba(0, 0, 0, 0.1);
+            }
         }
 
         @media (max-width: 768px) {
@@ -353,16 +470,21 @@
                 font-size: 1.1rem;
             }
 
+            .page-header .subtitle {
+                font-size: 24px;
+            }
+
             .page-header h1 {
-                font-size: 1.8rem;
+                font-size: 36px;
+                line-height: 1.0;
             }
         }
     </style>
 </head>
 <body>
     <header class="page-header">
-        <h1>Poetry</h1>
-        <div class="divider"></div>
+        <p class="subtitle">Les poèmes de</p>
+        <h1>Christian Lambillotte</h1>
     </header>
 
     <div class="poem-grid" id="grid">
