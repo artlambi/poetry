@@ -625,6 +625,7 @@
         <div class="modal-paper" id="modalPaper">
             <div class="card-content">
                 <h2 class="title" id="modalTitle"></h2>
+                <p class="author" id="modalAuthor"></p>
                 <div class="poem-text" id="modalText"></div>
             </div>
         </div>
@@ -824,6 +825,7 @@ But still, like air, I'll rise.`
             card.dataset.index = index;
             card.innerHTML = `
                 <h2 class="title">${poem.title}</h2>
+                <p class="author">${poem.author}</p>
                 <p class="preview">${poem.text.split('\n').slice(0, 6).join('\n')}</p>
             `;
             card.addEventListener('click', function() {
@@ -848,6 +850,7 @@ But still, like air, I'll rise.`
             
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
+            document.getElementById('modalAuthor').textContent = poem.author;
             document.getElementById('modalText').textContent = poem.text;
             
             // Save scroll position before hiding body
