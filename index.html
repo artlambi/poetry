@@ -24,7 +24,7 @@
     <!-- Preconnect to Google Fonts for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -143,7 +143,7 @@
 
         .poem-card {
             background: var(--paper-color);
-            padding: 35px 40px;
+            padding: 56px 40px 0 40px;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.2s ease;
             position: relative;
@@ -153,7 +153,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            box-shadow: 0 0 0 1px var(--shadow-spread);
+            box-shadow: 0 6px 8px -3px rgba(0,0,0,0.04);
         }
 
         .poem-card-wrapper {
@@ -181,7 +181,7 @@
         }
 
         .poem-card-wrapper .hover-title {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'EB Garamond', serif;
             font-size: 1.1rem;
             font-weight: 500;
             color: var(--text-primary);
@@ -200,12 +200,13 @@
         }
 
         .poem-card .title {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'EB Garamond', serif;
             font-size: 17px;
             font-weight: 500;
             color: var(--text-primary);
             margin-bottom: 6px;
             letter-spacing: 0.01em;
+            display: none;
         }
 
         .poem-card .author {
@@ -216,17 +217,22 @@
             margin-bottom: 25px;
             letter-spacing: 0.08em;
             text-transform: uppercase;
+            display: none;
         }
 
         .poem-card .preview {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 15px;
+            font-family: 'EB Garamond', serif;
+            font-size: 13px;
             font-style: italic;
             color: var(--text-body);
             line-height: 1.8;
             flex: 1;
             overflow: hidden;
             white-space: pre-line;
+            position: relative;
+            padding-bottom: 35px;
+            -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
         }
 
         /* Fullscreen Modal */
@@ -259,7 +265,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: 35px 40px;
+            padding: 56px 40px 0 40px;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             opacity: 1;
@@ -272,6 +278,9 @@
             width: 100%;
             max-width: 600px;
             overflow: hidden;
+            position: relative;
+            padding-top: 0;
+            transition: padding-top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .modal-paper .number {
@@ -283,38 +292,52 @@
         }
 
         .modal-paper .title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 17px;
+            font-family: 'EB Garamond', serif;
+            font-size: 2rem;
             font-weight: 500;
             color: var(--text-primary);
-            margin-bottom: 6px;
             letter-spacing: 0.01em;
-            transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                        margin-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(-20px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .modal-paper .author {
             font-family: 'Inter', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 300;
             color: var(--text-secondary);
-            margin-bottom: 25px;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            transition: margin-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                        font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(-15px);
+            position: absolute;
+            top: 48px;
+            left: 0;
+            right: 0;
+            transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .modal-paper .poem-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 15px;
+            font-family: 'EB Garamond', serif;
+            font-size: 13px;
             font-style: italic;
             color: var(--text-body);
             line-height: 1.8;
             white-space: pre-line;
+            padding-top: 0;
+            -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
             transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
                         color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                        line-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                        line-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        padding-top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .modal-paper.fullscreen {
@@ -326,16 +349,25 @@
 
         .modal-paper.fullscreen .card-content {
             overflow: visible;
+            padding-top: 100px;
         }
 
         .modal-paper.fullscreen .title {
-            font-size: 2rem;
-            margin-bottom: 8px;
+            font-family: 'Afacad Flux', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         }
 
         .modal-paper.fullscreen .author {
-            font-size: 0.8rem;
-            margin-bottom: 40px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s,
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s;
         }
 
         .modal-paper.fullscreen .poem-text {
@@ -343,6 +375,8 @@
             color: var(--text-body-full);
             line-height: 2;
             padding-bottom: 88px;
+            -webkit-mask-image: none;
+            mask-image: none;
         }
 
         .modal-close {
@@ -509,14 +543,14 @@
         }
         
         noscript .poem-article h2 {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'EB Garamond', serif;
             font-size: 1.5rem;
             margin-bottom: 1rem;
             color: var(--text-primary);
         }
         
         noscript .poem-article p {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'EB Garamond', serif;
             font-style: italic;
             color: var(--text-body);
             line-height: 1.8;
@@ -540,8 +574,8 @@
                 {
                     "@type": "CreativeWork",
                     "position": 1,
-                    "name": "The Road Not Taken",
-                    "@id": "#the-road-not-taken"
+                    "name": "Anaïs",
+                    "@id": "#anais"
                 },
                 {
                     "@type": "CreativeWork",
@@ -592,8 +626,8 @@
 
         <!-- Noscript fallback for search engines and users without JS -->
         <noscript>
-            <article class="poem-article" id="the-road-not-taken">
-                <h2>The Road Not Taken</h2>
+            <article class="poem-article" id="anais">
+                <h2>Anaïs</h2>
                 <p>Two roads diverged in a yellow wood, And sorry I could not travel both And be one traveler, long I stood And looked down one as far as I could To where it bent in the undergrowth...</p>
             </article>
             <article class="poem-article" id="hope-is-the-thing-with-feathers">
@@ -640,8 +674,8 @@
     <script>
         const poems = [
             {
-                title: "The Road Not Taken",
-                author: "Robert Frost",
+                title: "Anaïs",
+                author: "Christian Lambillotte",
                 text: `Two roads diverged in a yellow wood,
 And sorry I could not travel both
 And be one traveler, long I stood
@@ -668,7 +702,7 @@ And that has made all the difference.`
             },
             {
                 title: "Hope is the thing with feathers",
-                author: "Emily Dickinson",
+                author: "Christian Lambillotte",
                 text: `Hope is the thing with feathers
 That perches in the soul,
 And sings the tune without the words,
@@ -686,7 +720,7 @@ It asked a crumb of me.`
             },
             {
                 title: "Invictus",
-                author: "William Ernest Henley",
+                author: "Christian Lambillotte",
                 text: `Out of the night that covers me,
 Black as the pit from pole to pole,
 I thank whatever gods may be
@@ -709,7 +743,7 @@ I am the captain of my soul.`
             },
             {
                 title: "Sonnet 18",
-                author: "William Shakespeare",
+                author: "Christian Lambillotte",
                 text: `Shall I compare thee to a summer's day?
 Thou art more lovely and more temperate.
 Rough winds do shake the darling buds of May,
@@ -730,7 +764,7 @@ So long lives this, and this gives life to thee.`
             },
             {
                 title: "Do Not Go Gentle",
-                author: "Dylan Thomas",
+                author: "Christian Lambillotte",
                 text: `Do not go gentle into that good night,
 Old age should burn and rave at close of day;
 Rage, rage against the dying of the light.
@@ -758,7 +792,7 @@ Rage, rage against the dying of the light.`
             },
             {
                 title: "Still I Rise",
-                author: "Maya Angelou",
+                author: "Christian Lambillotte",
                 text: `You may write me down in history
 With your bitter, twisted lies,
 You may trod me in the very dirt
@@ -826,7 +860,7 @@ But still, like air, I'll rise.`
             card.innerHTML = `
                 <h2 class="title">${poem.title}</h2>
                 <p class="author">${poem.author}</p>
-                <p class="preview">${poem.text.split('\n').slice(0, 6).join('\n')}</p>
+                <p class="preview">${poem.text}</p>
             `;
             card.addEventListener('click', function() {
                 openModal(index, card);
@@ -897,6 +931,16 @@ But still, like air, I'll rise.`
                 window.scrollTo(0, savedScrollPosition);
                 
                 const rect = clickedCard.getBoundingClientRect();
+                const cardContent = modalPaper.querySelector('.card-content');
+                
+                // Set current padding inline so it can transition when fullscreen class is removed
+                cardContent.style.paddingTop = '100px';
+                
+                // Force reflow
+                cardContent.offsetHeight;
+                
+                // Now animate padding to 0
+                cardContent.style.paddingTop = '0';
                 
                 // Hide controls
                 document.querySelector('.modal-close').style.opacity = '0';
@@ -917,6 +961,7 @@ But still, like air, I'll rise.`
                 setTimeout(() => {
                     modal.classList.remove('active');
                     modalPaper.style.opacity = '1';
+                    cardContent.style.paddingTop = '';
                     // Reset controls
                     document.querySelector('.modal-close').style.opacity = '';
                 }, 550);
