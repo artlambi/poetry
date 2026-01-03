@@ -1,9 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poetry Collection</title>
+    <title>Les poèmes de Christian Lambillotte | Recueil de poésie</title>
+    <meta name="description" content="Découvrez la collection de poèmes de Christian Lambillotte. Une œuvre poétique unique à explorer et à partager.">
+    <meta name="keywords" content="Christian Lambillotte, poèmes, poésie, recueil, littérature, poète">
+    <meta name="author" content="Christian Lambillotte">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Les poèmes de Christian Lambillotte">
+    <meta property="og:description" content="Découvrez la collection de poèmes de Christian Lambillotte. Une œuvre poétique unique à explorer et à partager.">
+    <meta property="og:locale" content="fr_FR">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Les poèmes de Christian Lambillotte">
+    <meta name="twitter:description" content="Découvrez la collection de poèmes de Christian Lambillotte. Une œuvre poétique unique à explorer et à partager.">
+    
+    <!-- Preconnect to Google Fonts for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * {
@@ -479,7 +499,84 @@
                 line-height: 1.0;
             }
         }
+
+        /* Noscript fallback styles */
+        noscript .poem-article {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: var(--paper-color);
+        }
+        
+        noscript .poem-article h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        noscript .poem-article p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            color: var(--text-body);
+            line-height: 1.8;
+        }
     </style>
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Les poèmes de Christian Lambillotte",
+        "description": "Recueil de poèmes de Christian Lambillotte",
+        "author": {
+            "@type": "Person",
+            "name": "Christian Lambillotte"
+        },
+        "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+                {
+                    "@type": "CreativeWork",
+                    "position": 1,
+                    "name": "The Road Not Taken",
+                    "@id": "#the-road-not-taken"
+                },
+                {
+                    "@type": "CreativeWork",
+                    "position": 2,
+                    "name": "Hope is the thing with feathers",
+                    "@id": "#hope-is-the-thing-with-feathers"
+                },
+                {
+                    "@type": "CreativeWork",
+                    "position": 3,
+                    "name": "Invictus",
+                    "@id": "#invictus"
+                },
+                {
+                    "@type": "CreativeWork",
+                    "position": 4,
+                    "name": "Sonnet 18",
+                    "@id": "#sonnet-18"
+                },
+                {
+                    "@type": "CreativeWork",
+                    "position": 5,
+                    "name": "Do Not Go Gentle",
+                    "@id": "#do-not-go-gentle"
+                },
+                {
+                    "@type": "CreativeWork",
+                    "position": 6,
+                    "name": "Still I Rise",
+                    "@id": "#still-i-rise"
+                }
+            ]
+        }
+    }
+    </script>
 </head>
 <body>
     <header class="page-header">
@@ -487,9 +584,40 @@
         <h1>Christian Lambillotte</h1>
     </header>
 
-    <div class="poem-grid" id="grid">
+    <!-- Main content for SEO - poems rendered in semantic HTML -->
+    <main>
+        <div class="poem-grid" id="grid">
         <!-- Poems will be inserted here -->
-    </div>
+        </div>
+
+        <!-- Noscript fallback for search engines and users without JS -->
+        <noscript>
+            <article class="poem-article" id="the-road-not-taken">
+                <h2>The Road Not Taken</h2>
+                <p>Two roads diverged in a yellow wood, And sorry I could not travel both And be one traveler, long I stood And looked down one as far as I could To where it bent in the undergrowth...</p>
+            </article>
+            <article class="poem-article" id="hope-is-the-thing-with-feathers">
+                <h2>Hope is the thing with feathers</h2>
+                <p>Hope is the thing with feathers That perches in the soul, And sings the tune without the words, And never stops at all...</p>
+            </article>
+            <article class="poem-article" id="invictus">
+                <h2>Invictus</h2>
+                <p>Out of the night that covers me, Black as the pit from pole to pole, I thank whatever gods may be For my unconquerable soul...</p>
+            </article>
+            <article class="poem-article" id="sonnet-18">
+                <h2>Sonnet 18</h2>
+                <p>Shall I compare thee to a summer's day? Thou art more lovely and more temperate...</p>
+            </article>
+            <article class="poem-article" id="do-not-go-gentle">
+                <h2>Do Not Go Gentle</h2>
+                <p>Do not go gentle into that good night, Old age should burn and rave at close of day; Rage, rage against the dying of the light...</p>
+            </article>
+            <article class="poem-article" id="still-i-rise">
+                <h2>Still I Rise</h2>
+                <p>You may write me down in history With your bitter, twisted lies, You may trod me in the very dirt But still, like dust, I'll rise...</p>
+            </article>
+        </noscript>
+    </main>
 
     <footer class="page-footer"></footer>
 
