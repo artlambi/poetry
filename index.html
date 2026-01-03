@@ -24,7 +24,7 @@
     <!-- Preconnect to Google Fonts for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@400;500;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -51,8 +51,8 @@
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #1a1a1a;
-                --paper-color: #2a2a2a;
+                --bg-color: #1d1d1f;
+                --paper-color: #333335;
                 --text-primary: #e5e5e5;
                 --text-secondary: rgba(255, 255, 255, 0.5);
                 --text-muted: rgba(255, 255, 255, 0.2);
@@ -113,14 +113,14 @@
         .poem-grid {
             display: grid;
             grid-template-columns: repeat(3, 280px);
-            gap: 80px min(180px, calc((100vw - 480px - 840px) / 2));
+            gap: 96px min(180px, calc((100vw - 480px - 840px) / 2));
             margin: 0 240px;
             justify-content: center;
         }
 
         @media (max-width: 1320px) {
             .poem-grid {
-                gap: 80px 80px;
+                gap: 96px 80px;
                 margin: 0 120px;
             }
         }
@@ -128,7 +128,7 @@
         @media (max-width: 1100px) {
             .poem-grid {
                 grid-template-columns: repeat(2, 280px);
-                gap: 80px 80px;
+                gap: 96px 80px;
                 margin: 0 80px;
             }
         }
@@ -136,14 +136,14 @@
         @media (max-width: 700px) {
             .poem-grid {
                 grid-template-columns: 280px;
-                gap: 80px;
+                gap: 96px;
                 margin: 0 20px;
             }
         }
 
         .poem-card {
             background: var(--paper-color);
-            padding: 56px 40px 0 40px;
+            padding: 48px 32px 0 32px;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.2s ease;
             position: relative;
@@ -171,7 +171,7 @@
             }
 
             .poem-card-wrapper:hover .poem-card {
-                box-shadow: 0 0 0 1px var(--shadow-spread-hover), 0 30px 60px var(--shadow-soft), 0 15px 30px var(--shadow-softer);
+                box-shadow: 0 30px 60px var(--shadow-soft), 0 15px 30px var(--shadow-softer);
             }
 
             .poem-card-wrapper:hover .hover-title {
@@ -185,7 +185,7 @@
             font-size: 1.1rem;
             font-weight: 500;
             color: var(--text-primary);
-            margin-top: 40px;
+            margin-top: 20px;
             opacity: 0;
             transform: translateY(-10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
@@ -210,12 +210,12 @@
         }
 
         .poem-card .author {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 300;
+            font-family: 'Afacad Flux', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
             color: var(--text-secondary);
             margin-bottom: 25px;
-            letter-spacing: 0.08em;
+            letter-spacing: 1px;
             text-transform: uppercase;
             display: none;
         }
@@ -224,7 +224,7 @@
             font-family: 'EB Garamond', serif;
             font-size: 13px;
             font-style: italic;
-            color: var(--text-body);
+            color: #707070;
             line-height: 1.8;
             flex: 1;
             overflow: hidden;
@@ -265,7 +265,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: 56px 40px 0 40px;
+            padding: 48px 32px 0 32px;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             opacity: 1;
@@ -308,11 +308,11 @@
         }
 
         .modal-paper .author {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 300;
+            font-family: 'Afacad Flux', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
             color: var(--text-secondary);
-            letter-spacing: 0.08em;
+            letter-spacing: 1px;
             text-transform: uppercase;
             opacity: 0;
             transform: translateY(-15px);
@@ -328,7 +328,7 @@
             font-family: 'EB Garamond', serif;
             font-size: 13px;
             font-style: italic;
-            color: var(--text-body);
+            color: #707070;
             line-height: 1.8;
             white-space: pre-line;
             padding-top: 0;
@@ -364,10 +364,7 @@
         }
 
         .modal-paper.fullscreen .author {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s,
-                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s;
+            display: none;
         }
 
         .modal-paper.fullscreen .poem-text {
@@ -424,7 +421,7 @@
         /* Dark mode */
         @media (prefers-color-scheme: dark) {
             body {
-                background: #1a1a1a;
+                background: #1d1d1f;
             }
 
             .page-header .subtitle {
@@ -436,7 +433,7 @@
             }
 
             .poem-card {
-                background: #2a2a2a;
+                background: #333335;
                 box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
             }
 
@@ -674,93 +671,204 @@
     <script>
         const poems = [
             {
+                title: "30 ans en 30 lignes",
+                author: "Christian Lambillotte",
+                text: `Avoir trente ans, et réfléchir
+Leçons du passé, espoirs et désirs
+
+Es-tu à un peu moins d'un tiers, à la moitié ?
+Impossible à prédire, ni à deviner
+C'est le parcours qui compte, et ses virages
+Les choix à faire. Et le bagage
+
+De plus en plus à faire, à découvrir
+En toujours moins de temps
+Et en être très conscient
+Oui, cela fait parfois souffrir
+
+Une femme à chérir, des enfants à éduquer
+L'amour à aimer. L'amitié à partager
+Le boulot qui te permet de vivre
+Sans que l'ambition ne te rende ivre
+
+Des malchances à gérer
+Des peines, inévitables, à accepter
+Du bonheur à cultiver
+Des rires et des larmes à mêler
+
+Sans cesse aussi se développer
+Et être conscient de l'absurdité
+Du nationalisme extrême et de certaines religions
+Tu ne voudras pas mourir couillon…
+
+Plus tu apprendras, et moins tu sauras
+Triste frustration, mais c'est comme ça
+Le sprint prendra la place du marathon
+Et parfois pourtant tu n'avanceras qu'à tâtons
+
+Vise à pouvoir dire, à la fin :
+''Je suis content de mon chemin
+C'est fini ? Tant pis et… salut…
+Mais quelle tristesse qu'on ne se verra plus...''`
+            },
+            {
+                title: "L'essentiel retrouvé ?",
+                author: "Christian Lambillotte",
+                text: `Humanité, amitié, fraternité :
+Voilà l'essentiel, oublié
+
+Les raisons en sont nombreuses
+Et, hélas, souvent scabreuses
+
+Carrière, ambitions, argent
+Prestige, luxe éblouissant
+
+Nationalisme frénétique
+Religions fanatiques
+
+Le grand « je », le grand "nous »
+Oubliant le « tu », et le « vous »
+
+Ou pire encore, crachant dessus
+Les autres ? Que de superflus…
+
+Ma petite-fille aura bientôt un an
+Mais quel avenir l'attend ?
+
+Nous ne pourrons nous voir pour la fêter
+Et j'en ai déjà le cœur brisé
+
+Je n'ai jamais prié, n'y trouvant aucun réconfort
+Mais pour Anaïs, je veux bien faire un effort
+
+Espérant qu'à la fin de cette misère
+Apparaisse enfin un brin de lumière
+
+Qui lui ouvre un nouveau ciel
+Qui lui apprend le véritable essentiel
+
+Non pas celui du passé
+Mais celui d'une seule humanité
+
+Unie, forte et déterminée
+A redécouvrir la vraie fraternité…`
+            },
+            {
                 title: "Anaïs",
                 author: "Christian Lambillotte",
-                text: `Two roads diverged in a yellow wood,
-And sorry I could not travel both
-And be one traveler, long I stood
-And looked down one as far as I could
-To where it bent in the undergrowth;
+                text: `Dire que tu n'as même pas un an…
+Toi, fruit de l'amour de tes parents
+Jamais sans doute tu ne sauras
+Combien j'ai rêvé de toi
 
-Then took the other, as just as fair,
-And having perhaps the better claim,
-Because it was grassy and wanted wear;
-Though as for that the passing there
-Had worn them really about the same,
+Pendant de nombreuses années je me suis dit :
+J'aimerais tellement avoir une petite-fille
+Et puis voilà, tu es arrivée
+Grande, forte, et déjà étonnée
 
-And both that morning equally lay
-In leaves no step had trodden black.
-Oh, I kept the first for another day!
-Yet knowing how way leads on to way,
-I doubted if I should ever come back.
+Douce Anaïs, souriante, encore bébé
+C'est inévitable, je ne peux que t'aimer
+Tes superbes yeux bleus
+Reflets des océans et des cieux
 
-I shall be telling this with a sigh
-Somewhere ages and ages hence:
-Two roads diverged in a wood, and I—
-I took the one less traveled by,
-And that has made all the difference.`
+Ne sont qu'un seul témoin de ta beauté
+Que ton caractère ne fait que renforcer
+Ta volonté de vouloir t'élever
+De marcher dès demain sur tes deux pieds
+
+Est preuve de vouloir avancer
+Prête à découvrir le monde entier
+Va ! Va et s'il te plaît jouis
+De tous les plaisirs de la vie
+
+Fais face avec courage aux contretemps
+Qui ne seront alors que des passants
+Et même quand ils seraient trop durs à supporter
+Sache que ceux qui t'aiment seront toujours à tes côtés
+
+A tout jamais je serai ton Papy Junior
+A tout jamais, même après ma m...`
             },
             {
-                title: "Hope is the thing with feathers",
+                title: "Le foetus et le squelette",
                 author: "Christian Lambillotte",
-                text: `Hope is the thing with feathers
-That perches in the soul,
-And sings the tune without the words,
-And never stops at all,
+                text: `Deux conditions, de deux vies
+L'une à commencer, l'autre finie
+Le fœtus est, mais pas encore vraiment
+Le squelette n'est plus, depuis longtemps
 
-And sweetest in the gale is heard;
-And sore must be the storm
-That could abash the little bird
-That kept so many warm.
+Tout à apprendre d'un côté
+L'autre déjà presqu'oublié
+Séparés par la vie
+Cette drôle d'histoire, jamais choisie
 
-I've heard it in the chillest land,
-And on the strangest sea;
-Yet, never, in extremity,
-It asked a crumb of me.`
-            },
-            {
-                title: "Invictus",
-                author: "Christian Lambillotte",
-                text: `Out of the night that covers me,
-Black as the pit from pole to pole,
-I thank whatever gods may be
-For my unconquerable soul.
+J'imagine une conversation
+Entre ces deux faux compagnons
+(Le fœtus en italique
+L'autre plus classique)
 
-In the fell clutch of circumstance
-I have not winced nor cried aloud.
-Under the bludgeonings of chance
-My head is bloody, but unbowed.
+Je vois une lumière, là, à l'horizon !
+Ne te fais pas trop d'illusions
+Je ne comprends pas
+Sois patient et tu verras
 
-Beyond this place of wrath and tears
-Looms but the Horror of the shade,
-And yet the menace of the years
-Finds and shall find me unafraid.
+Raconte-moi du moins ton vécu
+A toi qui n'est qu'au début ?
+Je meurs d'apprendre, dis-moi !
+Hé, tu parles à un mort, ça va ?
 
-It matters not how strait the gate,
-How charged with punishments the scroll,
-I am the master of my fate,
-I am the captain of my soul.`
-            },
-            {
-                title: "Sonnet 18",
-                author: "Christian Lambillotte",
-                text: `Shall I compare thee to a summer's day?
-Thou art more lovely and more temperate.
-Rough winds do shake the darling buds of May,
-And summer's lease hath all too short a date.
+Pardon, j'avais presqu'oublié…
+Que je suis presque désossé ?
+Pour moi, c'est encore l'obscurité
+Moi, je l'ai retrouvée
 
-Sometime too hot the eye of heaven shines,
-And often is his gold complexion dimmed;
-And every fair from fair sometime declines,
-By chance, or nature's changing course, untrimmed;
+Que puis-je attendre de la vie ?
+Du bonheur, et bien de soucis
+Parle-moi de l'amour
+Celui d'un jour ou « pour toujours » ?
 
-But thy eternal summer shall not fade,
-Nor lose possession of that fair thou ow'st;
-Nor shall death brag thou wand'rest in his shade,
-When in eternal lines to Time thou grow'st.
+Cela m'est bien égal
+Des joies qui peuvent faire mal
+Et des enfants, tu en as, dis ?
+Oui, deux, à mon avis…
 
-So long as men can breathe or eyes can see,
-So long lives this, and this gives life to thee.`
+Tu me sembles un peu douter
+Non, non, je ne faisais que rêver
+Quoi, tu en voulais plus encore ?
+Bien sûr, mais j'avais tort
+
+Réponse bizarre, et je ne suis pas devin
+On ne choisit pas son destin
+Je ne comprends toujours pas
+On donne, on prend, et c'est comme ça
+
+En somme, la vie vaut-elle la peine ?
+Pleine de surprises, souvent sereine
+C'est quoi ce charabia ??
+Relis tes questions, et tu verras
+
+As-tu jamais eu peur de mourir ?
+Je suis mort armé d'un sourire
+Je te comprends de moins en moins
+Il faut bien que tout ait une fin
+
+Mais dis-moi donc ce qui m'attend !
+Je ne sais pas, cela dépend
+De qui, de quoi, par pitié ?
+De ceux que tu vas rencontrer
+
+Je ne sais vraiment plus quoi penser
+Bienvenu à la fatalité
+Une toute dernière question ?
+Je t'écoute, vas-y, sans façon
+
+La vie n'est-elle qu'un interlude ?
+Bien entendu, c'est une certitude
+Le néant avant, le néant après ?
+……………………………………… 
+
+Le squelette, sachant
+Resta muet`
             },
             {
                 title: "Do Not Go Gentle",
