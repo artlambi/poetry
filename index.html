@@ -145,7 +145,6 @@
             align-items: flex-end;
             padding: 80px 60px 40px 60px;
             margin-top: 40px;
-            isolation: isolate;
         }
 
         .page-footer .copyright {
@@ -161,11 +160,13 @@
 
         .page-footer .signature-light {
             mix-blend-mode: multiply;
+            filter: contrast(1.1);
         }
 
         .page-footer .signature-dark {
             display: none;
             mix-blend-mode: screen;
+            filter: contrast(1.1);
         }
 
         .poem-grid {
