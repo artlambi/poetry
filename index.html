@@ -1077,8 +1077,8 @@ But still, like air, I'll rise.`
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / centerY * -3;
-                const rotateY = (x - centerX) / centerX * 3;
+                const rotateX = (y - centerY) / centerY * -1.5;
+                const rotateY = (x - centerX) / centerX * 1.5;
                 card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             });
 
