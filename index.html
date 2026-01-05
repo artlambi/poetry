@@ -275,6 +275,14 @@
             text-align: center;
         }
 
+        /* Show titles on touch devices (tablets, phones) that don't support hover */
+        @media (hover: none), (pointer: coarse) {
+            .poem-card-wrapper .hover-title {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .poem-card .number {
             font-family: 'Cormorant Garamond', serif;
             font-size: 0.85rem;
