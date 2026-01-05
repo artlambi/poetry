@@ -139,6 +139,27 @@
             margin: 0;
         }
 
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 80px 60px 40px 60px;
+            margin-top: 40px;
+        }
+
+        .page-footer .copyright {
+            font-family: 'EB Garamond', serif;
+            font-size: 14px;
+            color: rgba(51, 51, 51, 0.5);
+        }
+
+        .page-footer .signature {
+            max-width: 256px;
+            height: auto;
+            mix-blend-mode: multiply;
+            opacity: 0.7;
+        }
+
         .poem-grid {
             display: grid;
             grid-template-columns: repeat(3, 280px);
@@ -185,6 +206,7 @@
             box-shadow: 0 6px 8px -3px rgba(0,0,0,0.04);
             overflow: hidden;
             mix-blend-mode: normal;
+            transform-style: preserve-3d;
         }
 
         .poem-card::after {
@@ -206,6 +228,10 @@
             flex-direction: column;
             align-items: center;
             transition: transform 0.3s ease;
+        }
+
+        .poem-card-wrapper {
+            perspective: 1000px;
         }
 
         @media (hover: hover) and (pointer: fine) {
@@ -257,23 +283,12 @@
             display: none;
         }
 
-        .poem-card .author {
-            font-family: 'Afacad Flux', sans-serif;
-            font-size: 15px;
-            font-weight: 400;
-            color: var(--text-secondary);
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            display: none;
-        }
-
         .poem-card .preview {
             font-family: 'EB Garamond', serif;
             font-size: 13px;
             font-style: normal;
             color: rgba(51, 51, 51, 0.7);
-            line-height: 1.7;
+            line-height: 1.8;
             letter-spacing: -0.01em;
             flex: 1;
             overflow: hidden;
@@ -357,23 +372,6 @@
                         transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .modal-paper .author {
-            font-family: 'Afacad Flux', sans-serif;
-            font-size: 15px;
-            font-weight: 400;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            opacity: 0;
-            transform: translateY(-15px);
-            position: absolute;
-            top: 48px;
-            left: 0;
-            right: 0;
-            transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1),
-                        transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         .modal-paper .poem-text {
             font-family: 'EB Garamond', serif;
             font-size: 13px;
@@ -411,10 +409,6 @@
             transform: translateY(0);
             transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
                         transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
-        }
-
-        .modal-paper.fullscreen .author {
-            display: none;
         }
 
         .modal-paper.fullscreen .poem-text {
@@ -496,10 +490,6 @@
                 color: #e5e5e5;
             }
 
-            .poem-card .author {
-                color: rgba(255, 255, 255, 0.4);
-            }
-
             .poem-card .preview {
                 color: #cccccc;
             }
@@ -520,10 +510,6 @@
                 color: #cccccc;
             }
 
-            .modal-paper .author {
-                color: rgba(255, 255, 255, 0.4);
-            }
-
             .modal-paper .poem-text {
                 color: #cccccc;
             }
@@ -538,6 +524,15 @@
 
             .modal-close:hover {
                 background: rgba(255,255,255,0.05);
+            }
+
+            .page-footer .copyright {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            .page-footer .signature {
+                filter: invert(1);
+                opacity: 0.5;
             }
         }
 
@@ -562,6 +557,11 @@
 
             .poem-card .title {
                 font-size: 1.3rem;
+            }
+
+            .poem-card-wrapper .hover-title {
+                opacity: 1;
+                transform: translateY(0);
             }
 
             .modal-paper.fullscreen {
@@ -705,13 +705,15 @@
         </noscript>
     </main>
 
-    <footer class="page-footer"></footer>
+    <footer class="page-footer">
+        <p class="copyright">©<span id="year"></span>. Tous droits réservés</p>
+        <img src="https://raw.githubusercontent.com/artlambi/poetry/main/img/signature.jpg" alt="Christian Lambillotte signature" class="signature">
+    </footer>
 
     <div class="modal-overlay" id="modal">
         <div class="modal-paper" id="modalPaper">
             <div class="card-content">
                 <h2 class="title" id="modalTitle"></h2>
-                <p class="author" id="modalAuthor"></p>
                 <div class="poem-text" id="modalText"></div>
             </div>
         </div>
@@ -727,7 +729,6 @@
         const poems = [
             {
                 title: "30 ans en 30 lignes",
-                author: "Christian Lambillotte",
                 text: `Avoir trente ans, et réfléchir
 Leçons du passé, espoirs et désirs
 
@@ -768,7 +769,6 @@ Mais quelle tristesse qu'on ne se verra plus...''`
             },
             {
                 title: "L'essentiel retrouvé ?",
-                author: "Christian Lambillotte",
                 text: `Humanité, amitié, fraternité :
 Voilà l'essentiel, oublié
 
@@ -810,7 +810,6 @@ A redécouvrir la vraie fraternité…`
             },
             {
                 title: "Anaïs",
-                author: "Christian Lambillotte",
                 text: `Dire que tu n'as même pas un an…
 Toi, fruit de l'amour de tes parents
 Jamais sans doute tu ne sauras
@@ -846,7 +845,6 @@ A tout jamais, même après ma m...`
             },
             {
                 title: "Le foetus et le squelette",
-                author: "Christian Lambillotte",
                 text: `Deux conditions, de deux vies
 L'une à commencer, l'autre finie
 Le fœtus est, mais pas encore vraiment
@@ -927,7 +925,6 @@ Resta muet`
             },
             {
                 title: "Ode à la pomme de terre",
-                author: "Christian Lambillotte",
                 text: `Oh Chère Patate
 
 Quand je t'ai vue
@@ -987,7 +984,6 @@ Qui serions… dans la purée….`
             },
             {
                 title: "Still I Rise",
-                author: "Christian Lambillotte",
                 text: `You may write me down in history
 With your bitter, twisted lies,
 You may trod me in the very dirt
@@ -1054,12 +1050,27 @@ But still, like air, I'll rise.`
             card.dataset.index = index;
             card.innerHTML = `
                 <h2 class="title">${poem.title}</h2>
-                <p class="author">${poem.author}</p>
                 <p class="preview">${poem.text}</p>
             `;
             card.addEventListener('click', function() {
                 openModal(index, card);
                 updateHash();
+            });
+
+            // Cursor-following 3D tilt effect
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / centerY * -3;
+                const rotateY = (x - centerX) / centerX * 3;
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = 'rotateX(0) rotateY(0)';
             });
             
             const hoverTitle = document.createElement('div');
@@ -1079,7 +1090,6 @@ But still, like air, I'll rise.`
             
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
-            document.getElementById('modalAuthor').textContent = poem.author;
             document.getElementById('modalText').textContent = poem.text;
             
             // Save scroll position before hiding body
@@ -1206,6 +1216,9 @@ But still, like air, I'll rise.`
         // Check for hash on page load
         window.addEventListener('load', openPoemByHash);
         window.addEventListener('hashchange', openPoemByHash);
+
+        // Update copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
