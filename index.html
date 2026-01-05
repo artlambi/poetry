@@ -156,8 +156,16 @@
         .page-footer .signature {
             max-width: 256px;
             height: auto;
-            mix-blend-mode: multiply;
             opacity: 0.7;
+        }
+
+        .page-footer .signature-light {
+            mix-blend-mode: multiply;
+        }
+
+        .page-footer .signature-dark {
+            display: none;
+            mix-blend-mode: screen;
         }
 
         .poem-grid {
@@ -416,9 +424,44 @@
             color: #333333;
             line-height: 33px;
             letter-spacing: -0.01em;
-            padding-bottom: 88px;
+            padding-bottom: 40px;
             -webkit-mask-image: none;
             mask-image: none;
+        }
+
+        .modal-footer {
+            display: none;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            max-width: 600px;
+            padding: 40px 0 40px 0;
+            margin-top: auto;
+        }
+
+        .modal-paper.fullscreen .modal-footer {
+            display: flex;
+        }
+
+        .modal-footer .copyright {
+            font-family: 'EB Garamond', serif;
+            font-size: 14px;
+            color: rgba(51, 51, 51, 0.5);
+        }
+
+        .modal-footer .signature {
+            max-width: 200px;
+            height: auto;
+            opacity: 0.7;
+        }
+
+        .modal-footer .signature-light {
+            mix-blend-mode: multiply;
+        }
+
+        .modal-footer .signature-dark {
+            display: none;
+            mix-blend-mode: screen;
         }
 
         .modal-close {
@@ -530,9 +573,26 @@
                 color: rgba(255, 255, 255, 0.5);
             }
 
-            .page-footer .signature {
-                filter: invert(1);
-                opacity: 0.5;
+            .page-footer .signature-light {
+                display: none;
+            }
+
+            .page-footer .signature-dark {
+                display: block;
+                opacity: 0.6;
+            }
+
+            .modal-footer .copyright {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            .modal-footer .signature-light {
+                display: none;
+            }
+
+            .modal-footer .signature-dark {
+                display: block;
+                opacity: 0.6;
             }
         }
 
@@ -707,7 +767,8 @@
 
     <footer class="page-footer">
         <p class="copyright">©<span id="year"></span>. Tous droits réservés</p>
-        <img src="https://raw.githubusercontent.com/artlambi/poetry/main/img/signature.jpg" alt="Christian Lambillotte signature" class="signature">
+        <img src="https://raw.githubusercontent.com/artlambi/poetry/main/img/signature.jpg" alt="Christian Lambillotte signature" class="signature signature-light">
+        <img src="https://raw.githubusercontent.com/artlambi/poetry/main/img/signature-dm.jpg" alt="Christian Lambillotte signature" class="signature signature-dark">
     </footer>
 
     <div class="modal-overlay" id="modal">
@@ -716,6 +777,11 @@
                 <h2 class="title" id="modalTitle"></h2>
                 <div class="poem-text" id="modalText"></div>
             </div>
+            <footer class="modal-footer">
+                <p class="copyright">©<span class="modal-year"></span>. Tous droits réservés</p>
+                <img src="https://raw.githubusercontent.com/artlambi/poetry/main/img/signature.jpg" alt="Christian Lambillotte signature" class="signature signature-light">
+                <img src="https://raw.githubusercontent.com/artlambi/poetry/main/img/signature-dm.jpg" alt="Christian Lambillotte signature" class="signature signature-dark">
+            </footer>
         </div>
         <button class="modal-close" id="closeBtn" aria-label="Close">
             <svg viewBox="0 0 24 24">
@@ -1218,7 +1284,9 @@ But still, like air, I'll rise.`
         window.addEventListener('hashchange', openPoemByHash);
 
         // Update copyright year
-        document.getElementById('year').textContent = new Date().getFullYear();
+        const currentYear = new Date().getFullYear();
+        document.getElementById('year').textContent = currentYear;
+        document.querySelector('.modal-year').textContent = currentYear;
     </script>
 </body>
 </html>
