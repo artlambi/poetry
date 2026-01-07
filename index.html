@@ -1250,44 +1250,6 @@ But still, like air, I'll rise.`
             }
         });
 
-        // Trailing row effect on scroll
-        const cards = document.querySelectorAll('.poem-card');
-        const cardsPerRow = window.innerWidth > 1100 ? 3 : window.innerWidth > 700 ? 2 : 1;
-        
-        let lastScrollY = window.scrollY;
-        let rowOffsets = {};
-        
-        function updateTrailing() {
-            const currentScrollY = window.scrollY;
-            const scrollDelta = currentScrollY - lastScrollY;
-            lastScrollY = currentScrollY;
-            
-            cards.forEach((card, index) => {
-                const row = Math.floor(index / cardsPerRow);
-                
-                if (rowOffsets[row] === undefined) rowOffsets[row] = 0;
-                
-                // Add scroll delta with row-based multiplier
-                rowOffsets[row] += scrollDelta * (row + 1) * 0.08;
-                
-                // Ease back to 0
-                rowOffsets[row] *= 0.9;
-                
-                // Clamp
-                rowOffsets[row] = Math.max(-30, Math.min(30, rowOffsets[row]));
-                
-                // Apply to card (not wrapper, to avoid hover conflict)
-                const currentTransform = card.style.transform || '';
-                if (!currentTransform.includes('rotateX')) {
-                    card.style.transform = `translateY(${rowOffsets[row]}px)`;
-                }
-            });
-            
-            requestAnimationFrame(updateTrailing);
-        }
-        
-        requestAnimationFrame(updateTrailing);
-
     </script>
 </body>
 </html>
