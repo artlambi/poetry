@@ -119,6 +119,12 @@
         .page-header {
             text-align: center;
             margin-bottom: 104px;
+            transition: transform 0.3s ease;
+            transform-origin: center top;
+        }
+
+        .page-header.scrolled {
+            transform: scale(0.88);
         }
 
         .page-header .subtitle {
@@ -1229,6 +1235,18 @@ But still, like air, I'll rise.`
 
         // Update copyright year
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Header scroll effect
+        const pageHeader = document.querySelector('.page-header');
+        const headerHeight = pageHeader.offsetHeight;
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > headerHeight * 0.75) {
+                pageHeader.classList.add('scrolled');
+            } else {
+                pageHeader.classList.remove('scrolled');
+            }
+        });
     </script>
 </body>
 </html>
