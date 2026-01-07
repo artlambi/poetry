@@ -226,7 +226,6 @@
             overflow: hidden;
             mix-blend-mode: normal;
             transform-style: preserve-3d;
-            transform: translateY(var(--parallax-y, 0));
         }
 
         .poem-card-wrapper {
@@ -1251,24 +1250,6 @@ But still, like air, I'll rise.`
             }
         });
 
-        // Subtle parallax effect on cards
-        const cardWrappers = document.querySelectorAll('.poem-card-wrapper');
-        
-        function updateParallax() {
-            cardWrappers.forEach((wrapper) => {
-                const rect = wrapper.getBoundingClientRect();
-                const cardCenter = rect.top + rect.height / 2;
-                const viewportCenter = window.innerHeight / 2;
-                const distance = (cardCenter - viewportCenter) / window.innerHeight;
-                
-                // Very subtle vertical offset based on scroll position
-                const translateY = distance * -15;
-                wrapper.style.setProperty('--parallax-y', `${translateY}px`);
-            });
-        }
-        
-        window.addEventListener('scroll', updateParallax);
-        updateParallax();
     </script>
 </body>
 </html>
