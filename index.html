@@ -119,13 +119,14 @@
         .page-header {
             text-align: center;
             margin-bottom: 104px;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
             transform-origin: center top;
         }
 
         .page-header.scrolled {
             transform: scale(0.88);
-            opacity: 0.8;
+            opacity: 0.24;
+            filter: blur(6px);
         }
 
         .page-header .subtitle {
