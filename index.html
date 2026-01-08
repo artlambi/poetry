@@ -1286,8 +1286,7 @@ But still, like air, I'll rise.`
         });
 
         // Scale image when scrolled into view in modal
-        const modalPaper = document.getElementById('modalPaper');
-        modalPaper.addEventListener('scroll', function() {
+        document.getElementById('modalPaper').addEventListener('scroll', function() {
             const modalImage = document.getElementById('modalImage');
             if (!modalImage.src || modalImage.style.display === 'none') return;
             
