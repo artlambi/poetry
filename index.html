@@ -158,21 +158,10 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             margin: 0;
-            overflow: hidden;
-        }
-
-        .page-header h1 .char {
-            display: inline-block;
             opacity: 0;
-            transform: translateY(100%);
-            animation: charReveal 0.5s ease-out forwards;
-        }
-
-        @keyframes charReveal {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
+            animation-delay: 0.15s;
         }
 
         .page-footer {
@@ -259,7 +248,14 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: transform 0.25s ease-in-out;
+            transition: transform 0.25s ease-in-out, opacity 0.6s ease-out;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .poem-card-wrapper.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .poem-card-wrapper {
@@ -786,26 +782,6 @@
     </div>
 
     <script>
-        // Split h1 into characters for staggered animation
-        const h1 = document.querySelector('.page-header h1');
-        const text = h1.textContent;
-        h1.innerHTML = '';
-        let charIndex = 0;
-        
-        for (let i = 0; i < text.length; i++) {
-            const char = text[i];
-            if (char === ' ') {
-                h1.innerHTML += ' ';
-            } else {
-                const span = document.createElement('span');
-                span.className = 'char';
-                span.textContent = char;
-                span.style.animationDelay = `${0.3 + charIndex * 0.03}s`;
-                h1.appendChild(span);
-                charIndex++;
-            }
-        }
-
         const poems = [
             {
                 title: "30 ans en 30 lignes",
@@ -1322,6 +1298,17 @@ But still, like air, I'll rise.`
             } else {
                 pageHeader.classList.remove('scrolled');
             }
+        });
+
+        // Staggered row animation on load
+        const cardWrappers = document.querySelectorAll('.poem-card-wrapper');
+        const cardsPerRow = window.innerWidth > 1100 ? 3 : window.innerWidth > 700 ? 2 : 1;
+        
+        cardWrappers.forEach((wrapper, index) => {
+            const row = Math.floor(index / cardsPerRow);
+            setTimeout(() => {
+                wrapper.classList.add('visible');
+            }, 600 + (row * 120));
         });
 
     </script>
