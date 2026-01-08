@@ -448,6 +448,13 @@
             max-width: 100%;
             height: auto;
             margin-top: 40px;
+            transform: scale(1);
+            transform-origin: center top;
+            transition: transform 0.3s ease-out;
+        }
+
+        .modal-paper.fullscreen .poem-image.scaled {
+            transform: scale(1.15);
         }
 
         .modal-close {
@@ -1275,6 +1282,23 @@ But still, like air, I'll rise.`
                 pageHeader.classList.add('scrolled');
             } else {
                 pageHeader.classList.remove('scrolled');
+            }
+        });
+
+        // Scale image when scrolled into view in modal
+        const modalPaper = document.getElementById('modalPaper');
+        modalPaper.addEventListener('scroll', function() {
+            const modalImage = document.getElementById('modalImage');
+            if (!modalImage.src || modalImage.style.display === 'none') return;
+            
+            const rect = modalImage.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            
+            // Check if image is mostly visible in viewport
+            if (rect.top < windowHeight * 0.7) {
+                modalImage.classList.add('scaled');
+            } else {
+                modalImage.classList.remove('scaled');
             }
         });
 
