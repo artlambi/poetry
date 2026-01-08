@@ -438,6 +438,18 @@
             mask-image: none;
         }
 
+        .modal-paper .poem-image {
+            display: none;
+        }
+
+        .modal-paper.fullscreen .poem-image {
+            display: block;
+            width: 560px;
+            max-width: 100%;
+            height: auto;
+            margin-top: 40px;
+        }
+
         .modal-close {
             position: fixed;
             top: 30px;
@@ -736,6 +748,7 @@
             <div class="card-content">
                 <h2 class="title" id="modalTitle"></h2>
                 <div class="poem-text" id="modalText"></div>
+                <img class="poem-image" id="modalImage" src="" alt="">
             </div>
         </div>
         <button class="modal-close" id="closeBtn" aria-label="Close">
@@ -866,6 +879,7 @@ A tout jamais, même après ma m...`
             },
             {
                 title: "Le foetus et le squelette",
+                image: "https://artlambi.github.io/poetry/img/foetus-squelette.jpg",
                 text: `Deux conditions, de deux vies
 L'une à commencer, l'autre finie
 Le fœtus est, mais pas encore vraiment
@@ -1112,6 +1126,17 @@ But still, like air, I'll rise.`
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
             document.getElementById('modalText').textContent = poem.text;
+            
+            // Set image if available
+            const modalImage = document.getElementById('modalImage');
+            if (poem.image) {
+                modalImage.src = poem.image;
+                modalImage.alt = poem.title;
+                modalImage.style.display = '';
+            } else {
+                modalImage.src = '';
+                modalImage.style.display = 'none';
+            }
             
             // Save scroll position before hiding body
             savedScrollPosition = window.scrollY;
