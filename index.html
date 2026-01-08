@@ -158,6 +158,21 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             margin: 0;
+            overflow: hidden;
+        }
+
+        .page-header h1 .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+            animation: charReveal 0.5s ease-out forwards;
+        }
+
+        @keyframes charReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .page-footer {
@@ -771,6 +786,26 @@
     </div>
 
     <script>
+        // Split h1 into characters for staggered animation
+        const h1 = document.querySelector('.page-header h1');
+        const text = h1.textContent;
+        h1.innerHTML = '';
+        let charIndex = 0;
+        
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            if (char === ' ') {
+                h1.innerHTML += ' ';
+            } else {
+                const span = document.createElement('span');
+                span.className = 'char';
+                span.textContent = char;
+                span.style.animationDelay = `${0.3 + charIndex * 0.03}s`;
+                h1.appendChild(span);
+                charIndex++;
+            }
+        }
+
         const poems = [
             {
                 title: "30 ans en 30 lignes",
