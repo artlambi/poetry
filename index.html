@@ -284,17 +284,15 @@
         }
 
         .poem-card-wrapper .hover-title {
-            font-family: 'gill-sans-nova-condensed', sans-serif;
+            font-family: 'EB Garamond', serif;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 500;
             color: rgba(0, 0, 0, 0.8);
             margin-top: 20px;
             opacity: 0;
             transform: translateY(-10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
             text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         /* Show titles on touch devices (tablets, phones) that don't support hover */
@@ -1466,7 +1464,7 @@ Et grandir en m'amusant…`
             const modalImage = document.getElementById('modalImage');
             if (poem.image) {
                 modalImage.src = poem.image;
-                modalImage.alt = poem.title;
+                modalImage.alt = 'Illustration pour ' + poem.title;
                 modalImage.style.display = '';
             } else {
                 modalImage.src = '';
