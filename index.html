@@ -94,7 +94,7 @@
             background-size: 100px 100px;
             transform: translateZ(0);
             mix-blend-mode: normal;
-            opacity: 0.1;
+            opacity: 0.07;
             pointer-events: none;
             z-index: 0;
         }
@@ -151,7 +151,7 @@
 
         .page-header h1 {
             font-family: 'gill-sans-nova-condensed', sans-serif;
-            font-weight: 800;
+            font-weight: 900;
             font-size: 56px;
             line-height: 56px;
             color: #000000;
@@ -433,6 +433,18 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        .modal-paper.fullscreen::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.50) 75%, rgba(255,255,255,0.00) 100%);
+            pointer-events: none;
+            z-index: 10;
+        }
+
         .modal-paper.fullscreen .card-content {
             overflow: visible;
             padding-top: 100px;
@@ -552,6 +564,10 @@
 
             .modal-paper {
                 background: #202020;
+            }
+
+            .modal-paper.fullscreen::before {
+                background-image: linear-gradient(180deg, rgba(32,32,32,0.96) 0%, rgba(32,32,32,0.50) 75%, rgba(32,32,32,0.00) 100%);
             }
 
             .modal-paper .number {
