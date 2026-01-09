@@ -481,16 +481,30 @@
             mask-image: none;
         }
 
-        .modal-paper .poem-image {
+        .modal-paper .poem-image-container {
             display: none;
+        }
+
+        .modal-paper.fullscreen .poem-image-container {
+            display: block;
+            width: 560px;
+            max-width: 100%;
+            margin-top: 40px;
+            border: 1px solid #000000;
+            overflow: hidden;
         }
 
         .modal-paper.fullscreen .poem-image {
             display: block;
-            width: 560px;
-            max-width: 100%;
+            width: 100%;
             height: auto;
-            margin-top: 40px;
+            transform: scale(1.1);
+            transform-origin: center center;
+            transition: transform 0.6s ease-out;
+        }
+
+        .modal-paper.fullscreen .poem-image.zoomed-out {
+            transform: scale(1);
         }
 
         .modal-close {
@@ -1079,7 +1093,9 @@ Et grandir en m'amusant…</p>
             <div class="card-content">
                 <h2 class="title" id="modalTitle"></h2>
                 <div class="poem-text" id="modalText"></div>
-                <img class="poem-image" id="modalImage" src="" alt="">
+                <div class="poem-image-container" id="modalImageContainer">
+                    <img class="poem-image" id="modalImage" src="" alt="">
+                </div>
             </div>
         </div>
         <button class="modal-close" id="closeBtn" aria-label="Close">
@@ -1486,13 +1502,15 @@ Et grandir en m'amusant…`
             
             // Set image if available
             const modalImage = document.getElementById('modalImage');
+            const modalImageContainer = document.getElementById('modalImageContainer');
             if (poem.image) {
                 modalImage.src = poem.image;
                 modalImage.alt = 'Illustration pour ' + poem.title;
-                modalImage.style.display = '';
+                modalImage.classList.remove('zoomed-out');
+                modalImageContainer.style.display = '';
             } else {
                 modalImage.src = '';
-                modalImage.style.display = 'none';
+                modalImageContainer.style.display = 'none';
             }
             
             // Save scroll position before hiding body
@@ -1663,12 +1681,25 @@ Et grandir en m'amusant…`
             }, 500 + (row * 120));
         });
 
-        // Modal scroll handler for top fade effect
+        // Modal scroll handler for top fade effect and image zoom
         document.getElementById('modalPaper').addEventListener('scroll', function() {
             if (this.scrollTop > 20) {
                 this.classList.add('scrolled');
             } else {
                 this.classList.remove('scrolled');
+            }
+            
+            // Image zoom effect
+            const modalImage = document.getElementById('modalImage');
+            const modalImageContainer = document.getElementById('modalImageContainer');
+            if (modalImage.src && modalImageContainer.style.display !== 'none') {
+                const containerRect = modalImageContainer.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                // Check if image is fully visible in viewport
+                if (containerRect.bottom <= windowHeight && containerRect.top >= 0) {
+                    modalImage.classList.add('zoomed-out');
+                }
             }
         });
 
