@@ -1696,9 +1696,14 @@ Et grandir en m'amusant…`
                 const containerRect = modalImageContainer.getBoundingClientRect();
                 const windowHeight = window.innerHeight;
                 
-                // Check if image is fully visible in viewport
-                if (containerRect.bottom <= windowHeight && containerRect.top >= 0) {
+                // Check if image is at least 10% visible in viewport
+                const visibleHeight = Math.min(containerRect.bottom, windowHeight) - Math.max(containerRect.top, 0);
+                const visiblePercent = visibleHeight / containerRect.height;
+                
+                if (visiblePercent >= 0.1) {
                     modalImage.classList.add('zoomed-out');
+                } else {
+                    modalImage.classList.remove('zoomed-out');
                 }
             }
         });
