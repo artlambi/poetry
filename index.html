@@ -185,15 +185,12 @@
             height: auto;
         }
 
-        .page-footer .signature-light {
-            mix-blend-mode: multiply;
-            filter: contrast(1.1);
-        }
-
-        .page-footer .signature-dark {
-            display: none;
-            mix-blend-mode: screen;
-            filter: contrast(1.1);
+        .page-footer .signature path {
+            fill: none;
+            stroke: #000;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.75px;
         }
 
         .poem-grid {
@@ -641,12 +638,8 @@
                 color: rgba(255, 255, 255, 0.5);
             }
 
-            .page-footer .signature-light {
-                display: none;
-            }
-
-            .page-footer .signature-dark {
-                display: block;
+            .page-footer .signature path {
+                stroke: #fff;
             }
         }
 
@@ -1105,8 +1098,16 @@ Et grandir en m'amusant…</p>
 
     <footer class="page-footer">
         <p class="copyright">©<span id="year"></span>. Tous droits réservés</p>
-        <img src="https://raw.githubusercontent.com/artlambi/poetry/main/img/signature.svg" alt="Christian Lambillotte signature" class="signature signature-light">
-        <img src="https://raw.githubusercontent.com/artlambi/poetry/main/img/signature-dm.svg" alt="Christian Lambillotte signature" class="signature signature-dark">
+        <svg class="signature" viewBox="0 0 1080 311.07" aria-label="Christian Lambillotte signature">
+            <path d="M1059.29,8.47c-94.87,14.4-381.18,105.04-462.49,132.14-81.32,27.11-256.66,92.33-396.42,142.31s-166.17,20.21-172.8,10.16c-9.32-14.12.85-39.53,107.58-111.81C251.1,102.75,373.05,40.5,437.39,40.72"/>
+            <path d="M363.85,213.46s17.7,44.05,176.15-149.93l-111.39,138.64s58.35-66.45,48.19-50.26-38.21,55.72-9.22,29.93,41.6-42.92,41.6-42.92c0,0-19.76,30.87,38.21-11.29,0,0-63.62,69.46,27.11-1.69,0,0-51.93,53.56,14.68,2.26,55.72-42.92,35.76,1.88,20.71,1.88"/>
+            <path d="M729.78,0s-60.41,99.94-74.81,121.69c0,0,50.53-67.47,83.85-70.86"/>
+            <path d="M577.88,113.79s7.34,1.27,14.96-5.65"/>
+            <path d="M745.03,77.74s-12.59,12.35-4.04,16.91"/>
+            <path d="M764.23,68.33s4.14,2.45,10.92-2.07"/>
+            <path d="M792.18,73.13"/>
+            <path d="M788.23,72.83s7.91-4.32,15.53-5.83,14.68-4.34,21.74-8.15,10.73-5.5,21.18-4.94,13.27-.85,18.92-4.24,17.51-6.21,27.11-6.78"/>
+        </svg>
     </footer>
 
     <div class="modal-overlay" id="modal">
