@@ -1716,15 +1716,10 @@ Et grandir en m'amusant…`
                 this.classList.remove('scrolled');
             }
             
-            // Make title sticky when scrolling up and past the original position
+            // Make title sticky only when scrolling up and past the original position
             const modalTitle = document.getElementById('modalTitle');
-            if (currentScrollTop > 150) {
-                modalTitle.classList.add('sticky');
-                if (isScrollingUp) {
-                    modalTitle.classList.add('visible');
-                } else {
-                    modalTitle.classList.remove('visible');
-                }
+            if (isScrollingUp && currentScrollTop > 150) {
+                modalTitle.classList.add('sticky', 'visible');
             } else {
                 modalTitle.classList.remove('sticky', 'visible');
             }
