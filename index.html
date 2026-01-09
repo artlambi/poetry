@@ -467,15 +467,13 @@
             letter-spacing: 1px;
             opacity: 1;
             transform: translateY(0);
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
-                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
-                        font-size 0.3s ease-out,
-                        filter 0.3s ease-out;
+            filter: blur(0);
+            transition: opacity 0.3s ease-out, top 0.3s ease-out, filter 0.3s ease-out;
         }
 
         .modal-paper.fullscreen .title.sticky {
             position: fixed;
-            top: 30px;
+            top: -40px;
             left: 0;
             right: 0;
             text-align: center;
@@ -483,15 +481,19 @@
             line-height: 40px;
             z-index: 15;
             opacity: 0;
-            transform: translateY(-20px);
             filter: blur(6px);
-            pointer-events: none;
         }
 
         .modal-paper.fullscreen .title.sticky.visible {
+            top: 30px;
             opacity: 1;
-            transform: translateY(0);
             filter: blur(0);
+        }
+
+        .modal-paper.fullscreen .title.sticky.at-top {
+            font-size: 40px;
+            line-height: 56px;
+            transition: opacity 0.3s ease-out, top 0.3s ease-out, filter 0.3s ease-out, font-size 0.3s ease-out;
         }
 
         .modal-paper.fullscreen .poem-text {
@@ -1578,7 +1580,7 @@ Et grandir en m'amusant…`
                 // Reset modal scroll position and remove scrolled class
                 modalPaper.scrollTop = 0;
                 modalPaper.classList.remove('scrolled');
-                document.getElementById('modalTitle').classList.remove('sticky', 'visible');
+                document.getElementById('modalTitle').classList.remove('sticky', 'visible', 'at-top');
                 
                 const rect = clickedCard.getBoundingClientRect();
                 const cardContent = modalPaper.querySelector('.card-content');
@@ -1716,12 +1718,30 @@ Et grandir en m'amusant…`
                 this.classList.remove('scrolled');
             }
             
-            // Make title sticky only when scrolling up and past the original position
+            // Show sticky title when scrolling up and main title is out of view
             const modalTitle = document.getElementById('modalTitle');
-            if (isScrollingUp && currentScrollTop > 150) {
-                modalTitle.classList.add('sticky', 'visible');
-            } else {
-                modalTitle.classList.remove('sticky', 'visible');
+            const titleOriginalTop = 100; // padding-top of card-content
+            const titleOutOfView = currentScrollTop > titleOriginalTop + 60; // title height ~60px
+            
+            if (isScrollingUp && titleOutOfView) {
+                // Scrolling up and title would be out of view - make it sticky
+                if (!modalTitle.classList.contains('sticky')) {
+                    modalTitle.classList.add('sticky');
+                    // Force reflow so browser registers the initial state
+                    modalTitle.offsetHeight;
+                    modalTitle.classList.add('visible');
+                }
+                modalTitle.classList.remove('at-top');
+            } else if (isScrollingUp && currentScrollTop <= titleOriginalTop) {
+                // Reaching the top while scrolling up - scale back to 40px
+                modalTitle.classList.add('sticky', 'visible', 'at-top');
+                // Remove sticky once fully at top
+                if (currentScrollTop < 20) {
+                    modalTitle.classList.remove('sticky', 'visible', 'at-top');
+                }
+            } else if (!isScrollingUp) {
+                // Scrolling down - remove sticky, let it scroll naturally
+                modalTitle.classList.remove('sticky', 'visible', 'at-top');
             }
             
             // Image zoom effect - progressive based on visibility
