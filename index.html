@@ -471,6 +471,30 @@
                         transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         }
 
+        .modal-sticky-title {
+            position: fixed;
+            top: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'gill-sans-nova-condensed', sans-serif;
+            font-weight: 800;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #000000;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            z-index: 15;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        .modal-sticky-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .modal-paper.fullscreen .poem-text {
             font-size: 24px;
             color: #000000;
@@ -593,6 +617,10 @@
             }
 
             .modal-paper .title {
+                color: #cccccc;
+            }
+
+            .modal-sticky-title {
                 color: #cccccc;
             }
 
@@ -1094,6 +1122,7 @@ Et grandir en m'amusant…</p>
                 </div>
             </div>
         </div>
+        <div class="modal-sticky-title" id="modalStickyTitle"></div>
         <button class="modal-close" id="closeBtn" aria-label="Close">
             <svg viewBox="0 0 24 24">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -1495,6 +1524,7 @@ Et grandir en m'amusant…`
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
             document.getElementById('modalText').textContent = poem.text;
+            document.getElementById('modalStickyTitle').textContent = poem.title;
             
             // Set image if available
             const modalImage = document.getElementById('modalImage');
@@ -1555,6 +1585,7 @@ Et grandir en m'amusant…`
                 // Reset modal scroll position and remove scrolled class
                 modalPaper.scrollTop = 0;
                 modalPaper.classList.remove('scrolled');
+                document.getElementById('modalStickyTitle').classList.remove('visible');
                 
                 const rect = clickedCard.getBoundingClientRect();
                 const cardContent = modalPaper.querySelector('.card-content');
@@ -1678,11 +1709,26 @@ Et grandir en m'amusant…`
         });
 
         // Modal scroll handler for top fade effect and image zoom
+        let lastModalScrollTop = 0;
+        let isScrollingUp = false;
+        
         document.getElementById('modalPaper').addEventListener('scroll', function() {
-            if (this.scrollTop > 20) {
+            const currentScrollTop = this.scrollTop;
+            isScrollingUp = currentScrollTop < lastModalScrollTop;
+            lastModalScrollTop = currentScrollTop;
+            
+            if (currentScrollTop > 20) {
                 this.classList.add('scrolled');
             } else {
                 this.classList.remove('scrolled');
+            }
+            
+            // Show sticky title when scrolling up and past the original title
+            const stickyTitle = document.getElementById('modalStickyTitle');
+            if (isScrollingUp && currentScrollTop > 150) {
+                stickyTitle.classList.add('visible');
+            } else {
+                stickyTitle.classList.remove('visible');
             }
             
             // Image zoom effect - progressive based on visibility
