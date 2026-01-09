@@ -498,13 +498,9 @@
             display: block;
             width: 100%;
             height: auto;
-            transform: scale(1.1);
+            transform: scale(var(--image-scale, 1.1));
             transform-origin: center center;
-            transition: transform 0.6s ease-out;
-        }
-
-        .modal-paper.fullscreen .poem-image.zoomed-out {
-            transform: scale(1);
+            transition: transform 0.15s ease-out;
         }
 
         .modal-close {
@@ -1689,22 +1685,24 @@ Et grandir en m'amusant…`
                 this.classList.remove('scrolled');
             }
             
-            // Image zoom effect
+            // Image zoom effect - progressive based on visibility
             const modalImage = document.getElementById('modalImage');
             const modalImageContainer = document.getElementById('modalImageContainer');
             if (modalImage.src && modalImageContainer.style.display !== 'none') {
                 const containerRect = modalImageContainer.getBoundingClientRect();
                 const windowHeight = window.innerHeight;
                 
-                // Check if image is at least 10% visible in viewport
+                // Calculate visible percentage
                 const visibleHeight = Math.min(containerRect.bottom, windowHeight) - Math.max(containerRect.top, 0);
-                const visiblePercent = visibleHeight / containerRect.height;
+                const visiblePercent = Math.max(0, visibleHeight / containerRect.height);
                 
-                if (visiblePercent >= 0.1) {
-                    modalImage.classList.add('zoomed-out');
-                } else {
-                    modalImage.classList.remove('zoomed-out');
-                }
+                // Map visibility (10% to 100%) to scale (1.1 to 1.0)
+                // Below 10% visibility = scale 1.1, at 100% visibility = scale 1.0
+                const startVisibility = 0.1;
+                const progress = Math.max(0, Math.min(1, (visiblePercent - startVisibility) / (1 - startVisibility)));
+                const scale = 1.1 - (progress * 0.1);
+                
+                modalImage.style.setProperty('--image-scale', scale);
             }
         });
 
