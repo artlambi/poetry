@@ -266,6 +266,40 @@
             }
         }
 
+        /* Tap animation for touch devices */
+        .page-footer .signature.tapped path:nth-child(1) { 
+            animation: drawSignatureReverse 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.1s; 
+        }
+        .page-footer .signature.tapped path:nth-child(2) { 
+            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.2s; 
+        }
+        .page-footer .signature.tapped path:nth-child(3) { 
+            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.4s; 
+        }
+        .page-footer .signature.tapped path:nth-child(4) { 
+            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.55s; 
+        }
+        .page-footer .signature.tapped path:nth-child(5) { 
+            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.65s; 
+        }
+        .page-footer .signature.tapped path:nth-child(6) { 
+            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.7s; 
+        }
+        .page-footer .signature.tapped path:nth-child(7) { 
+            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.75s; 
+        }
+        .page-footer .signature.tapped path:nth-child(8) { 
+            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.8s; 
+        }
+
         .poem-grid {
             display: grid;
             grid-template-columns: repeat(3, 280px);
@@ -1825,6 +1859,20 @@ Et grandir en m'amusant…`
                 
                 modalImage.style.setProperty('--image-scale', scale);
             }
+        });
+
+        // Signature tap animation for touch devices
+        const signature = document.querySelector('.page-footer .signature');
+        signature.addEventListener('click', function() {
+            const paths = this.querySelectorAll('path');
+            paths.forEach(path => {
+                path.style.animation = 'none';
+                path.offsetHeight; // Force reflow
+                path.style.animation = '';
+            });
+            this.classList.remove('tapped');
+            void this.offsetHeight; // Force reflow
+            this.classList.add('tapped');
         });
 
     </script>
