@@ -84,9 +84,14 @@
             position: relative;
         }
 
-        ::selection {
-            background: transparent;
-            text-shadow: 0 1px 0 currentColor;
+        .modal-paper.fullscreen .poem-text::selection {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .modal-paper.fullscreen .poem-text::selection {
+                background: rgba(255, 255, 255, 0.2);
+            }
         }
 
         body::before {
