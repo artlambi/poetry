@@ -222,6 +222,17 @@
                 gap: 96px;
                 margin: 0 20px;
             }
+
+            .page-footer {
+                flex-direction: column-reverse;
+                align-items: center;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .page-footer .signature {
+                width: 200px;
+            }
         }
 
         .poem-card {
@@ -465,7 +476,7 @@
             opacity: 1;
             transform: translateY(0);
             filter: blur(0);
-            transition: opacity 0.3s ease-out, top 0.3s ease-out, filter 0.3s ease-out;
+            transition: opacity 0.3s ease-out, top 0.3s ease-out, filter 0.3s ease-out, transform 0.3s ease-out;
         }
 
         .modal-paper.fullscreen .title.sticky {
@@ -485,12 +496,6 @@
             top: 30px;
             opacity: 1;
             filter: blur(0);
-        }
-
-        .modal-paper.fullscreen .title.sticky.at-top {
-            font-size: 40px;
-            line-height: 56px;
-            transition: opacity 0.3s ease-out, top 0.3s ease-out, filter 0.3s ease-out, font-size 0.3s ease-out;
         }
 
         .modal-paper.fullscreen .poem-text {
@@ -1732,17 +1737,15 @@ Et grandir en m'amusant…`
                     modalTitle.offsetHeight;
                     modalTitle.classList.add('visible');
                 }
-                modalTitle.classList.remove('at-top');
-            } else if (isScrollingUp && currentScrollTop <= titleOriginalTop) {
-                // Reaching the top while scrolling up - scale back to 40px
-                modalTitle.classList.add('sticky', 'visible', 'at-top');
-                // Remove sticky once fully at top
-                if (currentScrollTop < 20) {
-                    modalTitle.classList.remove('sticky', 'visible', 'at-top');
-                }
+            } else if (isScrollingUp && !titleOutOfView && currentScrollTop > 0) {
+                // Still scrolling up but title would be in view - keep sticky
+                modalTitle.classList.add('sticky', 'visible');
+            } else if (currentScrollTop === 0) {
+                // Fully at top - instant remove
+                modalTitle.classList.remove('sticky', 'visible');
             } else if (!isScrollingUp) {
                 // Scrolling down - remove sticky, let it scroll naturally
-                modalTitle.classList.remove('sticky', 'visible', 'at-top');
+                modalTitle.classList.remove('sticky', 'visible');
             }
             
             // Image zoom effect - progressive based on visibility
