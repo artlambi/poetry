@@ -268,58 +268,6 @@
             }
         }
 
-        /* Tap animation for touch devices */
-        .page-footer .signature.tapped path:nth-child(1) { 
-            animation: drawSignatureReverseTap 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.1s; 
-        }
-        .page-footer .signature.tapped path:nth-child(2) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.2s; 
-        }
-        .page-footer .signature.tapped path:nth-child(3) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.4s; 
-        }
-        .page-footer .signature.tapped path:nth-child(4) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.55s; 
-        }
-        .page-footer .signature.tapped path:nth-child(5) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.65s; 
-        }
-        .page-footer .signature.tapped path:nth-child(6) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.7s; 
-        }
-        .page-footer .signature.tapped path:nth-child(7) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.75s; 
-        }
-        .page-footer .signature.tapped path:nth-child(8) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.8s; 
-        }
-
-        @keyframes drawSignatureTap {
-            0% {
-                stroke-dashoffset: 2000;
-            }
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes drawSignatureReverseTap {
-            0% {
-                stroke-dashoffset: -2000;
-            }
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-
         .poem-grid {
             display: grid;
             grid-template-columns: repeat(3, 280px);
@@ -1879,48 +1827,6 @@ Et grandir en m'amusant…`
                 
                 modalImage.style.setProperty('--image-scale', scale);
             }
-        });
-
-        // Signature tap animation for touch devices
-        const signature = document.querySelector('.page-footer .signature');
-        let tapTimeout = null;
-        
-        signature.addEventListener('click', function() {
-            // Clear any pending timeout
-            if (tapTimeout) clearTimeout(tapTimeout);
-            
-            // Remove tapped class
-            this.classList.remove('tapped');
-            
-            const paths = this.querySelectorAll('path');
-            
-            // Hide all paths instantly
-            paths.forEach((path, index) => {
-                path.style.animation = 'none';
-                if (index === 0) {
-                    path.style.strokeDashoffset = '-2000';
-                } else {
-                    path.style.strokeDashoffset = '2000';
-                }
-            });
-            
-            // Force reflow
-            void this.offsetHeight;
-            
-            // Now start the animation
-            paths.forEach(path => {
-                path.style.animation = '';
-            });
-            this.classList.add('tapped');
-            
-            // Remove class after animation completes so it can be re-triggered
-            tapTimeout = setTimeout(() => {
-                this.classList.remove('tapped');
-                // Set final state explicitly
-                paths.forEach(path => {
-                    path.style.strokeDashoffset = '0';
-                });
-            }, 2100);
         });
 
     </script>
