@@ -297,6 +297,10 @@
                 gap: 96px;
                 margin: 0 20px;
             }
+
+            .page-header {
+                margin-bottom: 64px;
+            }
         }
 
         .poem-card {
@@ -562,6 +566,20 @@
             filter: blur(0);
         }
 
+        .modal-paper .author {
+            display: none;
+        }
+
+        .modal-paper.fullscreen .author {
+            display: block;
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.5);
+            margin-top: 8px;
+            margin-bottom: 32px;
+        }
+
         .modal-paper.fullscreen .poem-text {
             font-size: 24px;
             color: #000000;
@@ -696,6 +714,10 @@
 
             .modal-paper .title {
                 color: #cccccc;
+            }
+
+            .modal-paper.fullscreen .author {
+                color: rgba(255, 255, 255, 0.5);
             }
 
             .modal-paper .poem-text {
@@ -1203,6 +1225,7 @@ Et grandir en m'amusant…</p>
         <div class="modal-paper" id="modalPaper">
             <div class="card-content">
                 <h2 class="title" id="modalTitle"></h2>
+                <p class="author" id="modalAuthor">Christian Lambillotte</p>
                 <div class="poem-text" id="modalText"></div>
                 <div class="poem-image-container" id="modalImageContainer">
                     <img class="poem-image" id="modalImage" src="" alt="">
