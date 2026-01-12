@@ -313,7 +313,7 @@
 
         @keyframes drawSignatureReverseTap {
             0% {
-                stroke-dashoffset: 2000;
+                stroke-dashoffset: -2000;
             }
             100% {
                 stroke-dashoffset: 0;
@@ -1892,8 +1892,8 @@ Et grandir en m'amusant…`
             paths.forEach((path, index) => {
                 path.style.transition = 'none';
                 if (index === 0) {
-                    // Swoosh - use positive offset to hide from correct direction
-                    path.style.strokeDashoffset = '2000';
+                    // Swoosh - use negative offset to hide, will draw in from left to right
+                    path.style.strokeDashoffset = '-2000';
                 } else {
                     path.style.strokeDashoffset = '2000';
                 }
