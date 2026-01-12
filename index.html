@@ -602,7 +602,7 @@
             text-align: center;
             margin-top: 12px;
             opacity: 0;
-            transition: opacity 0.3s ease-out;
+            transition: opacity 0.4s ease-out 0.2s;
         }
 
         .modal-paper.fullscreen .illustration-credit.visible {
@@ -1859,8 +1859,8 @@ Et grandir en m'amusant…`
                 
                 modalImage.style.setProperty('--image-scale', scale);
                 
-                // Show credit when image is 100% visible
-                if (visiblePercent >= 1) {
+                // Show credit when image bottom is at least 50px above viewport bottom
+                if (containerRect.bottom < windowHeight - 50) {
                     illustrationCredit.classList.add('visible');
                 } else {
                     illustrationCredit.classList.remove('visible');
