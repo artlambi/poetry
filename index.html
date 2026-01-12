@@ -1882,13 +1882,20 @@ Et grandir en m'amusant…`
         // Signature tap animation for touch devices
         const signature = document.querySelector('.page-footer .signature');
         signature.addEventListener('click', function() {
-            // Remove tapped class
+            // Remove tapped class and reset paths
             this.classList.remove('tapped');
+            const paths = this.querySelectorAll('path');
+            paths.forEach(path => {
+                path.style.strokeDashoffset = '0';
+            });
             
             // Force reflow to reset animations
             void this.offsetHeight;
             
-            // Re-add tapped class to trigger animation
+            // Clear inline styles and add tapped class
+            paths.forEach(path => {
+                path.style.strokeDashoffset = '';
+            });
             this.classList.add('tapped');
             
             // Remove class after animation completes so it can be re-triggered
