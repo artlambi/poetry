@@ -594,6 +594,21 @@
             transition: transform 0.15s ease-out;
         }
 
+        .modal-paper.fullscreen .illustration-credit {
+            font-family: 'EB Garamond', serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.4);
+            text-align: center;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .modal-paper.fullscreen .illustration-credit.visible {
+            opacity: 1;
+        }
+
         .modal-close {
             position: fixed;
             top: 30px;
@@ -706,6 +721,10 @@
             .page-footer .signature path {
                 stroke: #fff;
             }
+
+            .modal-paper.fullscreen .illustration-credit {
+                color: rgba(255, 255, 255, 0.4);
+            }
         }
 
         @media (prefers-color-scheme: dark) and (hover: hover) and (pointer: fine) {
@@ -742,6 +761,11 @@
 
             .modal-paper.fullscreen .title {
                 font-size: 1.6rem;
+            }
+
+            .modal-paper.fullscreen .title.sticky {
+                font-size: 1.6rem;
+                line-height: 1.2;
             }
 
             .modal-paper.fullscreen .poem-text {
@@ -1183,6 +1207,7 @@ Et grandir en m'amusant…</p>
                 <div class="poem-image-container" id="modalImageContainer">
                     <img class="poem-image" id="modalImage" src="" alt="">
                 </div>
+                <p class="illustration-credit" id="illustrationCredit">Illustré par Arthur Lambillotte</p>
             </div>
         </div>
         <button class="modal-close" id="closeBtn" aria-label="Close">
@@ -1591,14 +1616,18 @@ Et grandir en m'amusant…`
             // Set image if available
             const modalImage = document.getElementById('modalImage');
             const modalImageContainer = document.getElementById('modalImageContainer');
+            const illustrationCredit = document.getElementById('illustrationCredit');
             if (poem.image) {
                 modalImage.src = poem.image;
                 modalImage.alt = 'Illustration pour ' + poem.title;
                 modalImage.classList.remove('zoomed-out');
                 modalImageContainer.style.display = '';
+                illustrationCredit.style.display = '';
+                illustrationCredit.classList.remove('visible');
             } else {
                 modalImage.src = '';
                 modalImageContainer.style.display = 'none';
+                illustrationCredit.style.display = 'none';
             }
             
             // Save scroll position before hiding body
@@ -1812,6 +1841,8 @@ Et grandir en m'amusant…`
             // Image zoom effect - progressive based on visibility
             const modalImage = document.getElementById('modalImage');
             const modalImageContainer = document.getElementById('modalImageContainer');
+            const illustrationCredit = document.getElementById('illustrationCredit');
+            
             if (modalImage.src && modalImageContainer.style.display !== 'none') {
                 const containerRect = modalImageContainer.getBoundingClientRect();
                 const windowHeight = window.innerHeight;
@@ -1827,6 +1858,13 @@ Et grandir en m'amusant…`
                 const scale = 1.1 - (progress * 0.1);
                 
                 modalImage.style.setProperty('--image-scale', scale);
+                
+                // Show credit when image is 100% visible
+                if (visiblePercent >= 1) {
+                    illustrationCredit.classList.add('visible');
+                } else {
+                    illustrationCredit.classList.remove('visible');
+                }
             }
         });
 
