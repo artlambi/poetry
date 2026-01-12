@@ -1859,11 +1859,9 @@ Et grandir en m'amusant…`
                 
                 modalImage.style.setProperty('--image-scale', scale);
                 
-                // Show credit when image bottom is at least 25px above viewport bottom
-                if (containerRect.bottom < windowHeight - 25) {
+                // Show credit when image bottom is at least 25px above viewport bottom (only once)
+                if (containerRect.bottom < windowHeight - 25 && !illustrationCredit.classList.contains('visible')) {
                     illustrationCredit.classList.add('visible');
-                } else {
-                    illustrationCredit.classList.remove('visible');
                 }
             }
         });
