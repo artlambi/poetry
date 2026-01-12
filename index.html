@@ -1890,22 +1890,16 @@ Et grandir en m'amusant…`
             // Force all paths to hidden state instantly
             const paths = this.querySelectorAll('path');
             paths.forEach((path, index) => {
-                path.style.transition = 'none';
-                if (index === 0) {
-                    // Swoosh - use negative offset to hide, will draw in from left to right
-                    path.style.strokeDashoffset = '-2000';
-                } else {
-                    path.style.strokeDashoffset = '2000';
-                }
+                // Remove any existing animation
+                path.style.animation = 'none';
             });
             
             // Force reflow
             void this.offsetHeight;
             
-            // Clear inline styles and add tapped class to trigger animation
+            // Clear animation style and add tapped class to trigger animation
             paths.forEach(path => {
-                path.style.transition = '';
-                path.style.strokeDashoffset = '';
+                path.style.animation = '';
             });
             this.classList.add('tapped');
             
