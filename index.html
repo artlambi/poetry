@@ -1883,29 +1883,43 @@ Et grandir en m'amusant…`
 
         // Signature tap animation for touch devices
         const signature = document.querySelector('.page-footer .signature');
+        let tapTimeout = null;
+        
         signature.addEventListener('click', function() {
+            // Clear any pending timeout
+            if (tapTimeout) clearTimeout(tapTimeout);
+            
             // Remove tapped class
             this.classList.remove('tapped');
             
-            // Force all paths to hidden state instantly
             const paths = this.querySelectorAll('path');
+            
+            // Hide all paths instantly
             paths.forEach((path, index) => {
-                // Remove any existing animation
                 path.style.animation = 'none';
+                if (index === 0) {
+                    path.style.strokeDashoffset = '-2000';
+                } else {
+                    path.style.strokeDashoffset = '2000';
+                }
             });
             
             // Force reflow
             void this.offsetHeight;
             
-            // Clear animation style and add tapped class to trigger animation
+            // Now start the animation
             paths.forEach(path => {
                 path.style.animation = '';
             });
             this.classList.add('tapped');
             
             // Remove class after animation completes so it can be re-triggered
-            setTimeout(() => {
+            tapTimeout = setTimeout(() => {
                 this.classList.remove('tapped');
+                // Set final state explicitly
+                paths.forEach(path => {
+                    path.style.strokeDashoffset = '0';
+                });
             }, 2100);
         });
 
