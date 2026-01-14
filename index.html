@@ -212,40 +212,42 @@
             stroke-dashoffset: 0;
         }
 
-        /* Hover animation - Swoosh */
-        .page-footer .signature:hover path:nth-child(1) { 
-            animation: drawSignatureReverse 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.1s; 
-        }
-        
-        /* Hover animation - Letters */
-        .page-footer .signature:hover path:nth-child(2) { 
-            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.2s; 
-        }
-        .page-footer .signature:hover path:nth-child(3) { 
-            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.4s; 
-        }
-        .page-footer .signature:hover path:nth-child(4) { 
-            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.55s; 
-        }
-        .page-footer .signature:hover path:nth-child(5) { 
-            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.65s; 
-        }
-        .page-footer .signature:hover path:nth-child(6) { 
-            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.7s; 
-        }
-        .page-footer .signature:hover path:nth-child(7) { 
-            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.75s; 
-        }
-        .page-footer .signature:hover path:nth-child(8) { 
-            animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.8s; 
+        /* Hover animation - only on devices with hover capability */
+        @media (hover: hover) and (pointer: fine) {
+            .page-footer .signature:hover path:nth-child(1) { 
+                animation: drawSignatureReverse 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.1s; 
+            }
+            
+            /* Hover animation - Letters */
+            .page-footer .signature:hover path:nth-child(2) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.2s; 
+            }
+            .page-footer .signature:hover path:nth-child(3) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.4s; 
+            }
+            .page-footer .signature:hover path:nth-child(4) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.55s; 
+            }
+            .page-footer .signature:hover path:nth-child(5) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.65s; 
+            }
+            .page-footer .signature:hover path:nth-child(6) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.7s; 
+            }
+            .page-footer .signature:hover path:nth-child(7) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.75s; 
+            }
+            .page-footer .signature:hover path:nth-child(8) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.8s; 
+            }
         }
 
         @keyframes drawSignature {
@@ -258,58 +260,6 @@
         }
 
         @keyframes drawSignatureReverse {
-            0% {
-                stroke-dashoffset: -2000;
-            }
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        /* Tap animation for touch devices */
-        .page-footer .signature.tapped path:nth-child(1) { 
-            animation: drawSignatureReverseTap 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.1s; 
-        }
-        .page-footer .signature.tapped path:nth-child(2) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.2s; 
-        }
-        .page-footer .signature.tapped path:nth-child(3) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.4s; 
-        }
-        .page-footer .signature.tapped path:nth-child(4) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.55s; 
-        }
-        .page-footer .signature.tapped path:nth-child(5) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.65s; 
-        }
-        .page-footer .signature.tapped path:nth-child(6) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.7s; 
-        }
-        .page-footer .signature.tapped path:nth-child(7) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.75s; 
-        }
-        .page-footer .signature.tapped path:nth-child(8) { 
-            animation: drawSignatureTap 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            animation-delay: 0.8s; 
-        }
-
-        @keyframes drawSignatureTap {
-            0% {
-                stroke-dashoffset: 2000;
-            }
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes drawSignatureReverseTap {
             0% {
                 stroke-dashoffset: -2000;
             }
@@ -346,6 +296,10 @@
                 grid-template-columns: 280px;
                 gap: 96px;
                 margin: 0 20px;
+            }
+
+            .page-header {
+                margin-bottom: 64px;
             }
         }
 
@@ -612,6 +566,14 @@
             filter: blur(0);
         }
 
+        .modal-paper .author {
+            display: none;
+        }
+
+        .modal-paper.fullscreen .author {
+            display: none;
+        }
+
         .modal-paper.fullscreen .poem-text {
             font-size: 24px;
             color: #000000;
@@ -642,6 +604,21 @@
             transform: scale(var(--image-scale, 1.1));
             transform-origin: center center;
             transition: transform 0.15s ease-out;
+        }
+
+        .modal-paper.fullscreen .illustration-credit {
+            font-family: 'EB Garamond', serif;
+            font-size: 15px;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.4);
+            text-align: center;
+            margin-top: 12px;
+            opacity: 0;
+            transition: opacity 0.4s ease-out 0.15s;
+        }
+
+        .modal-paper.fullscreen .illustration-credit.visible {
+            opacity: 1;
         }
 
         .modal-close {
@@ -733,6 +710,10 @@
                 color: #cccccc;
             }
 
+            .modal-paper.fullscreen .author {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
             .modal-paper .poem-text {
                 color: #cccccc;
             }
@@ -755,6 +736,10 @@
 
             .page-footer .signature path {
                 stroke: #fff;
+            }
+
+            .modal-paper.fullscreen .illustration-credit {
+                color: rgba(255, 255, 255, 0.4);
             }
         }
 
@@ -792,6 +777,11 @@
 
             .modal-paper.fullscreen .title {
                 font-size: 1.6rem;
+            }
+
+            .modal-paper.fullscreen .title.sticky {
+                font-size: 1.6rem;
+                line-height: 1.2;
             }
 
             .modal-paper.fullscreen .poem-text {
@@ -1229,10 +1219,12 @@ Et grandir en m'amusant…</p>
         <div class="modal-paper" id="modalPaper">
             <div class="card-content">
                 <h2 class="title" id="modalTitle"></h2>
+                <p class="author" id="modalAuthor">Christian Lambillotte</p>
                 <div class="poem-text" id="modalText"></div>
                 <div class="poem-image-container" id="modalImageContainer">
                     <img class="poem-image" id="modalImage" src="" alt="">
                 </div>
+                <p class="illustration-credit" id="illustrationCredit">Illustré par Arthur Lambillotte</p>
             </div>
         </div>
         <button class="modal-close" id="closeBtn" aria-label="Close">
@@ -1444,6 +1436,7 @@ Resta muet`
             },
             {
                 title: "Ode à la pomme de terre",
+                image: "https://artlambi.github.io/poetry/img/pomme-de-terre.jpg",
                 text: `Oh Chère Patate
 
 Quand je t'ai vue
@@ -1640,14 +1633,18 @@ Et grandir en m'amusant…`
             // Set image if available
             const modalImage = document.getElementById('modalImage');
             const modalImageContainer = document.getElementById('modalImageContainer');
+            const illustrationCredit = document.getElementById('illustrationCredit');
             if (poem.image) {
                 modalImage.src = poem.image;
                 modalImage.alt = 'Illustration pour ' + poem.title;
                 modalImage.classList.remove('zoomed-out');
                 modalImageContainer.style.display = '';
+                illustrationCredit.style.display = '';
+                illustrationCredit.classList.remove('visible');
             } else {
                 modalImage.src = '';
                 modalImageContainer.style.display = 'none';
+                illustrationCredit.style.display = 'none';
             }
             
             // Save scroll position before hiding body
@@ -1861,6 +1858,8 @@ Et grandir en m'amusant…`
             // Image zoom effect - progressive based on visibility
             const modalImage = document.getElementById('modalImage');
             const modalImageContainer = document.getElementById('modalImageContainer');
+            const illustrationCredit = document.getElementById('illustrationCredit');
+            
             if (modalImage.src && modalImageContainer.style.display !== 'none') {
                 const containerRect = modalImageContainer.getBoundingClientRect();
                 const windowHeight = window.innerHeight;
@@ -1876,25 +1875,12 @@ Et grandir en m'amusant…`
                 const scale = 1.1 - (progress * 0.1);
                 
                 modalImage.style.setProperty('--image-scale', scale);
+                
+                // Show credit when image bottom is at least 25px above viewport bottom (only once)
+                if (containerRect.bottom < windowHeight - 25 && !illustrationCredit.classList.contains('visible')) {
+                    illustrationCredit.classList.add('visible');
+                }
             }
-        });
-
-        // Signature tap animation for touch devices
-        const signature = document.querySelector('.page-footer .signature');
-        signature.addEventListener('click', function() {
-            // Remove tapped class
-            this.classList.remove('tapped');
-            
-            // Force reflow to reset animations
-            void this.offsetHeight;
-            
-            // Re-add tapped class to trigger animation
-            this.classList.add('tapped');
-            
-            // Remove class after animation completes so it can be re-triggered
-            setTimeout(() => {
-                this.classList.remove('tapped');
-            }, 2100);
         });
 
     </script>
