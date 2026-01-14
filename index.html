@@ -315,7 +315,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            box-shadow: 0 7px 6px -4px color(display-p3 0 0 0 / 0.06);
+            box-shadow: 0 1px 1px -1px rgba(0,0,0,0.03), 0 7px 6px -4px color(display-p3 0 0 0 / 0.06);
             overflow: hidden;
             mix-blend-mode: normal;
             transform-style: preserve-3d;
@@ -1371,64 +1371,64 @@ Entre ces deux faux compagnons
 (Le fœtus en italique
 L'autre plus classique)
 
-Je vois une lumière, là, à l'horizon !
+<em>Je vois une lumière, là, à l'horizon !</em>
 Ne te fais pas trop d'illusions
-Je ne comprends pas
+<em>Je ne comprends pas</em>
 Sois patient et tu verras
 
-Raconte-moi du moins ton vécu
+<em>Raconte-moi du moins ton vécu</em>
 A toi qui n'est qu'au début ?
-Je meurs d'apprendre, dis-moi !
+<em>Je meurs d'apprendre, dis-moi !</em>
 Hé, tu parles à un mort, ça va ?
 
-Pardon, j'avais presqu'oublié…
+<em>Pardon, j'avais presqu'oublié…</em>
 Que je suis presque désossé ?
-Pour moi, c'est encore l'obscurité
+<em>Pour moi, c'est encore l'obscurité</em>
 Moi, je l'ai retrouvée
 
-Que puis-je attendre de la vie ?
+<em>Que puis-je attendre de la vie ?</em>
 Du bonheur, et bien de soucis
-Parle-moi de l'amour
+<em>Parle-moi de l'amour</em>
 Celui d'un jour ou « pour toujours » ?
 
-Cela m'est bien égal
+<em>Cela m'est bien égal</em>
 Des joies qui peuvent faire mal
-Et des enfants, tu en as, dis ?
+<em>Et des enfants, tu en as, dis ?</em>
 Oui, deux, à mon avis…
 
-Tu me sembles un peu douter
+<em>Tu me sembles un peu douter</em>
 Non, non, je ne faisais que rêver
-Quoi, tu en voulais plus encore ?
+<em>Quoi, tu en voulais plus encore ?</em>
 Bien sûr, mais j'avais tort
 
-Réponse bizarre, et je ne suis pas devin
+<em>Réponse bizarre, et je ne suis pas devin</em>
 On ne choisit pas son destin
-Je ne comprends toujours pas
+<em>Je ne comprends toujours pas</em>
 On donne, on prend, et c'est comme ça
 
-En somme, la vie vaut-elle la peine ?
+<em>En somme, la vie vaut-elle la peine ?</em>
 Pleine de surprises, souvent sereine
-C'est quoi ce charabia ??
+<em>C'est quoi ce charabia ??</em>
 Relis tes questions, et tu verras
 
-As-tu jamais eu peur de mourir ?
+<em>As-tu jamais eu peur de mourir ?</em>
 Je suis mort armé d'un sourire
-Je te comprends de moins en moins
+<em>Je te comprends de moins en moins</em>
 Il faut bien que tout ait une fin
 
-Mais dis-moi donc ce qui m'attend !
+<em>Mais dis-moi donc ce qui m'attend !</em>
 Je ne sais pas, cela dépend
-De qui, de quoi, par pitié ?
+<em>De qui, de quoi, par pitié ?</em>
 De ceux que tu vas rencontrer
 
-Je ne sais vraiment plus quoi penser
+<em>Je ne sais vraiment plus quoi penser</em>
 Bienvenu à la fatalité
-Une toute dernière question ?
+<em>Une toute dernière question ?</em>
 Je t'écoute, vas-y, sans façon
 
-La vie n'est-elle qu'un interlude ?
+<em>La vie n'est-elle qu'un interlude ?</em>
 Bien entendu, c'est une certitude
-Le néant avant, le néant après ?
+<em>Le néant avant, le néant après ?</em>
 ……………………………………… 
 
 Le squelette, sachant
@@ -1628,7 +1628,8 @@ Et grandir en m'amusant…`
             
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
-            document.getElementById('modalText').textContent = poem.text;
+            // Convert line breaks to <br> while preserving HTML tags like <em>
+            document.getElementById('modalText').innerHTML = poem.text.replace(/\n/g, '<br>');
             
             // Set image if available
             const modalImage = document.getElementById('modalImage');
