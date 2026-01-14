@@ -1579,7 +1579,12 @@ Et grandir en m'amusant…`
 
         // Deep linking helper functions
         function getSlug(title) {
-            return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            return title
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
         }
 
         function updateHash() {
