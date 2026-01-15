@@ -326,6 +326,7 @@
             overflow: hidden;
             mix-blend-mode: normal;
             transform-style: preserve-3d;
+            outline: none;
         }
 
         .poem-card-wrapper {
@@ -349,20 +350,24 @@
         }
 
         @media (hover: hover) and (pointer: fine) {
-            .poem-card-wrapper:hover {
+            .poem-card-wrapper:hover,
+            .poem-card-wrapper:focus-within {
                 transform: scale(1.0962);
                 z-index: 10;
             }
 
-            .poem-card-wrapper:hover .poem-card {
+            .poem-card-wrapper:hover .poem-card,
+            .poem-card-wrapper:focus-within .poem-card {
                 box-shadow: 0 30px 60px var(--shadow-soft), 0 15px 30px var(--shadow-softer);
             }
 
-            .poem-card-wrapper:hover .poem-card .preview {
+            .poem-card-wrapper:hover .poem-card .preview,
+            .poem-card-wrapper:focus-within .poem-card .preview {
                 color: rgba(0, 0, 0, 0.9);
             }
 
-            .poem-card-wrapper:hover .hover-title {
+            .poem-card-wrapper:hover .hover-title,
+            .poem-card-wrapper:focus-within .hover-title {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -774,11 +779,13 @@
         }
 
         @media (prefers-color-scheme: dark) and (hover: hover) and (pointer: fine) {
-            .poem-card-wrapper:hover .poem-card {
+            .poem-card-wrapper:hover .poem-card,
+            .poem-card-wrapper:focus-within .poem-card {
                 box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 60px rgba(0, 0, 0, 0.08), 0 15px 30px rgba(0, 0, 0, 0.05);
             }
 
-            .poem-card-wrapper:hover .poem-card .preview {
+            .poem-card-wrapper:hover .poem-card .preview,
+            .poem-card-wrapper:focus-within .poem-card .preview {
                 color: #ffffff;
             }
         }
@@ -1620,6 +1627,8 @@ Et grandir en m'amusant…`
             const card = document.createElement('div');
             card.className = 'poem-card';
             card.dataset.index = index;
+            card.tabIndex = 0;
+            card.setAttribute('role', 'button');
             card.innerHTML = `
                 <h2 class="title">${poem.title}</h2>
                 <p class="preview">${poem.text}</p>
@@ -1627,6 +1636,14 @@ Et grandir en m'amusant…`
             card.addEventListener('click', function() {
                 openModal(index, card);
                 updateHash();
+            });
+            
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openModal(index, card);
+                    updateHash();
+                }
             });
 
             // Cursor-following 3D tilt effect
