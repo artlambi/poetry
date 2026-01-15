@@ -205,7 +205,6 @@
             width: 256px;
             max-width: 100%;
             height: auto;
-            cursor: pointer;
             order: 1;
         }
 
@@ -685,6 +684,31 @@
             d: path("M15.25,15.25 L4.75,4.75 M15.25,4.75 L4.75,15.25");
         }
 
+        .modal-close .tooltip {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.76);
+            color: #fff;
+            font-family: 'gill-sans-nova', 'Gill Sans', sans-serif;
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            transition-delay: 0s;
+            pointer-events: none;
+        }
+
+        .modal-close:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0.7s;
+        }
+
         .modal-content {
             display: none;
         }
@@ -759,6 +783,11 @@
 
             .modal-close:hover {
                 background: rgba(255, 255, 255, 0.06);
+            }
+
+            .modal-close .tooltip {
+                background: rgba(255, 255, 255, 0.24);
+                color: #fff;
             }
 
             .page-footer .copyright {
@@ -1264,10 +1293,11 @@ Et grandir en m'amusant…</p>
                 <p class="illustration-credit" id="illustrationCredit">Illustré par <a href="https://artlambi.be/" target="_blank" rel="noopener">Arthur Lambillotte</a></p>
             </div>
         </div>
-        <button class="modal-close" id="closeBtn" aria-label="Close">
+        <button class="modal-close" id="closeBtn" aria-label="Fermer">
             <svg width="20" height="20" viewBox="0 0 20 20">
                 <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25" stroke="currentColor" fill="none"/>
             </svg>
+            <span class="tooltip">Fermer</span>
         </button>
     </div>
 
