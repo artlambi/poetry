@@ -456,6 +456,7 @@
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             opacity: 1;
+            outline: none;
         }
 
         .modal-paper .card-content {
@@ -1237,7 +1238,7 @@ Et grandir en m'amusant…</p>
     </footer>
 
     <div class="modal-overlay" id="modal">
-        <div class="modal-paper" id="modalPaper">
+        <div class="modal-paper" id="modalPaper" tabindex="-1">
             <div class="card-content">
                 <h2 class="title" id="modalTitle"></h2>
                 <p class="author" id="modalAuthor">Christian Lambillotte</p>
@@ -1708,6 +1709,11 @@ Et grandir en m'amusant…`
             // Lock body scroll with saved position
             document.body.style.top = `-${savedScrollPosition}px`;
             document.body.classList.add('modal-open');
+            
+            // Focus modal paper for keyboard scrolling
+            setTimeout(() => {
+                modalPaper.focus();
+            }, 100);
         }
 
         function closeModal() {
