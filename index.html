@@ -1748,6 +1748,7 @@ Et grandir en m'amusant…`
                 cardContent.style.paddingTop = '0';
                 
                 // Hide controls
+                document.querySelector('.modal-close').style.transition = 'opacity 0.15s ease';
                 document.querySelector('.modal-close').style.opacity = '0';
                 
                 // Animate back to card position
@@ -1769,6 +1770,7 @@ Et grandir en m'amusant…`
                     cardContent.style.paddingTop = '';
                     // Reset controls
                     document.querySelector('.modal-close').style.opacity = '';
+                    document.querySelector('.modal-close').style.transition = '';
                 }, 550);
             } else {
                 modal.classList.remove('active');
