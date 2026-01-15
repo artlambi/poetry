@@ -646,15 +646,16 @@
             width: 40px;
             height: 40px;
             border: none;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.04);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: background 0.3s ease, opacity 0.3s ease 0.3s;
+            transition: background 0.2s ease, opacity 0.3s ease 0.3s;
             opacity: 0;
             z-index: 1001;
+            color: #000;
         }
 
         .modal-overlay.active .modal-close {
@@ -662,15 +663,13 @@
         }
 
         .modal-close:hover {
-            background: var(--close-btn-hover);
+            background: rgba(0, 0, 0, 0.08);
         }
 
         .modal-close svg {
             width: 20px;
             height: 20px;
-            stroke: var(--close-btn-stroke);
-            fill: none;
-            stroke-width: 2;
+            stroke-width: 1;
         }
 
         .modal-content {
@@ -740,12 +739,13 @@
                 color: #cccccc;
             }
 
-            .modal-close svg {
-                stroke: rgba(255,255,255,0.4);
+            .modal-close {
+                background: rgba(255, 255, 255, 0.04);
+                color: #fff;
             }
 
             .modal-close:hover {
-                background: rgba(255,255,255,0.05);
+                background: rgba(255, 255, 255, 0.08);
             }
 
             .page-footer .copyright {
@@ -1250,9 +1250,8 @@ Et grandir en m'amusant…</p>
             </div>
         </div>
         <button class="modal-close" id="closeBtn" aria-label="Close">
-            <svg viewBox="0 0 24 24">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
+            <svg width="20" height="20" viewBox="0 0 20 20">
+                <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25" stroke="currentColor" fill="none"/>
             </svg>
         </button>
     </div>
