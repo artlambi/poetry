@@ -127,11 +127,10 @@
             z-index: 1;
         }
 
+        html.modal-open,
         body.modal-open {
             overflow: hidden;
-            position: fixed;
-            width: 100%;
-            isolation: isolate;
+            height: 100%;
         }
 
         .page-header {
@@ -2027,8 +2026,8 @@ Et grandir en m'amusant…`
             modalPaper.style.height = '100vh';
             modalPaper.classList.add('fullscreen');
             
-            // Lock body scroll with saved position
-            document.body.style.top = `-${savedScrollPosition}px`;
+            // Lock body scroll
+            document.documentElement.classList.add('modal-open');
             document.body.classList.add('modal-open');
             
             // Focus modal paper for keyboard scrolling
@@ -2055,56 +2054,52 @@ Et grandir en m'amusant…`
                 document.getElementById('navNext').style.transition = 'opacity 0.15s ease';
                 document.getElementById('navNext').style.opacity = '0';
                 
-                // Restore scroll position before getting rect
-                document.body.classList.remove('modal-open');
-                document.body.style.top = '';
-                window.scrollTo({ top: savedScrollPosition, left: 0, behavior: 'instant' });
+                // Get card position while scroll is still locked (position hasn't changed)
+                const rect = clickedCard.getBoundingClientRect();
+                const cardContent = modalPaper.querySelector('.card-content');
                 
-                // Use setTimeout to let mobile browser fully settle after scroll restoration
+                // Unlock scroll
+                document.documentElement.classList.remove('modal-open');
+                document.body.classList.remove('modal-open');
+                
+                // Set current padding inline so it can transition when fullscreen class is removed
+                cardContent.style.paddingTop = '100px';
+                
+                // Force reflow
+                cardContent.offsetHeight;
+                
+                // Now animate padding to 0
+                cardContent.style.paddingTop = '0';
+                
+                // Animate back to card position
+                modalPaper.classList.remove('fullscreen');
+                modalPaper.style.top = rect.top + 'px';
+                modalPaper.style.left = rect.left + 'px';
+                modalPaper.style.width = rect.width + 'px';
+                modalPaper.style.height = rect.height + 'px';
+                
+                // Fade out modal paper and show card at the end
                 setTimeout(() => {
-                    const rect = clickedCard.getBoundingClientRect();
-                    const cardContent = modalPaper.querySelector('.card-content');
-                    
-                    // Set current padding inline so it can transition when fullscreen class is removed
-                    cardContent.style.paddingTop = '100px';
-                    
-                    // Force reflow
-                    cardContent.offsetHeight;
-                    
-                    // Now animate padding to 0
-                    cardContent.style.paddingTop = '0';
-                    
-                    // Animate back to card position
-                    modalPaper.classList.remove('fullscreen');
-                    modalPaper.style.top = rect.top + 'px';
-                    modalPaper.style.left = rect.left + 'px';
-                    modalPaper.style.width = rect.width + 'px';
-                    modalPaper.style.height = rect.height + 'px';
-                    
-                    // Fade out modal paper and show card at the end
-                    setTimeout(() => {
-                        modalPaper.style.opacity = '0';
-                        clickedCard.style.opacity = '1';
-                    }, 400);
-                    
-                    setTimeout(() => {
-                        modal.classList.remove('active');
-                        modalPaper.style.opacity = '1';
-                        cardContent.style.paddingTop = '';
-                        // Reset controls
-                        document.querySelector('.modal-controls').style.opacity = '';
-                        document.querySelector('.modal-controls').style.transition = '';
-                        document.getElementById('navPrev').style.opacity = '';
-                        document.getElementById('navPrev').style.transition = '';
-                        document.getElementById('navNext').style.opacity = '';
-                        document.getElementById('navNext').style.transition = '';
-                    }, 550);
-                }, 50);
+                    modalPaper.style.opacity = '0';
+                    clickedCard.style.opacity = '1';
+                }, 400);
+                
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                    modalPaper.style.opacity = '1';
+                    cardContent.style.paddingTop = '';
+                    // Reset controls
+                    document.querySelector('.modal-controls').style.opacity = '';
+                    document.querySelector('.modal-controls').style.transition = '';
+                    document.getElementById('navPrev').style.opacity = '';
+                    document.getElementById('navPrev').style.transition = '';
+                    document.getElementById('navNext').style.opacity = '';
+                    document.getElementById('navNext').style.transition = '';
+                }, 550);
             } else {
                 modal.classList.remove('active');
+                document.documentElement.classList.remove('modal-open');
                 document.body.classList.remove('modal-open');
-                document.body.style.top = '';
-                window.scrollTo(0, savedScrollPosition);
             }
         }
 
