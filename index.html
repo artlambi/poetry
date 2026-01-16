@@ -851,39 +851,15 @@
             width: 20px;
             height: 20px;
             stroke-width: 1;
-            will-change: transform;
+            transition: transform 0.2s ease;
         }
 
         .modal-nav.prev .modal-nav-btn:hover svg {
-            animation: arrowBumpLeft 0.3s ease;
+            transform: translateX(-2px);
         }
 
         .modal-nav.next .modal-nav-btn:hover svg {
-            animation: arrowBumpRight 0.3s ease;
-        }
-
-        @keyframes arrowBumpLeft {
-            0% {
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(-3px);
-            }
-            100% {
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes arrowBumpRight {
-            0% {
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(3px);
-            }
-            100% {
-                transform: translateX(0);
-            }
+            transform: translateX(2px);
         }
 
         /* Hide nav arrows on mobile */
