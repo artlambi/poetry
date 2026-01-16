@@ -799,7 +799,7 @@
             position: fixed;
             top: 100px;
             bottom: 0;
-            width: 120px;
+            width: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -851,6 +851,39 @@
             width: 20px;
             height: 20px;
             stroke-width: 1;
+            will-change: transform;
+        }
+
+        .modal-nav.prev .modal-nav-btn:hover svg {
+            animation: arrowBumpLeft 0.3s ease;
+        }
+
+        .modal-nav.next .modal-nav-btn:hover svg {
+            animation: arrowBumpRight 0.3s ease;
+        }
+
+        @keyframes arrowBumpLeft {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(-3px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes arrowBumpRight {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(3px);
+            }
+            100% {
+                transform: translateX(0);
+            }
         }
 
         /* Hide nav arrows on mobile */
@@ -2025,6 +2058,10 @@ Et grandir en m'amusant…`
                 // Hide controls
                 document.querySelector('.modal-controls').style.transition = 'opacity 0.15s ease';
                 document.querySelector('.modal-controls').style.opacity = '0';
+                document.getElementById('navPrev').style.transition = 'opacity 0.15s ease';
+                document.getElementById('navPrev').style.opacity = '0';
+                document.getElementById('navNext').style.transition = 'opacity 0.15s ease';
+                document.getElementById('navNext').style.opacity = '0';
                 
                 // Animate back to card position
                 modalPaper.classList.remove('fullscreen');
@@ -2046,6 +2083,10 @@ Et grandir en m'amusant…`
                     // Reset controls
                     document.querySelector('.modal-controls').style.opacity = '';
                     document.querySelector('.modal-controls').style.transition = '';
+                    document.getElementById('navPrev').style.opacity = '';
+                    document.getElementById('navPrev').style.transition = '';
+                    document.getElementById('navNext').style.opacity = '';
+                    document.getElementById('navNext').style.transition = '';
                 }, 550);
             } else {
                 modal.classList.remove('active');
