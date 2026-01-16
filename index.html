@@ -1850,6 +1850,7 @@ Et grandir en m'amusant…`
 
         let currentIndex = 0;
         let clickedCard = null;
+        let originalClickedCard = null;
         let savedScrollPosition = 0;
         const grid = document.getElementById('grid');
         const modal = document.getElementById('modal');
@@ -1962,6 +1963,7 @@ Et grandir en m'amusant…`
         function openModal(index, card) {
             currentIndex = index;
             clickedCard = card;
+            originalClickedCard = card;
             
             const poem = poems[currentIndex];
             
@@ -2147,8 +2149,13 @@ Et grandir en m'amusant…`
             // Update hash
             updateHash();
             
-            // Update clicked card reference for close animation
+            // Restore original card opacity and update clickedCard for close animation
+            if (originalClickedCard) {
+                originalClickedCard.style.opacity = '1';
+            }
             clickedCard = document.querySelector(`.poem-card[data-index="${targetIndex}"]`);
+            clickedCard.style.opacity = '0';
+            originalClickedCard = clickedCard;
         }
 
         modal.addEventListener('click', (e) => {
