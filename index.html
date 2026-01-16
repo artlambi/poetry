@@ -643,10 +643,22 @@
             opacity: 1;
         }
 
-        .modal-close {
+        .modal-controls {
             position: fixed;
             top: 30px;
             right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.3s;
+        }
+
+        .modal-overlay.active .modal-controls {
+            opacity: 1;
+        }
+
+        .modal-btn {
             width: 40px;
             height: 40px;
             border: none;
@@ -656,35 +668,22 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: background 0.2s ease, opacity 0.3s ease 0.3s;
-            opacity: 0;
-            z-index: 1001;
+            transition: background 0.2s ease;
             color: #000;
+            position: relative;
         }
 
-        .modal-overlay.active .modal-close {
-            opacity: 1;
-        }
-
-        .modal-close:hover {
+        .modal-btn:hover {
             background: rgba(0, 0, 0, 0.06);
         }
 
-        .modal-close svg {
+        .modal-btn svg {
             width: 20px;
             height: 20px;
             stroke-width: 1;
         }
 
-        .modal-close svg path {
-            transition: d 0.2s ease;
-        }
-
-        .modal-close:hover svg path {
-            d: path("M15.25,15.25 L4.75,4.75 M15.25,4.75 L4.75,15.25");
-        }
-
-        .modal-close .tooltip {
+        .modal-btn .tooltip {
             position: absolute;
             top: calc(100% + 8px);
             left: 50%;
@@ -703,10 +702,162 @@
             pointer-events: none;
         }
 
-        .modal-close:hover .tooltip {
+        .modal-btn:hover .tooltip {
             opacity: 1;
             visibility: visible;
             transition-delay: 0.7s;
+        }
+
+        /* Close button specific */
+        .modal-close svg path {
+            transition: d 0.2s ease;
+        }
+
+        .modal-close:hover svg path {
+            d: path("M15.25,15.25 L4.75,4.75 M15.25,4.75 L4.75,15.25");
+        }
+
+        /* Share button specific */
+        .modal-share {
+            overflow: visible;
+        }
+
+        .modal-share .share-icon,
+        .modal-share .checkmark-icon {
+            position: absolute;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .modal-share .share-icon {
+            opacity: 1;
+        }
+
+        .modal-share .checkmark-icon {
+            opacity: 0;
+        }
+
+        .modal-share.copied .share-icon {
+            opacity: 0;
+        }
+
+        .modal-share.copied .checkmark-icon {
+            opacity: 1;
+        }
+
+        .modal-share .share-icon {
+            stroke-width: 0.9;
+        }
+
+        .modal-share .checkmark-icon {
+            stroke-width: 0.9;
+        }
+
+        .modal-share .share-icon .arrow {
+            will-change: transform;
+        }
+
+        .modal-share:hover:not(.copied) .share-icon .arrow {
+            animation: arrowBounce 0.3s ease;
+        }
+
+        @keyframes arrowBounce {
+            0% {
+                transform: translate3d(6px, 1.5px, 0);
+            }
+            50% {
+                transform: translate3d(6px, -1px, 0);
+            }
+            100% {
+                transform: translate3d(6px, 1.5px, 0);
+            }
+        }
+
+        .modal-share .tooltip-copied {
+            opacity: 0;
+            visibility: hidden;
+            transition-delay: 0s;
+        }
+
+        .modal-share:hover .tooltip-copied {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .modal-share.copied .tooltip-copied {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0s;
+        }
+
+        .modal-share.copied .tooltip-share {
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        /* Navigation arrows */
+        .modal-nav {
+            position: fixed;
+            top: 100px;
+            bottom: 0;
+            width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .modal-nav.prev {
+            left: 0;
+            padding-left: 30px;
+            justify-content: flex-start;
+        }
+
+        .modal-nav.next {
+            right: 0;
+            padding-right: 30px;
+            justify-content: flex-end;
+        }
+
+        .modal-overlay.active .modal-nav {
+            pointer-events: auto;
+        }
+
+        .modal-nav:hover {
+            opacity: 1;
+        }
+
+        .modal-nav-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s ease;
+            color: #000;
+        }
+
+        .modal-nav-btn:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .modal-nav-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 1;
+        }
+
+        /* Hide nav arrows on mobile */
+        @media (max-width: 768px) {
+            .modal-nav {
+                display: none;
+            }
         }
 
         .modal-content {
@@ -776,18 +927,27 @@
                 color: #cccccc;
             }
 
-            .modal-close {
+            .modal-btn {
                 background: rgba(255, 255, 255, 0.04);
                 color: #fff;
             }
 
-            .modal-close:hover {
+            .modal-btn:hover {
                 background: rgba(255, 255, 255, 0.06);
             }
 
-            .modal-close .tooltip {
+            .modal-btn .tooltip {
                 background: rgba(255, 255, 255, 0.24);
                 color: #fff;
+            }
+
+            .modal-nav-btn {
+                background: rgba(255, 255, 255, 0.04);
+                color: #fff;
+            }
+
+            .modal-nav-btn:hover {
+                background: rgba(255, 255, 255, 0.06);
             }
 
             .page-footer .copyright {
@@ -822,6 +982,10 @@
         @media (max-width: 768px) {
             body {
                 padding: 40px 15px;
+            }
+
+            .modal-share {
+                display: none;
             }
 
             .poem-card {
@@ -1293,18 +1457,49 @@ Et grandir en m'amusant…</p>
                 <p class="illustration-credit" id="illustrationCredit">Illustré par <a href="https://artlambi.be/" target="_blank" rel="noopener">Arthur Lambillotte</a></p>
             </div>
         </div>
-        <button class="modal-close" id="closeBtn" aria-label="Fermer">
-            <svg width="20" height="20" viewBox="0 0 20 20">
-                <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25" stroke="currentColor" fill="none"/>
-            </svg>
-            <span class="tooltip">Fermer</span>
-        </button>
+        <div class="modal-controls">
+            <button class="modal-btn modal-share" id="shareBtn" aria-label="Partager">
+                <svg class="share-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="overflow: visible;">
+                    <g class="arrow" transform="translate(6, 1.5)">
+                        <polyline points="0 3.75 3.74989629 0 7.5 3.75"></polyline>
+                        <line x1="3.74989629" y1="0.416666667" x2="3.74989629" y2="10"></line>
+                    </g>
+                    <polyline points="7.08333353 8.16666667 3.75008702 8.16666667 3.75008702 17.3333333 16.250087 17.3333333 16.250087 8.16666667 12.9167537 8.16666667"></polyline>
+                </svg>
+                <svg class="checkmark-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3.75 10.4166667 8.33333333 16.0416667 16.25 3.75"></polyline>
+                </svg>
+                <span class="tooltip tooltip-share">Partager</span>
+                <span class="tooltip tooltip-copied">Lien copié</span>
+            </button>
+            <button class="modal-btn modal-close" id="closeBtn" aria-label="Fermer">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25" stroke="currentColor" fill="none"/>
+                </svg>
+                <span class="tooltip">Fermer</span>
+            </button>
+        </div>
+        <div class="modal-nav prev" id="navPrev">
+            <button class="modal-nav-btn" aria-label="Poème précédent">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                    <path d="M12.5 15L7.5 10L12.5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-nav next" id="navNext">
+            <button class="modal-nav-btn" aria-label="Poème suivant">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                    <path d="M7.5 15L12.5 10L7.5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
     </div>
 
     <script>
         const poems = [
             {
                 title: "30 ans en 30 lignes",
+                slug: "30-ans-en-30-lignes",
                 text: `Avoir trente ans, et réfléchir
 Leçons du passé, espoirs et désirs
 
@@ -1345,6 +1540,7 @@ Mais quelle tristesse qu'on ne se verra plus...''`
             },
             {
                 title: "L'essentiel retrouvé ?",
+                slug: "l-essentiel-retrouve",
                 text: `Humanité, amitié, fraternité :
 Voilà l'essentiel, oublié
 
@@ -1386,6 +1582,7 @@ A redécouvrir la vraie fraternité…`
             },
             {
                 title: "Anaïs",
+                slug: "anais",
                 text: `Dire que tu n'as même pas un an…
 Toi, fruit de l'amour de tes parents
 Jamais sans doute tu ne sauras
@@ -1421,6 +1618,7 @@ A tout jamais, même après ma m...`
             },
             {
                 title: "Le foetus et le squelette",
+                slug: "le-foetus-et-le-squelette",
                 image: "https://artlambi.github.io/poetry/img/foetus-squelette.jpg",
                 text: `Deux conditions, de deux vies
 L'une à commencer, l'autre finie
@@ -1502,6 +1700,7 @@ Resta muet`
             },
             {
                 title: "Ode à la pomme de terre",
+                slug: "ode-a-la-pomme-de-terre",
                 image: "https://artlambi.github.io/poetry/img/pomme-de-terre.jpg",
                 text: `Oh Chère Patate
 
@@ -1562,6 +1761,7 @@ Qui serions… dans la purée….`
             },
             {
                 title: "L'Orpheline de guerre...",
+                slug: "l-orpheline-de-guerre",
                 text: `Je suis un GRAND enfant
 J'aurai bientôt NEUF ans !
 
@@ -1648,6 +1848,31 @@ Et grandir en m'amusant…`
                 // Ignore errors in iframe/restricted contexts
             }
         }
+
+        // Share functionality
+        function getShareUrl() {
+            const poem = poems[currentIndex];
+            const slug = poem.slug || getSlug(poem.title);
+            const baseUrl = window.location.origin;
+            return `${baseUrl}/${slug}.html`;
+        }
+
+        function copyShareUrl() {
+            const shareBtn = document.getElementById('shareBtn');
+            const url = getShareUrl();
+            
+            navigator.clipboard.writeText(url).then(() => {
+                shareBtn.classList.add('copied');
+                
+                setTimeout(() => {
+                    shareBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy URL:', err);
+            });
+        }
+
+        document.getElementById('shareBtn').addEventListener('click', copyShareUrl);
 
         // Create grid cards
         poems.forEach((poem, index) => {
@@ -1771,6 +1996,9 @@ Et grandir en m'amusant…`
         }
 
         function closeModal() {
+            // Reset share button state
+            document.getElementById('shareBtn').classList.remove('copied');
+            
             if (clickedCard) {
                 // Restore scroll position before getting rect
                 document.body.classList.remove('modal-open');
@@ -1795,8 +2023,8 @@ Et grandir en m'amusant…`
                 cardContent.style.paddingTop = '0';
                 
                 // Hide controls
-                document.querySelector('.modal-close').style.transition = 'opacity 0.15s ease';
-                document.querySelector('.modal-close').style.opacity = '0';
+                document.querySelector('.modal-controls').style.transition = 'opacity 0.15s ease';
+                document.querySelector('.modal-controls').style.opacity = '0';
                 
                 // Animate back to card position
                 modalPaper.classList.remove('fullscreen');
@@ -1816,8 +2044,8 @@ Et grandir en m'amusant…`
                     modalPaper.style.opacity = '1';
                     cardContent.style.paddingTop = '';
                     // Reset controls
-                    document.querySelector('.modal-close').style.opacity = '';
-                    document.querySelector('.modal-close').style.transition = '';
+                    document.querySelector('.modal-controls').style.opacity = '';
+                    document.querySelector('.modal-controls').style.transition = '';
                 }, 550);
             } else {
                 modal.classList.remove('active');
@@ -1832,6 +2060,56 @@ Et grandir en m'amusant…`
             setTimeout(clearHash, 550);
         });
 
+        // Navigation arrows
+        document.getElementById('navPrev').addEventListener('click', () => {
+            navigatePoem(-1);
+        });
+
+        document.getElementById('navNext').addEventListener('click', () => {
+            navigatePoem(1);
+        });
+
+        function navigatePoem(direction) {
+            const newIndex = currentIndex + direction;
+            
+            // Wrap around
+            const targetIndex = newIndex < 0 ? poems.length - 1 : newIndex >= poems.length ? 0 : newIndex;
+            
+            // Update content
+            const poem = poems[targetIndex];
+            currentIndex = targetIndex;
+            
+            document.getElementById('modalTitle').textContent = poem.title;
+            document.getElementById('modalText').innerHTML = poem.text.replace(/\n/g, '<br>');
+            
+            // Update image if available
+            const modalImage = document.getElementById('modalImage');
+            const modalImageContainer = document.getElementById('modalImageContainer');
+            const illustrationCredit = document.getElementById('illustrationCredit');
+            if (poem.image) {
+                modalImage.src = poem.image;
+                modalImage.alt = 'Illustration pour ' + poem.title;
+                modalImageContainer.style.display = '';
+                illustrationCredit.style.display = '';
+                illustrationCredit.classList.remove('visible');
+            } else {
+                modalImage.src = '';
+                modalImageContainer.style.display = 'none';
+                illustrationCredit.style.display = 'none';
+            }
+            
+            // Reset scroll position
+            modalPaper.scrollTop = 0;
+            modalPaper.classList.remove('scrolled');
+            document.getElementById('modalTitle').classList.remove('sticky', 'visible');
+            
+            // Update hash
+            updateHash();
+            
+            // Update clicked card reference for close animation
+            clickedCard = document.querySelector(`.poem-card[data-index="${targetIndex}"]`);
+        }
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 closeModal();
@@ -1845,13 +2123,17 @@ Et grandir en m'amusant…`
             if (e.key === 'Escape') {
                 closeModal();
                 setTimeout(clearHash, 550);
+            } else if (e.key === 'ArrowLeft') {
+                navigatePoem(-1);
+            } else if (e.key === 'ArrowRight') {
+                navigatePoem(1);
             }
         });
 
         function openPoemByHash() {
             const hash = window.location.hash.slice(1);
             if (hash) {
-                const index = poems.findIndex(p => getSlug(p.title) === hash);
+                const index = poems.findIndex(p => (p.slug || getSlug(p.title)) === hash);
                 if (index !== -1) {
                     const poem = poems[index];
                     const card = document.querySelector(`.poem-card[data-index="${index}"]`);
