@@ -1,6 +1,6 @@
 # Christian Lambillotte - Poetry Collection
 
-> A personal collection of French poems by Christian Lambillotte, presented in an elegant digital format.
+> A personal collection of poems by Christian Lambillotte, presented in an elegant digital format.
 
 This website showcases original poetry written by Christian Lambillotte, a Belgian poet. The site features an interactive reading experience where poems can be viewed in a fullscreen modal with smooth animations.
 
@@ -16,7 +16,7 @@ This website showcases original poetry written by Christian Lambillotte, a Belgi
 ## About
 
 - **Author**: Christian Lambillotte
-- **Language**: French
+- **Language**: French, Dutch
 - **Location**: Belgium
 - **Website**: [christianlambillotte.be](https://www.christianlambillotte.be)
 
