@@ -157,6 +157,28 @@
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s ease-out forwards;
+            position: relative;
+            height: 36px;
+            overflow: hidden;
+        }
+
+        .page-header .subtitle-text {
+            position: absolute;
+            left: 0;
+            right: 0;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+        }
+
+        .page-header .subtitle-text.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .page-header .subtitle-text.exit {
+            transform: translateY(-100%);
+            opacity: 0;
         }
 
         @keyframes fadeInUp {
@@ -1123,7 +1145,10 @@
 </head>
 <body>
     <header class="page-header">
-        <p class="subtitle">La poésie de</p>
+        <p class="subtitle">
+            <span class="subtitle-text active">La poésie de</span>
+            <span class="subtitle-text">De poëzie van</span>
+        </p>
         <h1>Christian Lambillotte</h1>
     </header>
 
@@ -2193,6 +2218,28 @@ Et grandir en m'amusant…`
 
         // Update copyright year
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Cycle subtitle text with vertical slide
+        const subtitleTexts = document.querySelectorAll('.subtitle-text');
+        let currentSubtitle = 0;
+        
+        setInterval(() => {
+            const current = subtitleTexts[currentSubtitle];
+            const next = subtitleTexts[(currentSubtitle + 1) % subtitleTexts.length];
+            
+            current.classList.remove('active');
+            current.classList.add('exit');
+            
+            next.classList.remove('exit');
+            next.classList.add('active');
+            
+            // Reset exit class after transition
+            setTimeout(() => {
+                current.classList.remove('exit');
+            }, 600);
+            
+            currentSubtitle = (currentSubtitle + 1) % subtitleTexts.length;
+        }, 6000);
 
         // Header scroll effect
         const pageHeader = document.querySelector('.page-header');
