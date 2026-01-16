@@ -6,5 +6,5 @@ Illustrations: Arthur Lambillotte
 Website: artlambi.be
 
 /* SITE */
-Language: French
+Language: French, Dutch
 Standards: HTML5, CSS3, JavaScript
