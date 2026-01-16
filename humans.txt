@@ -1,0 +1,10 @@
+/* TEAM */
+Author: Christian Lambillotte
+Website: christianlambillotte.be
+
+Illustrations: Arthur Lambillotte
+Website: artlambi.be
+
+/* SITE */
+Language: French
+Standards: HTML5, CSS3, JavaScript
