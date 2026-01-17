@@ -2047,6 +2047,8 @@ Et grandir en m'amusant…`
             // Reset share button state
             document.getElementById('shareBtn').classList.remove('copied');
             
+            const isMobile = window.innerWidth <= 768;
+            
             if (clickedCard) {
                 // Reset modal scroll position and remove scrolled class
                 modalPaper.scrollTop = 0;
@@ -2063,43 +2065,27 @@ Et grandir en m'amusant…`
                 
                 const cardContent = modalPaper.querySelector('.card-content');
                 
-                // Unlock scroll and restore position
-                document.documentElement.classList.remove('modal-open');
-                document.body.classList.remove('modal-open');
-                document.body.style.top = '';
-                window.scrollTo({ top: savedScrollPosition, left: 0, behavior: 'instant' });
-                
-                // Wait for next frame to ensure scroll is complete
-                requestAnimationFrame(() => {
-                    // Get card position after scroll restoration
-                    const rect = clickedCard.getBoundingClientRect();
-                    
-                    // Set current padding inline so it can transition when fullscreen class is removed
-                    cardContent.style.paddingTop = '100px';
-                    
-                    // Force reflow
-                    cardContent.offsetHeight;
-                    
-                    // Now animate padding to 0
-                    cardContent.style.paddingTop = '0';
-                    
-                    // Animate back to card position
-                    modalPaper.classList.remove('fullscreen');
-                    modalPaper.style.top = rect.top + 'px';
-                    modalPaper.style.left = rect.left + 'px';
-                    modalPaper.style.width = rect.width + 'px';
-                    modalPaper.style.height = rect.height + 'px';
-                    
-                    // Fade out modal paper and show card at the end
-                    setTimeout(() => {
-                        modalPaper.style.opacity = '0';
-                        clickedCard.style.opacity = '1';
-                    }, 400);
+                if (isMobile) {
+                    // On mobile: fade out modal, then restore scroll, then show card
+                    modalPaper.style.transition = 'opacity 0.25s ease';
+                    modalPaper.style.opacity = '0';
                     
                     setTimeout(() => {
+                        // Now restore scroll while modal is invisible
+                        document.documentElement.classList.remove('modal-open');
+                        document.body.classList.remove('modal-open');
+                        document.body.style.top = '';
+                        window.scrollTo(0, savedScrollPosition);
+                        
+                        // Reset modal state
                         modal.classList.remove('active');
+                        modalPaper.classList.remove('fullscreen');
                         modalPaper.style.opacity = '1';
-                        cardContent.style.paddingTop = '';
+                        modalPaper.style.transition = '';
+                        
+                        // Show the card
+                        clickedCard.style.opacity = '1';
+                        
                         // Reset controls
                         document.querySelector('.modal-controls').style.opacity = '';
                         document.querySelector('.modal-controls').style.transition = '';
@@ -2107,8 +2093,56 @@ Et grandir en m'amusant…`
                         document.getElementById('navPrev').style.transition = '';
                         document.getElementById('navNext').style.opacity = '';
                         document.getElementById('navNext').style.transition = '';
-                    }, 550);
-                });
+                    }, 250);
+                } else {
+                    // On desktop: full position animation
+                    // Unlock scroll and restore position
+                    document.documentElement.classList.remove('modal-open');
+                    document.body.classList.remove('modal-open');
+                    document.body.style.top = '';
+                    window.scrollTo({ top: savedScrollPosition, left: 0, behavior: 'instant' });
+                    
+                    // Wait for next frame to ensure scroll is complete
+                    requestAnimationFrame(() => {
+                        // Get card position after scroll restoration
+                        const rect = clickedCard.getBoundingClientRect();
+                        
+                        // Set current padding inline so it can transition when fullscreen class is removed
+                        cardContent.style.paddingTop = '100px';
+                        
+                        // Force reflow
+                        cardContent.offsetHeight;
+                        
+                        // Now animate padding to 0
+                        cardContent.style.paddingTop = '0';
+                        
+                        // Animate back to card position
+                        modalPaper.classList.remove('fullscreen');
+                        modalPaper.style.top = rect.top + 'px';
+                        modalPaper.style.left = rect.left + 'px';
+                        modalPaper.style.width = rect.width + 'px';
+                        modalPaper.style.height = rect.height + 'px';
+                        
+                        // Fade out modal paper and show card at the end
+                        setTimeout(() => {
+                            modalPaper.style.opacity = '0';
+                            clickedCard.style.opacity = '1';
+                        }, 400);
+                        
+                        setTimeout(() => {
+                            modal.classList.remove('active');
+                            modalPaper.style.opacity = '1';
+                            cardContent.style.paddingTop = '';
+                            // Reset controls
+                            document.querySelector('.modal-controls').style.opacity = '';
+                            document.querySelector('.modal-controls').style.transition = '';
+                            document.getElementById('navPrev').style.opacity = '';
+                            document.getElementById('navPrev').style.transition = '';
+                            document.getElementById('navNext').style.opacity = '';
+                            document.getElementById('navNext').style.transition = '';
+                        }, 550);
+                    });
+                }
             } else {
                 modal.classList.remove('active');
                 document.documentElement.classList.remove('modal-open');
