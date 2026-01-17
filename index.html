@@ -490,6 +490,7 @@
             overflow: hidden;
             opacity: 1;
             outline: none;
+            will-change: transform, top, left, width, height;
         }
 
         .modal-paper .card-content {
@@ -2018,24 +2019,30 @@ Et grandir en m'amusant…`
             modalPaper.style.width = rect.width + 'px';
             modalPaper.style.height = rect.height + 'px';
             
-            // Force reflow
+            // Force GPU acceleration and reflow
+            modalPaper.style.transform = 'translateZ(0)';
             modalPaper.offsetHeight;
             
-            // Show modal and animate to fullscreen
+            // Show modal
             modal.classList.add('active');
             
-            // Animate to fullscreen
-            modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-            modalPaper.style.top = '0';
-            modalPaper.style.left = '0';
-            modalPaper.style.width = '100vw';
-            modalPaper.style.height = '100vh';
-            modalPaper.classList.add('fullscreen');
-            
-            // Lock body scroll
-            document.body.style.top = `-${savedScrollPosition}px`;
-            document.documentElement.classList.add('modal-open');
-            document.body.classList.add('modal-open');
+            // Wait for two frames before animating to ensure everything is ready
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    // Enable transitions and animate to fullscreen
+                    modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    modalPaper.style.top = '0';
+                    modalPaper.style.left = '0';
+                    modalPaper.style.width = '100vw';
+                    modalPaper.style.height = '100vh';
+                    modalPaper.classList.add('fullscreen');
+                    
+                    // Lock body scroll
+                    document.body.style.top = `-${savedScrollPosition}px`;
+                    document.documentElement.classList.add('modal-open');
+                    document.body.classList.add('modal-open');
+                });
+            });
             
             // Focus modal paper for keyboard scrolling
             setTimeout(() => {
