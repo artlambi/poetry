@@ -2062,9 +2062,13 @@ Et grandir en m'amusant…`
                 const rect = clickedCard.getBoundingClientRect();
                 const cardContent = modalPaper.querySelector('.card-content');
                 
-                // Unlock scroll
+                // Unlock scroll and restore position
                 document.documentElement.classList.remove('modal-open');
                 document.body.classList.remove('modal-open');
+                window.scrollTo(0, savedScrollPosition);
+                
+                // Recalculate rect after scroll restoration
+                const newRect = clickedCard.getBoundingClientRect();
                 
                 // Set current padding inline so it can transition when fullscreen class is removed
                 cardContent.style.paddingTop = '100px';
@@ -2077,10 +2081,10 @@ Et grandir en m'amusant…`
                 
                 // Animate back to card position
                 modalPaper.classList.remove('fullscreen');
-                modalPaper.style.top = rect.top + 'px';
-                modalPaper.style.left = rect.left + 'px';
-                modalPaper.style.width = rect.width + 'px';
-                modalPaper.style.height = rect.height + 'px';
+                modalPaper.style.top = newRect.top + 'px';
+                modalPaper.style.left = newRect.left + 'px';
+                modalPaper.style.width = newRect.width + 'px';
+                modalPaper.style.height = newRect.height + 'px';
                 
                 // Fade out modal paper and show card at the end
                 setTimeout(() => {
@@ -2104,6 +2108,7 @@ Et grandir en m'amusant…`
                 modal.classList.remove('active');
                 document.documentElement.classList.remove('modal-open');
                 document.body.classList.remove('modal-open');
+                window.scrollTo(0, savedScrollPosition);
             }
         }
 
