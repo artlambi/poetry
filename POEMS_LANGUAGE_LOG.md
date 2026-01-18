@@ -46,11 +46,23 @@
    - Language: Dutch (nl)
    - Slug: op-de-bergtop
 
+11. **De Ring**
+   - Language: Dutch (nl)
+   - Slug: de-ring
+
+12. **de traan**
+   - Language: Dutch (nl)
+   - Slug: de-traan
+
+13. **zandkorrel**
+   - Language: Dutch (nl)
+   - Slug: zandkorrel
+
 ## Summary by Language
 
 - **French (fr)**: 7 poems (positions 1-7)
 - **Italian (it)**: 1 poem (position 8)
-- **Dutch (nl)**: 2 poems (positions 9-10)
+- **Dutch (nl)**: 5 poems (positions 9-13)
 
 ## Notes
 
