@@ -356,15 +356,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .poem-card-wrapper.initially-hidden {
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(30px) scale(0.95);
         }
 
         .poem-card-wrapper.visible {
             opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.6s ease-out, transform 0.25s ease-in-out;
+            transform: translateY(0) scale(1);
         }
 
         .poem-card-wrapper {
@@ -1184,6 +1187,12 @@
                     "position": 13,
                     "name": "Zandkorrel",
                     "@id": "#zandkorrel"
+                },
+                {
+                    "@type": "CreativeWork",
+                    "position": 14,
+                    "name": "Die kus",
+                    "@id": "#die-kus"
                 }
             ]
         }
@@ -1776,6 +1785,43 @@ Maar ook, wat géén ster kan….
 
 Eén zandkorrel volstaat
 En maakt van liefde haat….</p>
+            </article>
+            <article class="poem-article" id="die-kus">
+                <h2>Die kus</h2>
+                <p> 's Avonds. Duisternis
+
+Of toch niet, er is een kaars 
+Zachte muziek ook
+
+Handen zoeken
+En vinden handen
+
+Die tedere aanraking
+Van vingers
+Eén voor één
+
+Ogen zoeken 
+En vinden ogen
+Een glinstering
+
+Ogen worden spiegels
+Geluk ontmoet geluk
+Verlangen vindt verlangen
+
+Geen woord, enkel een zucht
+Warmte in harten
+Angst ook, voor verlies
+
+Die laatste stap nog
+Naar Het Verbond
+
+De muziek valt stil
+De kaars is uit
+
+Maar wat dan nog ? 
+Toen kwam hij toch
+
+Die Kus…</p>
             </article>
         </noscript>
     </main>
@@ -2430,6 +2476,44 @@ Maar ook, wat géén ster kan….
 
 Eén zandkorrel volstaat
 En maakt van liefde haat….`
+            },
+            {
+                title: "Die kus",
+                slug: "die-kus",
+                text: ` 's Avonds. Duisternis
+
+Of toch niet, er is een kaars 
+Zachte muziek ook
+
+Handen zoeken
+En vinden handen
+
+Die tedere aanraking
+Van vingers
+Eén voor één
+
+Ogen zoeken 
+En vinden ogen
+Een glinstering
+
+Ogen worden spiegels
+Geluk ontmoet geluk
+Verlangen vindt verlangen
+
+Geen woord, enkel een zucht
+Warmte in harten
+Angst ook, voor verlies
+
+Die laatste stap nog
+Naar Het Verbond
+
+De muziek valt stil
+De kaars is uit
+
+Maar wat dan nog ? 
+Toen kwam hij toch
+
+Die Kus…`
             }
         ];
 
@@ -2873,15 +2957,97 @@ En maakt van liefde haat….`
             }
         });
 
-        // Staggered row animation on load
+        // Initial load animation for first two rows, scroll stagger for cards beyond
         const cardWrappers = document.querySelectorAll('.poem-card-wrapper');
         const cardsPerRow = window.innerWidth > 1100 ? 3 : window.innerWidth > 700 ? 2 : 1;
         
+        // Mark first two rows as initially hidden (will fade in on load only once)
         cardWrappers.forEach((wrapper, index) => {
             const row = Math.floor(index / cardsPerRow);
-            setTimeout(() => {
+            
+            if (row < 2) {
+                wrapper.classList.add('initially-hidden');
+                wrapper.dataset.loadAnimated = 'true'; // Mark as needing load animation
+            } else {
+                // Cards beyond row 2 start visible (no fade-in on load)
                 wrapper.classList.add('visible');
-            }, 500 + (row * 120));
+            }
+        });
+        
+        // Animate first two rows on load with diagonal stagger
+        cardWrappers.forEach((wrapper, index) => {
+            const row = Math.floor(index / cardsPerRow);
+            const col = index % cardsPerRow;
+            
+            if (row < 2) {
+                const diagonalDelay = (row + col) * 80;
+                setTimeout(() => {
+                    wrapper.classList.add('visible');
+                }, 500 + diagonalDelay);
+            }
+        });
+        
+        // Intersection Observer for scroll-triggered stagger ONLY on cards beyond row 2
+        const observerOptions = {
+            root: null,
+            rootMargin: '-10% 0px -10% 0px',
+            threshold: 0
+        };
+        
+        const observerCallback = (entries) => {
+            // Group entries by whether they're intersecting
+            const intersecting = entries.filter(e => e.isIntersecting);
+            const notIntersecting = entries.filter(e => !e.isIntersecting);
+            
+            // Handle cards entering viewport with stagger
+            intersecting.forEach(entry => {
+                const wrapper = entry.target;
+                const index = Array.from(cardWrappers).indexOf(wrapper);
+                const col = index % cardsPerRow;
+                
+                // Sort intersecting cards by index to get proper relative position
+                const sortedIntersecting = intersecting
+                    .map(e => Array.from(cardWrappers).indexOf(e.target))
+                    .sort((a, b) => a - b);
+                const relativeIndex = sortedIntersecting.indexOf(index);
+                const relativeRow = Math.floor(relativeIndex / cardsPerRow);
+                
+                // Use relative position for diagonal delay - increased for visibility
+                const diagonalDelay = (relativeRow + col) * 80;
+                
+                setTimeout(() => {
+                    wrapper.classList.add('visible');
+                }, diagonalDelay);
+            });
+            
+            // Handle cards leaving viewport with stagger
+            notIntersecting.forEach(entry => {
+                const wrapper = entry.target;
+                const index = Array.from(cardWrappers).indexOf(wrapper);
+                const col = index % cardsPerRow;
+                
+                const sortedNotIntersecting = notIntersecting
+                    .map(e => Array.from(cardWrappers).indexOf(e.target))
+                    .sort((a, b) => a - b);
+                const relativeIndex = sortedNotIntersecting.indexOf(index);
+                const relativeRow = Math.floor(relativeIndex / cardsPerRow);
+                
+                const diagonalDelay = (relativeRow + col) * 80;
+                
+                setTimeout(() => {
+                    wrapper.classList.remove('visible');
+                }, diagonalDelay);
+            });
+        };
+        
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        
+        // Only observe cards beyond the first two rows
+        cardWrappers.forEach((wrapper, index) => {
+            const row = Math.floor(index / cardsPerRow);
+            if (row >= 2) {
+                observer.observe(wrapper);
+            }
         });
 
         // Modal scroll handler for top fade effect and image zoom
