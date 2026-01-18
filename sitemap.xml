@@ -32,4 +32,8 @@
     <loc>https://www.christianlambillotte.be/membre-de-l-humanite.html</loc>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.christianlambillotte.be/come-dire.html</loc>
+    <priority>0.8</priority>
+  </url>
 </urlset>
