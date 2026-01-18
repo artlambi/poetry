@@ -1892,6 +1892,7 @@ Die Kus…</p>
             {
                 title: "30 ans en 30 lignes",
                 slug: "30-ans-en-30-lignes",
+                date: "2019-03-18", // March 18, 2019
                 text: `Avoir trente ans, et réfléchir
 Leçons du passé, espoirs et désirs
 
@@ -2534,7 +2535,7 @@ Die Kus…`
 
         function updateHash() {
             try {
-                const slug = getSlug(poems[currentIndex].title);
+                const slug = getSlug(shuffledPoems[currentIndex].title);
                 history.replaceState(null, '', '#' + slug);
             } catch (e) {
                 // Ignore errors in iframe/restricted contexts
@@ -2551,7 +2552,7 @@ Die Kus…`
 
         // Share functionality
         function getShareUrl() {
-            const poem = poems[currentIndex];
+            const poem = shuffledPoems[currentIndex];
             const slug = poem.slug || getSlug(poem.title);
             const baseUrl = window.location.origin;
             return `${baseUrl}/${slug}.html`;
@@ -2574,8 +2575,35 @@ Die Kus…`
 
         document.getElementById('shareBtn').addEventListener('click', copyShareUrl);
 
+        // Shuffle array function (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const shuffled = [...array]; // Create a copy
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        // Sort by date function (newest first)
+        function sortByDate(array) {
+            return [...array].sort((a, b) => {
+                // Poems without dates go to the end
+                if (!a.date && !b.date) return 0;
+                if (!a.date) return 1;
+                if (!b.date) return -1;
+                // Compare dates (newest first)
+                return new Date(b.date) - new Date(a.date);
+            });
+        }
+        
+        // CURRENT MODE: Random order (showcases all poems equally)
+        // To switch to date-based sorting (newest first), change line below to:
+        // const shuffledPoems = sortByDate(poems);
+        const shuffledPoems = shuffleArray(poems);
+        
         // Create grid cards
-        poems.forEach((poem, index) => {
+        shuffledPoems.forEach((poem, index) => {
             const wrapper = document.createElement('div');
             wrapper.className = 'poem-card-wrapper';
             
@@ -2631,7 +2659,7 @@ Die Kus…`
             clickedCard = card;
             originalClickedCard = card;
             
-            const poem = poems[currentIndex];
+            const poem = shuffledPoems[currentIndex];
             
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
@@ -2824,10 +2852,10 @@ Die Kus…`
             const newIndex = currentIndex + direction;
             
             // Wrap around
-            const targetIndex = newIndex < 0 ? poems.length - 1 : newIndex >= poems.length ? 0 : newIndex;
+            const targetIndex = newIndex < 0 ? shuffledPoems.length - 1 : newIndex >= shuffledPoems.length ? 0 : newIndex;
             
             // Update content
-            const poem = poems[targetIndex];
+            const poem = shuffledPoems[targetIndex];
             currentIndex = targetIndex;
             
             document.getElementById('modalTitle').textContent = poem.title;
@@ -2889,9 +2917,10 @@ Die Kus…`
         function openPoemByHash() {
             const hash = window.location.hash.slice(1);
             if (hash) {
-                const index = poems.findIndex(p => (p.slug || getSlug(p.title)) === hash);
+                // Find in shuffled array
+                const index = shuffledPoems.findIndex(p => (p.slug || getSlug(p.title)) === hash);
                 if (index !== -1) {
-                    const poem = poems[index];
+                    const poem = shuffledPoems[index];
                     const card = document.querySelector(`.poem-card[data-index="${index}"]`);
                     
                     // Update Open Graph and Twitter meta tags
