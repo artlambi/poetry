@@ -760,7 +760,7 @@
             width: 44px;
             height: 44px;
             border: none;
-            background-image: linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(255,255,255,0.04) 100%);
+            background: transparent;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -771,16 +771,28 @@
             transition: transform 0.2s ease;
         }
 
+        .poem-nav-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+            opacity: 0.04;
+            z-index: -1;
+        }
+
         .poem-nav-btn::before {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: 50%;
             padding: 1px;
-            background: linear-gradient(180deg, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.04) 100%);
+            background: linear-gradient(180deg, #000000 0%, #000000 100%);
+            opacity: 0.04;
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
+            z-index: 0;
         }
 
         .poem-nav-btn:hover {
@@ -790,7 +802,10 @@
         .poem-nav-btn svg {
             width: 20px;
             height: 20px;
-            stroke-width: 1.5;
+            stroke-width: 1;
+            position: relative;
+            z-index: 1;
+            opacity: 0.72;
         }
 
         .modal-controls {
@@ -1090,13 +1105,16 @@
                 color: #cccccc;
             }
 
-            .poem-nav-btn {
-                background-image: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.04) 100%);
-                color: #fff;
+            .poem-nav-btn::after {
+                background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
             }
 
             .poem-nav-btn::before {
-                background: linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.04) 100%);
+                background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+            }
+
+            .poem-nav-btn {
+                color: #fff;
             }
 
             .modal-btn {
@@ -1171,6 +1189,10 @@
                 display: none;
             }
 
+            .modal-controls {
+                display: none;
+            }
+
             .poem-card {
                 padding: 28px 24px;
             }
@@ -1215,11 +1237,11 @@
                 align-items: center;
                 gap: 40px;
                 margin-top: 80px;
-                margin-bottom: 80px;
+                margin-bottom: 104px;
             }
 
             .modal-paper.fullscreen .modal-footer {
-                margin-top: 104px;
+                margin-top: 0;
                 padding-bottom: 60px;
             }
 
@@ -2013,17 +2035,17 @@ Die Kus…</p>
                 <div class="poem-nav-buttons">
                     <button class="poem-nav-btn" id="poemNavPrev" aria-label="Poème précédent">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                            <path d="M12.5 15L7.5 10L12.5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline points="12.5 16.6666667 5.83333333 10.0000151 12.5 3.33333333" stroke-linecap="square"/>
                         </svg>
                     </button>
                     <button class="poem-nav-btn" id="poemNavClose" aria-label="Fermer">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                            <path d="M15 5L5 15M15 15L5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25"/>
                         </svg>
                     </button>
                     <button class="poem-nav-btn" id="poemNavNext" aria-label="Poème suivant">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                            <path d="M7.5 15L12.5 10L7.5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline transform="translate(10.8333, 10) scale(-1, 1) translate(-10.8333, -10)" points="14.1666667 16.6666667 7.5 10.0000151 14.1666667 3.33333333" stroke-linecap="square"/>
                         </svg>
                     </button>
                 </div>
@@ -2067,14 +2089,14 @@ Die Kus…</p>
         <div class="modal-nav prev" id="navPrev">
             <button class="modal-nav-btn" aria-label="Poème précédent">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                    <path d="M12.5 15L7.5 10L12.5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline points="12.5 16.6666667 5.83333333 10.0000151 12.5 3.33333333" stroke-linecap="square"/>
                 </svg>
             </button>
         </div>
         <div class="modal-nav next" id="navNext">
             <button class="modal-nav-btn" aria-label="Poème suivant">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                    <path d="M7.5 15L12.5 10L7.5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline transform="translate(10.8333, 10) scale(-1, 1) translate(-10.8333, -10)" points="14.1666667 16.6666667 7.5 10.0000151 14.1666667 3.33333333" stroke-linecap="square"/>
                 </svg>
             </button>
         </div>
