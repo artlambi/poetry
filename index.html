@@ -2903,10 +2903,20 @@ Die Kus…`
             
             const poem = shuffledPoems[currentIndex];
             
-            // Set full content immediately (overflow hidden will clip it)
-            document.getElementById('modalTitle').textContent = poem.title;
+            // Clear existing content first
+            const modalTitle = document.getElementById('modalTitle');
+            const modalText = document.getElementById('modalText');
+            modalTitle.textContent = '';
+            modalText.innerHTML = '';
+            
+            // Force a repaint
+            modalTitle.offsetHeight;
+            modalText.offsetHeight;
+            
+            // Now set full content
+            modalTitle.textContent = poem.title;
             // Convert line breaks to <br> while preserving HTML tags like <em>
-            document.getElementById('modalText').innerHTML = poem.text.replace(/\n/g, '<br>');
+            modalText.innerHTML = poem.text.replace(/\n/g, '<br>');
             
             // Set image if available
             const modalImage = document.getElementById('modalImage');
@@ -3004,8 +3014,9 @@ Die Kus…`
                         // Reset modal state
                         modal.classList.remove('active');
                         modalPaper.classList.remove('fullscreen');
-                        modalPaper.style.opacity = '1';
-                        modalPaper.style.transition = '';
+                        
+                        // Clear ALL inline styles from modalPaper
+                        modalPaper.style.cssText = '';
                         
                         // Show the card
                         clickedCard.style.opacity = '1';
