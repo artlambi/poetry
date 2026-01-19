@@ -753,12 +753,7 @@
         }
 
         .modal-paper.fullscreen .poem-nav-buttons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin-top: 80px;
-            margin-bottom: 80px;
+            display: none; /* Hidden by default (desktop) */
         }
 
         .poem-nav-btn {
@@ -1212,6 +1207,15 @@
             .modal-paper.fullscreen .poem-text {
                 font-size: 20px;
                 line-height: 28px;
+            }
+
+            .modal-paper.fullscreen .poem-nav-buttons {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                margin-top: 80px;
+                margin-bottom: 80px;
             }
 
             .modal-paper.fullscreen .modal-footer {
