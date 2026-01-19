@@ -2989,6 +2989,11 @@ Die Kus…`
                 
                 const cardContent = modalPaper.querySelector('.card-content');
                 
+                // ALWAYS clear cardContent padding immediately, regardless of mobile/desktop
+                if (cardContent) {
+                    cardContent.style.paddingTop = '';
+                }
+                
                 if (isMobile) {
                     // On mobile: fade out modal, then restore scroll, then show card
                     modalPaper.style.transition = 'opacity 0.25s ease';
