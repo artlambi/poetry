@@ -828,7 +828,9 @@
             position: fixed;
             top: 100px;
             bottom: 0;
-            width: 200px;
+            width: 15%; /* 15% of window width instead of fixed 200px */
+            min-width: 100px; /* Minimum width for very small screens */
+            max-width: 250px; /* Maximum width for very large screens */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -840,13 +842,13 @@
 
         .modal-nav.prev {
             left: 0;
-            padding-left: 30px;
+            padding-left: 2%; /* 2% padding instead of fixed 30px */
             justify-content: flex-start;
         }
 
         .modal-nav.next {
             right: 0;
-            padding-right: 30px;
+            padding-right: 2%; /* 2% padding instead of fixed 30px */
             justify-content: flex-end;
         }
 
@@ -2318,10 +2320,7 @@ Spero che un giorno`
             {
                 title: "Een moment van diep geluk",
                 slug: "een-moment-van-diep-geluk",
-<<<<<<< HEAD
                 date: "2022-12-30", // December 30, 2022 (newest poem!)
-=======
->>>>>>> 4e87c40a423390738821719ef47bbcf88c78382e
                 text: `Kwam het door een glimlach
 Die ik even zag ?
 Of was het een woord, een blik 
@@ -2613,17 +2612,10 @@ Die Kus…`
             });
         }
         
-<<<<<<< HEAD
         // CURRENT MODE: Chronological order (newest first)
         // To switch back to random order, change line below to:
         // const shuffledPoems = shuffleArray(poems);
         const shuffledPoems = sortByDate(poems);
-=======
-        // CURRENT MODE: Random order (showcases all poems equally)
-        // To switch to date-based sorting (newest first), change line below to:
-        // const shuffledPoems = sortByDate(poems);
-        const shuffledPoems = shuffleArray(poems);
->>>>>>> 4e87c40a423390738821719ef47bbcf88c78382e
         
         // Create grid cards
         shuffledPoems.forEach((poem, index) => {
