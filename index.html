@@ -3015,8 +3015,11 @@ Die Kus…`
                         modal.classList.remove('active');
                         modalPaper.classList.remove('fullscreen');
                         
-                        // Clear ALL inline styles from modalPaper
+                        // Clear ALL inline styles from modal elements
                         modalPaper.style.cssText = '';
+                        cardContent.style.cssText = '';
+                        document.getElementById('modalTitle').style.cssText = '';
+                        document.getElementById('modalText').style.cssText = '';
                         
                         // Show the card
                         clickedCard.style.opacity = '1';
