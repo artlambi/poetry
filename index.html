@@ -852,7 +852,7 @@
         }
 
         .modal-overlay.active .modal-nav {
-            pointer-events: auto;
+            pointer-events: auto; /* Enable to detect hover and clicks */
         }
 
         .modal-nav:hover {
@@ -2322,26 +2322,37 @@ Spero che un giorno`
                 date: "2022-12-30", // December 30, 2022 (newest poem!)
                 text: `Kwam het door een glimlach
 Die ik even zag ?
+
 Of was het een woord, een blik 
 Een tel van een ogenblik ?
+
 Een gedachte of een beeld
 Ooit met iemand gedeeld ?
+
 Een parfum met een herinnering 
 Een lang vergeten omhelzing ?
+
 Een bloem en haar pracht
 Een vriend(in) die aan mij dacht ?
+
 Kwam het door muziek, of een ander mooi geluid ?
 Het maakt allemaal niet uit
+
 Wat er echt toe doet :
 Het deed me goed
+
 Het helpt niet, te zitten kniezen
 Ooit moet je wel kiezen
+
 Niet voor optimisme
 Noch voor pessimisme
+
 Die twee vijanden van elkaar
 En beiden onbetrouwbaar
+
 Ik kies voor idealisme
 Met zin voor realisme
+
 Het is nooit alles kommer noch kwel
 Ga ! Ga en leef wel.`
             },
@@ -2927,6 +2938,21 @@ Die Kus…`
                 navigatePoem(1);
             }
         });
+
+        // Forward scroll events from nav areas to modal paper
+        document.getElementById('navPrev').addEventListener('wheel', (e) => {
+            if (modal.classList.contains('active')) {
+                modalPaper.scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.getElementById('navNext').addEventListener('wheel', (e) => {
+            if (modal.classList.contains('active')) {
+                modalPaper.scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
 
         function openPoemByHash() {
             const hash = window.location.hash.slice(1);
