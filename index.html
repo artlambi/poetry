@@ -1276,6 +1276,17 @@
             color: var(--text-body);
             line-height: 1.8;
         }
+
+        /* CRITICAL: Final dark mode override to win cascade */
+        @media (prefers-color-scheme: dark) {
+            .modal-paper.fullscreen .poem-text {
+                color: #cccccc !important;
+            }
+            
+            .modal-paper .poem-text {
+                color: #cccccc !important;
+            }
+        }
     </style>
     
     <!-- Structured Data for SEO -->
