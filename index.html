@@ -1090,15 +1090,15 @@
             }
 
             .modal-paper .title {
-                color: #cccccc !important;
+                color: #cccccc;
             }
 
             .modal-paper.fullscreen .author {
                 color: rgba(255, 255, 255, 0.5);
             }
 
-            .modal-paper .poem-text {
-                color: #cccccc !important;
+            .modal-overlay.active .modal-paper .poem-text {
+                color: #cccccc;
             }
 
             .modal-paper.fullscreen .poem-text {
@@ -2903,20 +2903,10 @@ Die Kus…`
             
             const poem = shuffledPoems[currentIndex];
             
-            // Clear existing content first
-            const modalTitle = document.getElementById('modalTitle');
-            const modalText = document.getElementById('modalText');
-            modalTitle.textContent = '';
-            modalText.innerHTML = '';
-            
-            // Force a repaint
-            modalTitle.offsetHeight;
-            modalText.offsetHeight;
-            
-            // Now set full content
-            modalTitle.textContent = poem.title;
+            // Set full content immediately (overflow hidden will clip it)
+            document.getElementById('modalTitle').textContent = poem.title;
             // Convert line breaks to <br> while preserving HTML tags like <em>
-            modalText.innerHTML = poem.text.replace(/\n/g, '<br>');
+            document.getElementById('modalText').innerHTML = poem.text.replace(/\n/g, '<br>');
             
             // Set image if available
             const modalImage = document.getElementById('modalImage');
@@ -3015,11 +3005,19 @@ Die Kus…`
                         modal.classList.remove('active');
                         modalPaper.classList.remove('fullscreen');
                         
-                        // Clear ALL inline styles from modal elements
+                        // Explicitly clear ALL positioning and transform properties
                         modalPaper.style.cssText = '';
-                        cardContent.style.cssText = '';
-                        document.getElementById('modalTitle').style.cssText = '';
-                        document.getElementById('modalText').style.cssText = '';
+                        modalPaper.style.removeProperty('top');
+                        modalPaper.style.removeProperty('left');
+                        modalPaper.style.removeProperty('width');
+                        modalPaper.style.removeProperty('height');
+                        modalPaper.style.removeProperty('opacity');
+                        modalPaper.style.removeProperty('transition');
+                        modalPaper.style.removeProperty('transform');
+                        
+                        if (cardContent) {
+                            cardContent.style.cssText = '';
+                        }
                         
                         // Show the card
                         clickedCard.style.opacity = '1';
