@@ -1090,7 +1090,7 @@
             }
 
             .modal-paper .title {
-                color: #cccccc;
+                color: #cccccc !important;
             }
 
             .modal-paper.fullscreen .author {
@@ -1098,7 +1098,7 @@
             }
 
             .modal-paper .poem-text {
-                color: #cccccc;
+                color: #cccccc !important;
             }
 
             .modal-paper.fullscreen .poem-text {
@@ -2902,7 +2902,6 @@ Die Kus…`
             originalClickedCard = card;
             
             const poem = shuffledPoems[currentIndex];
-            const isMobile = window.innerWidth <= 768;
             
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
@@ -2932,68 +2931,40 @@ Die Kus…`
             // Hide card
             card.style.opacity = '0';
             
-            if (isMobile) {
-                // Mobile: Skip animation, go directly to fullscreen
-                modalPaper.style.transition = 'none';
-                modalPaper.classList.add('fullscreen');
-                modalPaper.style.top = '0';
-                modalPaper.style.left = '0';
-                modalPaper.style.width = '100vw';
-                modalPaper.style.height = '100vh';
-                modalPaper.style.opacity = '1';
-                
-                // Show modal
-                modal.classList.add('active');
-                
-                // Lock body scroll
-                document.body.style.top = `-${savedScrollPosition}px`;
-                document.documentElement.classList.add('modal-open');
-                document.body.classList.add('modal-open');
-                
-                // Focus modal paper for keyboard scrolling
-                setTimeout(() => {
-                    modalPaper.focus();
-                }, 50);
-            } else {
-                // Desktop: Animate from card position
-                // Get the clicked card's position
-                const rect = card.getBoundingClientRect();
-                
-                // Set initial position to match the card
-                modalPaper.style.transition = 'none';
-                modalPaper.classList.remove('fullscreen');
-                modalPaper.style.top = rect.top + 'px';
-                modalPaper.style.left = rect.left + 'px';
-                modalPaper.style.width = rect.width + 'px';
-                modalPaper.style.height = rect.height + 'px';
-                
-                // Force reflow to ensure content is rendered
-                modalPaper.offsetHeight;
-                
-                // Show modal and animate to fullscreen
-                modal.classList.add('active');
-                
-                // Small delay to ensure DOM is updated before animation
-                requestAnimationFrame(() => {
-                    // Animate to fullscreen
-                    modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                    modalPaper.style.top = '0';
-                    modalPaper.style.left = '0';
-                    modalPaper.style.width = '100vw';
-                    modalPaper.style.height = '100vh';
-                    modalPaper.classList.add('fullscreen');
-                });
-                
-                // Lock body scroll
-                document.body.style.top = `-${savedScrollPosition}px`;
-                document.documentElement.classList.add('modal-open');
-                document.body.classList.add('modal-open');
-                
-                // Focus modal paper for keyboard scrolling
-                setTimeout(() => {
-                    modalPaper.focus();
-                }, 100);
-            }
+            // Get the clicked card's position
+            const rect = card.getBoundingClientRect();
+            
+            // Set initial position to match the card
+            modalPaper.style.transition = 'none';
+            modalPaper.classList.remove('fullscreen');
+            modalPaper.style.top = rect.top + 'px';
+            modalPaper.style.left = rect.left + 'px';
+            modalPaper.style.width = rect.width + 'px';
+            modalPaper.style.height = rect.height + 'px';
+            
+            // Force reflow
+            modalPaper.offsetHeight;
+            
+            // Show modal and animate to fullscreen
+            modal.classList.add('active');
+            
+            // Animate to fullscreen
+            modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            modalPaper.style.top = '0';
+            modalPaper.style.left = '0';
+            modalPaper.style.width = '100vw';
+            modalPaper.style.height = '100vh';
+            modalPaper.classList.add('fullscreen');
+            
+            // Lock body scroll
+            document.body.style.top = `-${savedScrollPosition}px`;
+            document.documentElement.classList.add('modal-open');
+            document.body.classList.add('modal-open');
+            
+            // Focus modal paper for keyboard scrolling
+            setTimeout(() => {
+                modalPaper.focus();
+            }, 100);
         }
 
         function closeModal() {
