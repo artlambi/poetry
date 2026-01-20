@@ -140,6 +140,63 @@
             margin-bottom: 104px;
             transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
             transform-origin: center top;
+            position: relative;
+        }
+
+        .dark-mode-toggle {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .dark-mode-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .dark-mode-toggle .sun-icon {
+            display: none;
+        }
+
+        .dark-mode-toggle .moon-icon {
+            display: block;
+        }
+
+        /* Manual dark mode class */
+        html.dark-mode .dark-mode-toggle .sun-icon {
+            display: block;
+        }
+
+        html.dark-mode .dark-mode-toggle .moon-icon {
+            display: none;
+        }
+
+        html.dark-mode .dark-mode-toggle {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        html.dark-mode .dark-mode-toggle:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        @media (max-width: 768px) {
+            .dark-mode-toggle {
+                right: 10px;
+            }
         }
 
         .page-header.scrolled {
@@ -1287,6 +1344,148 @@
                 color: #cccccc !important;
             }
         }
+
+        /* Manual dark mode toggle support */
+        html.dark-mode {
+            --bg-color: #121212;
+            --paper-color: #202020;
+            --text-primary: #e5e5e5;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-muted: rgba(255, 255, 255, 0.2);
+            --text-body: rgba(255, 255, 255, 0.6);
+            --text-body-full: rgba(255, 255, 255, 0.75);
+            --divider-color: rgba(255, 255, 255, 0.2);
+            --shadow-spread: rgba(0, 0, 0, 0);
+            --shadow-spread-hover: rgba(255, 255, 255, 0.05);
+            --shadow-soft: rgba(0, 0, 0, 0.3);
+            --shadow-softer: rgba(0, 0, 0, 0.2);
+            --close-btn-hover: rgba(255, 255, 255, 0.1);
+            --close-btn-stroke: rgba(255, 255, 255, 0.5);
+        }
+
+        html.dark-mode ::selection {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        html.dark-mode body::before {
+            display: none;
+        }
+
+        html.dark-mode .page-header .subtitle {
+            color: #cccccc;
+        }
+
+        html.dark-mode .page-header h1 {
+            color: #cccccc;
+        }
+
+        html.dark-mode .poem-card {
+            background: #202020;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
+        }
+
+        html.dark-mode .poem-card .number {
+            color: rgba(255,255,255,0.2);
+        }
+
+        html.dark-mode .poem-card .title {
+            color: #e5e5e5;
+        }
+
+        html.dark-mode .poem-card .preview {
+            color: #cccccc;
+        }
+
+        html.dark-mode .poem-card-wrapper .hover-title {
+            color: #cccccc;
+        }
+
+        html.dark-mode .modal-paper {
+            background: #202020;
+        }
+
+        html.dark-mode .modal-paper.fullscreen::before {
+            background-image: linear-gradient(180deg, rgba(32,32,32,0.96) 0%, rgba(32,32,32,0.50) 75%, rgba(32,32,32,0.00) 100%);
+        }
+
+        html.dark-mode .modal-paper .number {
+            color: rgba(255,255,255,0.2);
+        }
+
+        html.dark-mode .modal-paper .title {
+            color: #cccccc;
+        }
+
+        html.dark-mode .modal-paper.fullscreen .author {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        html.dark-mode .modal-paper .poem-text {
+            color: #cccccc !important;
+        }
+
+        html.dark-mode .modal-paper.fullscreen .poem-text {
+            color: #cccccc !important;
+        }
+
+        html.dark-mode .modal-btn {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+        }
+
+        html.dark-mode .modal-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        html.dark-mode .modal-btn .tooltip {
+            background: rgba(255, 255, 255, 0.24);
+            color: #fff;
+        }
+
+        html.dark-mode .modal-nav-btn {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+        }
+
+        html.dark-mode .modal-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        html.dark-mode .poem-nav-btn::after {
+            background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+        }
+
+        html.dark-mode .poem-nav-btn::before {
+            background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+        }
+
+        html.dark-mode .page-footer .copyright {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        html.dark-mode .page-footer .signature path {
+            stroke: #fff;
+        }
+
+        html.dark-mode .modal-paper.fullscreen .illustration-credit {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        html.dark-mode .modal-paper.fullscreen .illustration-credit a:hover {
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            html.dark-mode .poem-card-wrapper:hover .poem-card,
+            html.dark-mode .poem-card-wrapper:focus-within .poem-card {
+                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 60px rgba(0, 0, 0, 0.08), 0 15px 30px rgba(0, 0, 0, 0.05);
+            }
+
+            html.dark-mode .poem-card-wrapper:hover .poem-card .preview,
+            html.dark-mode .poem-card-wrapper:focus-within .poem-card .preview {
+                color: #ffffff;
+            }
+        }
     </style>
     
     <!-- Structured Data for SEO -->
@@ -1394,6 +1593,22 @@
 </head>
 <body>
     <header class="page-header">
+        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        </button>
         <p class="subtitle">
             <span class="subtitle-text active">La poésie de</span>
             <span class="subtitle-text">De poëzie van</span>
@@ -2913,7 +3128,6 @@ Die Kus…`
             originalClickedCard = card;
             
             const poem = shuffledPoems[currentIndex];
-            const isMobile = window.innerWidth <= 768;
             
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
@@ -2943,64 +3157,40 @@ Die Kus…`
             // Hide card
             card.style.opacity = '0';
             
-            if (isMobile) {
-                // MOBILE: Skip card animation, go directly to fullscreen
-                modalPaper.style.transition = 'none';
-                modalPaper.style.top = '0';
-                modalPaper.style.left = '0';
-                modalPaper.style.width = '100vw';
-                modalPaper.style.height = '100vh';
-                modalPaper.classList.add('fullscreen');
-                
-                // Show modal
-                modal.classList.add('active');
-                
-                // Lock body scroll
-                document.body.style.top = `-${savedScrollPosition}px`;
-                document.documentElement.classList.add('modal-open');
-                document.body.classList.add('modal-open');
-                
-                // Focus modal paper
-                setTimeout(() => {
-                    modalPaper.focus();
-                }, 100);
-            } else {
-                // DESKTOP: Animate from card position to fullscreen
-                // Get the clicked card's position
-                const rect = card.getBoundingClientRect();
-                
-                // Set initial position to match the card
-                modalPaper.style.transition = 'none';
-                modalPaper.classList.remove('fullscreen');
-                modalPaper.style.top = rect.top + 'px';
-                modalPaper.style.left = rect.left + 'px';
-                modalPaper.style.width = rect.width + 'px';
-                modalPaper.style.height = rect.height + 'px';
-                
-                // Force reflow
-                modalPaper.offsetHeight;
-                
-                // Show modal and animate to fullscreen
-                modal.classList.add('active');
-                
-                // Animate to fullscreen
-                modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                modalPaper.style.top = '0';
-                modalPaper.style.left = '0';
-                modalPaper.style.width = '100vw';
-                modalPaper.style.height = '100vh';
-                modalPaper.classList.add('fullscreen');
-                
-                // Lock body scroll
-                document.body.style.top = `-${savedScrollPosition}px`;
-                document.documentElement.classList.add('modal-open');
-                document.body.classList.add('modal-open');
-                
-                // Focus modal paper for keyboard scrolling
-                setTimeout(() => {
-                    modalPaper.focus();
-                }, 100);
-            }
+            // Get the clicked card's position
+            const rect = card.getBoundingClientRect();
+            
+            // Set initial position to match the card
+            modalPaper.style.transition = 'none';
+            modalPaper.classList.remove('fullscreen');
+            modalPaper.style.top = rect.top + 'px';
+            modalPaper.style.left = rect.left + 'px';
+            modalPaper.style.width = rect.width + 'px';
+            modalPaper.style.height = rect.height + 'px';
+            
+            // Force reflow
+            modalPaper.offsetHeight;
+            
+            // Show modal and animate to fullscreen
+            modal.classList.add('active');
+            
+            // Animate to fullscreen
+            modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            modalPaper.style.top = '0';
+            modalPaper.style.left = '0';
+            modalPaper.style.width = '100vw';
+            modalPaper.style.height = '100vh';
+            modalPaper.classList.add('fullscreen');
+            
+            // Lock body scroll
+            document.body.style.top = `-${savedScrollPosition}px`;
+            document.documentElement.classList.add('modal-open');
+            document.body.classList.add('modal-open');
+            
+            // Focus modal paper for keyboard scrolling
+            setTimeout(() => {
+                modalPaper.focus();
+            }, 100);
         }
 
         function closeModal() {
@@ -3275,6 +3465,27 @@ Die Kus…`
         const currentYear = new Date().getFullYear();
         document.getElementById('year').textContent = currentYear;
         document.querySelector('.modal-year').textContent = currentYear;
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+        
+        // Check if user has a saved preference
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'enabled') {
+            html.classList.add('dark-mode');
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark-mode');
+            
+            // Save preference
+            if (html.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
 
         // Cycle subtitle text with vertical slide
         const subtitleTexts = document.querySelectorAll('.subtitle-text');
