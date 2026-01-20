@@ -983,42 +983,57 @@
             overflow: visible;
         }
 
-        .modal-share .share-morph-icon {
+        .modal-share .share-icon,
+        .modal-share .checkmark-icon {
+            position: absolute;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .modal-share .checkmark-icon {
+            opacity: 0;
+        }
+
+        .modal-share:hover .checkmark-icon {
+            opacity: 0;
+        }
+
+        .modal-share.copied .share-icon {
+            opacity: 0;
+        }
+
+        .modal-share.copied .checkmark-icon {
+            opacity: 1;
+        }
+
+        .modal-share.copied:hover .checkmark-icon {
+            opacity: 1;
+        }
+
+        .modal-share .share-icon {
             stroke-width: 0.9;
         }
 
-        .modal-share .morph-path-1,
-        .modal-share .morph-path-2,
-        .modal-share .morph-path-3 {
-            transition: d 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        .modal-share .checkmark-icon {
+            stroke-width: 0.9;
         }
 
-        /* Morph to checkmark on copied state */
-        .modal-share.copied .morph-path-1 {
-            d: path("M 3.75 10.4166667 L 8.33333333 16.0416667");
+        .modal-share .share-icon .arrow {
+            will-change: transform;
         }
 
-        .modal-share.copied .morph-path-2 {
-            d: path("M 8.33333333 16.0416667 L 16.25 3.75");
-        }
-
-        .modal-share.copied .morph-path-3 {
-            d: path("M 16.25 3.75 L 16.25 3.75");
-        }
-
-        .modal-share:hover:not(.copied) .morph-path-2 {
+        .modal-share:hover:not(.copied) .share-icon .arrow {
             animation: arrowBounce 0.3s ease;
         }
 
         @keyframes arrowBounce {
             0% {
-                d: path("M 9.75 1.9166 L 9.75 11.5");
+                transform: translate3d(6px, 1.5px, 0);
             }
             50% {
-                d: path("M 9.75 1.9166 L 9.75 10");
+                transform: translate3d(6px, -1px, 0);
             }
             100% {
-                d: path("M 9.75 1.9166 L 9.75 11.5");
+                transform: translate3d(6px, 1.5px, 0);
             }
         }
 
@@ -2380,13 +2395,15 @@ Die Kus…</p>
         </div>
         <div class="modal-controls">
             <button class="modal-btn modal-share" id="shareBtn" aria-label="Partager">
-                <svg class="share-morph-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="round" stroke-width="1">
-                    <!-- Arrow top left -->
-                    <path class="morph-path-1" d="M 6 5.25 L 9.75 1.5 L 13.5 5.25" />
-                    <!-- Arrow vertical line -->
-                    <path class="morph-path-2" d="M 9.75 1.9166 L 9.75 11.5" />
-                    <!-- Box bottom -->
-                    <path class="morph-path-3" d="M 7.08333 9.66667 L 3.75009 9.66667 L 3.75009 17.3333 L 16.2501 17.3333 L 16.2501 9.66667 L 12.9168 9.66667" />
+                <svg class="share-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="round" style="overflow: visible;">
+                    <g class="arrow" transform="translate(6, 1.5)">
+                        <polyline points="0 3.75 3.74989629 0 7.5 3.75"></polyline>
+                        <line x1="3.74989629" y1="0.416666667" x2="3.74989629" y2="10"></line>
+                    </g>
+                    <polyline points="7.08333353 8.16666667 3.75008702 8.16666667 3.75008702 17.3333333 16.250087 17.3333333 16.250087 8.16666667 12.9167537 8.16666667"></polyline>
+                </svg>
+                <svg class="checkmark-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="round">
+                    <polyline points="3.75 10.4166667 8.33333333 16.0416667 16.25 3.75"></polyline>
                 </svg>
                 <span class="tooltip tooltip-share">Partager</span>
                 <span class="tooltip tooltip-copied">Lien copié</span>
