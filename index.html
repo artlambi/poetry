@@ -3144,6 +3144,17 @@ Die Kus…`
             // Get the clicked card's position
             const rect = card.getBoundingClientRect();
             
+            // DEBUG: Log the rect values
+            console.log('Opening poem:', poem.title);
+            console.log('Card rect:', {
+                top: rect.top,
+                left: rect.left,
+                width: rect.width,
+                height: rect.height
+            });
+            console.log('Window scroll:', window.scrollY);
+            console.log('Viewport size:', window.innerWidth, 'x', window.innerHeight);
+            
             // Set initial position to match the card
             modalPaper.style.transition = 'none';
             modalPaper.classList.remove('fullscreen');
