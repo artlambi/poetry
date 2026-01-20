@@ -127,12 +127,11 @@
             z-index: 1;
         }
 
-        html.modal-open,
         body.modal-open {
             overflow: hidden;
-            height: 100%;
             position: fixed;
             width: 100%;
+            isolation: isolate;
         }
 
         .page-header {
@@ -158,28 +157,6 @@
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s ease-out forwards;
-            position: relative;
-            height: 36px;
-            overflow: hidden;
-        }
-
-        .page-header .subtitle-text {
-            position: absolute;
-            left: 0;
-            right: 0;
-            transform: translateY(100%);
-            opacity: 0;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
-        }
-
-        .page-header .subtitle-text.active {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .page-header .subtitle-text.exit {
-            transform: translateY(-100%);
-            opacity: 0;
         }
 
         @keyframes fadeInUp {
@@ -196,7 +173,7 @@
             line-height: 56px;
             color: #000000;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             margin: 0;
             opacity: 0;
             transform: translateY(20px);
@@ -323,7 +300,7 @@
         @media (max-width: 700px) {
             .poem-grid {
                 grid-template-columns: 280px;
-                gap: 56px;
+                gap: 96px;
                 margin: 0 20px;
             }
 
@@ -412,12 +389,6 @@
             .poem-card-wrapper .hover-title {
                 opacity: 1;
                 transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 700px) {
-            .poem-card-wrapper .hover-title {
-                font-size: 1.25rem;
             }
         }
 
@@ -672,22 +643,10 @@
             opacity: 1;
         }
 
-        .modal-controls {
+        .modal-close {
             position: fixed;
             top: 30px;
             right: 30px;
-            display: flex;
-            gap: 10px;
-            z-index: 1001;
-            opacity: 0;
-            transition: opacity 0.3s ease 0.3s;
-        }
-
-        .modal-overlay.active .modal-controls {
-            opacity: 1;
-        }
-
-        .modal-btn {
             width: 40px;
             height: 40px;
             border: none;
@@ -697,22 +656,35 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: background 0.2s ease;
+            transition: background 0.2s ease, opacity 0.3s ease 0.3s;
+            opacity: 0;
+            z-index: 1001;
             color: #000;
-            position: relative;
         }
 
-        .modal-btn:hover {
+        .modal-overlay.active .modal-close {
+            opacity: 1;
+        }
+
+        .modal-close:hover {
             background: rgba(0, 0, 0, 0.06);
         }
 
-        .modal-btn svg {
+        .modal-close svg {
             width: 20px;
             height: 20px;
             stroke-width: 1;
         }
 
-        .modal-btn .tooltip {
+        .modal-close svg path {
+            transition: d 0.2s ease;
+        }
+
+        .modal-close:hover svg path {
+            d: path("M15.25,15.25 L4.75,4.75 M15.25,4.75 L4.75,15.25");
+        }
+
+        .modal-close .tooltip {
             position: absolute;
             top: calc(100% + 8px);
             left: 50%;
@@ -731,171 +703,10 @@
             pointer-events: none;
         }
 
-        .modal-btn:hover .tooltip {
+        .modal-close:hover .tooltip {
             opacity: 1;
             visibility: visible;
             transition-delay: 0.7s;
-        }
-
-        /* Close button specific */
-        .modal-close svg path {
-            transition: d 0.2s ease;
-        }
-
-        .modal-close:hover svg path {
-            d: path("M15.25,15.25 L4.75,4.75 M15.25,4.75 L4.75,15.25");
-        }
-
-        /* Share button specific */
-        .modal-share {
-            overflow: visible;
-        }
-
-        .modal-share .share-icon,
-        .modal-share .checkmark-icon {
-            position: absolute;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-
-        .modal-share .share-icon {
-            opacity: 1;
-        }
-
-        .modal-share .checkmark-icon {
-            opacity: 0;
-        }
-
-        .modal-share.copied .share-icon {
-            opacity: 0;
-        }
-
-        .modal-share.copied .checkmark-icon {
-            opacity: 1;
-        }
-
-        .modal-share .share-icon {
-            stroke-width: 0.9;
-        }
-
-        .modal-share .checkmark-icon {
-            stroke-width: 0.9;
-        }
-
-        .modal-share .share-icon .arrow {
-            will-change: transform;
-        }
-
-        .modal-share:hover:not(.copied) .share-icon .arrow {
-            animation: arrowBounce 0.3s ease;
-        }
-
-        @keyframes arrowBounce {
-            0% {
-                transform: translate3d(6px, 1.5px, 0);
-            }
-            50% {
-                transform: translate3d(6px, -1px, 0);
-            }
-            100% {
-                transform: translate3d(6px, 1.5px, 0);
-            }
-        }
-
-        .modal-share .tooltip-copied {
-            opacity: 0;
-            visibility: hidden;
-            transition-delay: 0s;
-        }
-
-        .modal-share:hover .tooltip-copied {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .modal-share.copied .tooltip-copied {
-            opacity: 1;
-            visibility: visible;
-            transition-delay: 0s;
-        }
-
-        .modal-share.copied .tooltip-share {
-            opacity: 0 !important;
-            visibility: hidden !important;
-        }
-
-        /* Navigation arrows */
-        .modal-nav {
-            position: fixed;
-            top: 100px;
-            bottom: 0;
-            width: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
-        }
-
-        .modal-nav.prev {
-            left: 0;
-            padding-left: 30px;
-            justify-content: flex-start;
-        }
-
-        .modal-nav.next {
-            right: 0;
-            padding-right: 30px;
-            justify-content: flex-end;
-        }
-
-        .modal-overlay.active .modal-nav {
-            pointer-events: auto;
-        }
-
-        .modal-nav:hover {
-            opacity: 1;
-        }
-
-        .modal-nav-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: rgba(0, 0, 0, 0.04);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background 0.2s ease;
-            color: #000;
-        }
-
-        .modal-nav-btn:hover {
-            background: rgba(0, 0, 0, 0.06);
-        }
-
-        .modal-nav-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke-width: 1;
-            transition: transform 0.2s ease;
-        }
-
-        .modal-nav.prev .modal-nav-btn:hover svg {
-            transform: translateX(-2px);
-        }
-
-        .modal-nav.next .modal-nav-btn:hover svg {
-            transform: translateX(2px);
-        }
-
-        /* Hide nav arrows on mobile */
-        @media (max-width: 768px) {
-            .modal-nav {
-                display: none;
-            }
         }
 
         .modal-content {
@@ -965,27 +776,18 @@
                 color: #cccccc;
             }
 
-            .modal-btn {
+            .modal-close {
                 background: rgba(255, 255, 255, 0.04);
                 color: #fff;
             }
 
-            .modal-btn:hover {
+            .modal-close:hover {
                 background: rgba(255, 255, 255, 0.06);
             }
 
-            .modal-btn .tooltip {
+            .modal-close .tooltip {
                 background: rgba(255, 255, 255, 0.24);
                 color: #fff;
-            }
-
-            .modal-nav-btn {
-                background: rgba(255, 255, 255, 0.04);
-                color: #fff;
-            }
-
-            .modal-nav-btn:hover {
-                background: rgba(255, 255, 255, 0.06);
             }
 
             .page-footer .copyright {
@@ -1022,16 +824,8 @@
                 padding: 40px 15px;
             }
 
-            .modal-share {
-                display: none;
-            }
-
             .poem-card {
                 padding: 28px 24px;
-            }
-
-            .modal-paper {
-                padding: 28px 24px 0 24px;
             }
 
             .poem-card .title {
@@ -1142,54 +936,6 @@
                     "position": 6,
                     "name": "L'Orpheline de guerre...",
                     "@id": "#l-orpheline-de-guerre"
-                },
-                {
-                    "@type": "CreativeWork",
-                    "position": 7,
-                    "name": "Membre de l'humanité",
-                    "@id": "#membre-de-l-humanite"
-                },
-                {
-                    "@type": "CreativeWork",
-                    "position": 8,
-                    "name": "Come dire",
-                    "@id": "#come-dire"
-                },
-                {
-                    "@type": "CreativeWork",
-                    "position": 9,
-                    "name": "Een moment van diep geluk",
-                    "@id": "#een-moment-van-diep-geluk"
-                },
-                {
-                    "@type": "CreativeWork",
-                    "position": 10,
-                    "name": "Op de bergtop",
-                    "@id": "#op-de-bergtop"
-                },
-                {
-                    "@type": "CreativeWork",
-                    "position": 11,
-                    "name": "De ring",
-                    "@id": "#de-ring"
-                },
-                {
-                    "@type": "CreativeWork",
-                    "position": 12,
-                    "name": "De traan",
-                    "@id": "#de-traan"
-                },
-                {
-                    "@type": "CreativeWork",
-                    "position": 13,
-                    "name": "Zandkorrel",
-                    "@id": "#zandkorrel"
-                },
-                {
-                    "@type": "CreativeWork",
-                    "position": 14,
-                    "name": "Die kus",
-                    "@id": "#die-kus"
                 }
             ]
         }
@@ -1198,10 +944,7 @@
 </head>
 <body>
     <header class="page-header">
-        <p class="subtitle">
-            <span class="subtitle-text active">La poésie de</span>
-            <span class="subtitle-text">De poëzie van</span>
-        </p>
+        <p class="subtitle">Les poèmes de</p>
         <h1>Christian Lambillotte</h1>
     </header>
 
@@ -1521,305 +1264,6 @@ Et à y vivre, ensemble, sans soucis
 J'aimerais tellement rester enfant
 Et grandir en m'amusant…</p>
             </article>
-            <article class="poem-article" id="membre-de-l-humanite">
-                <h2>Membre de l'humanité</h2>
-                <p>Membre de l'humanité
-Sans n'avoir rien demandé
-
-Sentiments mitigés
-Honte et fierté
-
-Être encore primitif
-Négatif, positif
-
-A la quête de bonheur
-D'amour, de douceur
-
-En  quasi- éternel conflit
-Souvent avec soi-même, sinon avec autrui
-
-200.000 ans d'histoire
-Long, peine à y croire
-
-Homme de cro-magnon
-C'était hier à peine, non ?
-
-Tout au début
-Batailles entre tribus
-
-     Puis boucheries des croisades. Oubliées ?
-Des milliers de gorges tranchées
-
-Empire romain ?
-Sublime selon certains ?
-
-Soumission et barbarie
-Coûtant d'innombrables vies
-
-Siècle de Lumière ?
-Suivi de nombreuses guerres
-
-Guerres napoléoniennes, criminelles
-Soif de pouvoir personnelle
-
-La guerre de cent ans
-
-Deux grands conflits mondiaux
-L'hécatombe, au bas mot
-
-Plus récent, l'horreur du Balcan
-Impitoyable, assassinant aveuglement
-
-Parler alors de culture supérieure ?
-Soyons modeste, avec pudeur
-
-Combien de morts ?
-Qui avait raison, et qui tort ?
-
-Chaque défunt, une tristesse
-Famille et amis en détresse
-
-Une centaine de milliards avant nous
-A la vie avait pris goût
-
-Et puis, ils en furent déchirés
-
-Ah oui, il y aussi du positif
-J'essaie de me souvenir du bon
-Mais ce soir….
-
-
-Homme redéfinit, grâce à un virus ?
-Espoir…. N'en disons pas plus…</p>
-            </article>
-            <article class="poem-article" id="come-dire">
-                <h2>Come dire</h2>
-                <p>Come dire
-A chi non vuole sentire
-Le tue parole
-Parole d'amore
-E di dolore
-Hai speranza
-Ma anche paura
-Un sogno è lì
-Ma allo stesso tempo
-È lontano da qui
-Tu sei sincero
-Ma sempre in dubbio
-Perché non sai 
-E forse non saprai mai
-Che ne pensa
-Questa bella donna
-Mai, una vita insieme ?
-O è per sempre
-L'ultima illusione ?
-Aspetti <em>la sua</em> mano
-E guardi la tua 
-Con calma
-Perché tu, non voglio
-Distruggere il sogno...
-
-Spero che un giorno</p>
-            </article>
-            <article class="poem-article" id="een-moment-van-diep-geluk">
-                <h2>Een moment van diep geluk</h2>
-                <p>Kwam het door een glimlach
-Die ik even zag ?
-Of was het een woord, een blik 
-Een tel van een ogenblik ?
-Een gedachte of een beeld
-Ooit met iemand gedeeld ?
-Een parfum met een herinnering 
-Een lang vergeten omhelzing ?
-Een bloem en haar pracht
-Een vriend(in) die aan mij dacht ?
-Kwam het door muziek, of een ander mooi geluid ?
-Het maakt allemaal niet uit
-Wat er echt toe doet :
-Het deed me goed
-Het helpt niet, te zitten kniezen
-Ooit moet je wel kiezen
-Niet voor optimisme
-Noch voor pessimisme
-Die twee vijanden van elkaar
-En beiden onbetrouwbaar
-Ik kies voor idealisme
-Met zin voor realisme
-Het is nooit alles kommer noch kwel
-Ga ! Ga en leef wel.</p>
-            </article>
-            <article class="poem-article" id="op-de-bergtop">
-                <h2>Op de bergtop</h2>
-                <p>Daar in de Pyreneeën
-Met zicht op zeeën
-
-Hoogte en horizon
-Niet verblind door zon
-
-Denken op die bergtop
-Gedachten in mijn kop
-
-Ik bekijk die bergen
-Die chaos verbergen
-
-Ontstaan uit vuur 
-Dat heet vandaag natuur
-
-De apocalyps, voorbij
-Geen mens, geen god nabij
-
-Het onbegrijpelijke was daar
-Maar nog niet klaar
-
-De mensheid werd geboren
-De evolutie doorbroken
-
-En dan, sedertdien…
-Geen plezier om te zien
-
-Vechten om macht
-Om aanzien en pracht
-
-Eerst ging het om stammen
-Geweld, niet meer in te dammen
-
-Dan strijdende legioenen
-Met domme visioenen
-
-Eenvoud als mens verloren
-De andere niet horen
-
-Mens, je bent erg
-Ik val van mijn berg…</p>
-            </article>
-            <article class="poem-article" id="de-ring">
-                <h2>De ring</h2>
-                <p>Ik zoek  naar de ring
-Die ooit mijn vinger sierde
-Wat ik zo lang vierde
-En toch verging
-Ik zoek naar een reden
-Vrees geen waarheid
-Denk aan voorbije tijd
-Nu lang verleden
-Ja,  het is voorbij
-Sedert jaren al
-Toch een 
-Wij nooit meer zij aan zij
-Maar je gaf mij kind'ren
-Twee</p>
-            </article>
-            <article class="poem-article" id="de-traan">
-                <h2>De traan</h2>
-                <p>Het begon met een traan
-Niet meer weten wat gedaan
-
-Raden naar het waarom
-Het voelde zo dom
-
-Een echte reden was er niet
-Zomaar, plots verdriet
-
-Denken aan het verleden
-Te dikwijls geleden ?
-
-Toch veel geluk gekend
-Liefde, mij wel bekend
-
-Ouders, kinderen, een vriendin
-Die ik bovenal bemin
-
-Vrienden, loyaal en trouw
-De perfecte, mooie vrouw
-
-Maar de wereld rondom mij ?
-Klotemaatschappij !
-
-Altijd wel ergens oorlog
-
-En toch blijft hij bestaan
-Die verdomde traan
-
-Maar doet ook deugd
-De voorbode van vreugd ?</p>
-            </article>
-            <article class="poem-article" id="zandkorrel">
-                <h2>Zandkorrel</h2>
-                <p>Meer sterren 
-In het heelal
-
-Dan zandkorrels
-In dit dal 
-
-Licht in de hoogte
-Voeten op de droogte
-
-Het voelen van eindigheid
-Opkijken naar eeuwigheid
-
-Woestijnen, de wereld rond
-'Schoonheid' ? Ongegrond
-
-Amper leven, het niets
-Dwalen, zoeken naar iets
-
-Een oase, en water
-Met hoop op een later
-
-Kijk naar omhoog 
-Boven die aardse boog
-
-Zie het firmament
-Geniet van het moment
-
-Die schitteringen
-En schakeringen
-
-Doen dromen van meer
-Weer en weer en weer
-
-Maar ook, wat géén ster kan….
-
-Eén zandkorrel volstaat
-En maakt van liefde haat….</p>
-            </article>
-            <article class="poem-article" id="die-kus">
-                <h2>Die kus</h2>
-                <p> 's Avonds. Duisternis
-
-Of toch niet, er is een kaars 
-Zachte muziek ook
-
-Handen zoeken
-En vinden handen
-
-Die tedere aanraking
-Van vingers
-Eén voor één
-
-Ogen zoeken 
-En vinden ogen
-Een glinstering
-
-Ogen worden spiegels
-Geluk ontmoet geluk
-Verlangen vindt verlangen
-
-Geen woord, enkel een zucht
-Warmte in harten
-Angst ook, voor verlies
-
-Die laatste stap nog
-Naar Het Verbond
-
-De muziek valt stil
-De kaars is uit
-
-Maar wat dan nog ? 
-Toen kwam hij toch
-
-Die Kus…</p>
-            </article>
         </noscript>
     </main>
 
@@ -1849,49 +1293,18 @@ Die Kus…</p>
                 <p class="illustration-credit" id="illustrationCredit">Illustré par <a href="https://artlambi.be/" target="_blank" rel="noopener">Arthur Lambillotte</a></p>
             </div>
         </div>
-        <div class="modal-controls">
-            <button class="modal-btn modal-share" id="shareBtn" aria-label="Partager">
-                <svg class="share-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="overflow: visible;">
-                    <g class="arrow" transform="translate(6, 1.5)">
-                        <polyline points="0 3.75 3.74989629 0 7.5 3.75"></polyline>
-                        <line x1="3.74989629" y1="0.416666667" x2="3.74989629" y2="10"></line>
-                    </g>
-                    <polyline points="7.08333353 8.16666667 3.75008702 8.16666667 3.75008702 17.3333333 16.250087 17.3333333 16.250087 8.16666667 12.9167537 8.16666667"></polyline>
-                </svg>
-                <svg class="checkmark-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3.75 10.4166667 8.33333333 16.0416667 16.25 3.75"></polyline>
-                </svg>
-                <span class="tooltip tooltip-share">Partager</span>
-                <span class="tooltip tooltip-copied">Lien copié</span>
-            </button>
-            <button class="modal-btn modal-close" id="closeBtn" aria-label="Fermer">
-                <svg width="20" height="20" viewBox="0 0 20 20">
-                    <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25" stroke="currentColor" fill="none"/>
-                </svg>
-                <span class="tooltip">Fermer</span>
-            </button>
-        </div>
-        <div class="modal-nav prev" id="navPrev">
-            <button class="modal-nav-btn" aria-label="Poème précédent">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                    <path d="M12.5 15L7.5 10L12.5 5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        </div>
-        <div class="modal-nav next" id="navNext">
-            <button class="modal-nav-btn" aria-label="Poème suivant">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                    <path d="M7.5 15L12.5 10L7.5 5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        </div>
+        <button class="modal-close" id="closeBtn" aria-label="Fermer">
+            <svg width="20" height="20" viewBox="0 0 20 20">
+                <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25" stroke="currentColor" fill="none"/>
+            </svg>
+            <span class="tooltip">Fermer</span>
+        </button>
     </div>
 
     <script>
         const poems = [
             {
                 title: "30 ans en 30 lignes",
-                slug: "30-ans-en-30-lignes",
                 text: `Avoir trente ans, et réfléchir
 Leçons du passé, espoirs et désirs
 
@@ -1932,7 +1345,6 @@ Mais quelle tristesse qu'on ne se verra plus...''`
             },
             {
                 title: "L'essentiel retrouvé ?",
-                slug: "l-essentiel-retrouve",
                 text: `Humanité, amitié, fraternité :
 Voilà l'essentiel, oublié
 
@@ -1974,7 +1386,6 @@ A redécouvrir la vraie fraternité…`
             },
             {
                 title: "Anaïs",
-                slug: "anais",
                 text: `Dire que tu n'as même pas un an…
 Toi, fruit de l'amour de tes parents
 Jamais sans doute tu ne sauras
@@ -2010,7 +1421,6 @@ A tout jamais, même après ma m...`
             },
             {
                 title: "Le foetus et le squelette",
-                slug: "le-foetus-et-le-squelette",
                 image: "https://artlambi.github.io/poetry/img/foetus-squelette.jpg",
                 text: `Deux conditions, de deux vies
 L'une à commencer, l'autre finie
@@ -2092,7 +1502,6 @@ Resta muet`
             },
             {
                 title: "Ode à la pomme de terre",
-                slug: "ode-a-la-pomme-de-terre",
                 image: "https://artlambi.github.io/poetry/img/pomme-de-terre.jpg",
                 text: `Oh Chère Patate
 
@@ -2153,7 +1562,6 @@ Qui serions… dans la purée….`
             },
             {
                 title: "L'Orpheline de guerre...",
-                slug: "l-orpheline-de-guerre",
                 text: `Je suis un GRAND enfant
 J'aurai bientôt NEUF ans !
 
@@ -2204,319 +1612,11 @@ Et à y vivre, ensemble, sans soucis
 
 J'aimerais tellement rester enfant
 Et grandir en m'amusant…`
-            },
-            {
-                title: "Membre de l'humanité",
-                slug: "membre-de-l-humanite",
-                text: `Membre de l'humanité
-Sans n'avoir rien demandé
-
-Sentiments mitigés
-Honte et fierté
-
-Être encore primitif
-Négatif, positif
-
-A la quête de bonheur
-D'amour, de douceur
-
-En  quasi- éternel conflit
-Souvent avec soi-même, sinon avec autrui
-
-200.000 ans d'histoire
-Long, peine à y croire
-
-Homme de cro-magnon
-C'était hier à peine, non ?
-
-Tout au début
-Batailles entre tribus
-
-     Puis boucheries des croisades. Oubliées ?
-Des milliers de gorges tranchées
-
-Empire romain ?
-Sublime selon certains ?
-
-Soumission et barbarie
-Coûtant d'innombrables vies
-
-Siècle de Lumière ?
-Suivi de nombreuses guerres
-
-Guerres napoléoniennes, criminelles
-Soif de pouvoir personnelle
-
-La guerre de cent ans
-
-Deux grands conflits mondiaux
-L'hécatombe, au bas mot
-
-Plus récent, l'horreur du Balcan
-Impitoyable, assassinant aveuglement
-
-Parler alors de culture supérieure ?
-Soyons modeste, avec pudeur
-
-Combien de morts ?
-Qui avait raison, et qui tort ?
-
-Chaque défunt, une tristesse
-Famille et amis en détresse
-
-Une centaine de milliards avant nous
-A la vie avait pris goût
-
-Et puis, ils en furent déchirés
-
-Ah oui, il y aussi du positif
-J'essaie de me souvenir du bon
-Mais ce soir….
-
-
-Homme redéfinit, grâce à un virus ?
-Espoir…. N'en disons pas plus…`
-            },
-            {
-                title: "Come dire",
-                slug: "come-dire",
-                text: `Come dire
-A chi non vuole sentire
-Le tue parole
-Parole d'amore
-E di dolore
-Hai speranza
-Ma anche paura
-Un sogno è lì
-Ma allo stesso tempo
-È lontano da qui
-Tu sei sincero
-Ma sempre in dubbio
-Perché non sai 
-E forse non saprai mai
-Che ne pensa
-Questa bella donna
-Mai, una vita insieme ?
-O è per sempre
-L'ultima illusione ?
-Aspetti <em>la sua</em> mano
-E guardi la tua 
-Con calma
-Perché tu, non voglio
-Distruggere il sogno...
-
-Spero che un giorno`
-            },
-            {
-                title: "Een moment van diep geluk",
-                slug: "een-moment-van-diep-geluk",
-                text: `Kwam het door een glimlach
-Die ik even zag ?
-Of was het een woord, een blik 
-Een tel van een ogenblik ?
-Een gedachte of een beeld
-Ooit met iemand gedeeld ?
-Een parfum met een herinnering 
-Een lang vergeten omhelzing ?
-Een bloem en haar pracht
-Een vriend(in) die aan mij dacht ?
-Kwam het door muziek, of een ander mooi geluid ?
-Het maakt allemaal niet uit
-Wat er echt toe doet :
-Het deed me goed
-Het helpt niet, te zitten kniezen
-Ooit moet je wel kiezen
-Niet voor optimisme
-Noch voor pessimisme
-Die twee vijanden van elkaar
-En beiden onbetrouwbaar
-Ik kies voor idealisme
-Met zin voor realisme
-Het is nooit alles kommer noch kwel
-Ga ! Ga en leef wel.`
-            },
-            {
-                title: "Op de bergtop",
-                slug: "op-de-bergtop",
-                text: `Daar in de Pyreneeën
-Met zicht op zeeën
-
-Hoogte en horizon
-Niet verblind door zon
-
-Denken op die bergtop
-Gedachten in mijn kop
-
-Ik bekijk die bergen
-Die chaos verbergen
-
-Ontstaan uit vuur 
-Dat heet vandaag natuur
-
-De apocalyps, voorbij
-Geen mens, geen god nabij
-
-Het onbegrijpelijke was daar
-Maar nog niet klaar
-
-De mensheid werd geboren
-De evolutie doorbroken
-
-En dan, sedertdien…
-Geen plezier om te zien
-
-Vechten om macht
-Om aanzien en pracht
-
-Eerst ging het om stammen
-Geweld, niet meer in te dammen
-
-Dan strijdende legioenen
-Met domme visioenen
-
-Eenvoud als mens verloren
-De andere niet horen
-
-Mens, je bent erg
-Ik val van mijn berg…`
-            },
-            {
-                title: "De ring",
-                slug: "de-ring",
-                text: `Ik zoek  naar de ring
-Die ooit mijn vinger sierde
-Wat ik zo lang vierde
-En toch verging
-Ik zoek naar een reden
-Vrees geen waarheid
-Denk aan voorbije tijd
-Nu lang verleden
-Ja,  het is voorbij
-Sedert jaren al
-Toch een 
-Wij nooit meer zij aan zij
-Maar je gaf mij kind'ren
-Twee`
-            },
-            {
-                title: "De traan",
-                slug: "de-traan",
-                text: `Het begon met een traan
-Niet meer weten wat gedaan
-
-Raden naar het waarom
-Het voelde zo dom
-
-Een echte reden was er niet
-Zomaar, plots verdriet
-
-Denken aan het verleden
-Te dikwijls geleden ?
-
-Toch veel geluk gekend
-Liefde, mij wel bekend
-
-Ouders, kinderen, een vriendin
-Die ik bovenal bemin
-
-Vrienden, loyaal en trouw
-De perfecte, mooie vrouw
-
-Maar de wereld rondom mij ?
-Klotemaatschappij !
-
-Altijd wel ergens oorlog
-
-En toch blijft hij bestaan
-Die verdomde traan
-
-Maar doet ook deugd
-De voorbode van vreugd ?`
-            },
-            {
-                title: "Zandkorrel",
-                slug: "zandkorrel",
-                text: `Meer sterren 
-In het heelal
-
-Dan zandkorrels
-In dit dal 
-
-Licht in de hoogte
-Voeten op de droogte
-
-Het voelen van eindigheid
-Opkijken naar eeuwigheid
-
-Woestijnen, de wereld rond
-'Schoonheid' ? Ongegrond
-
-Amper leven, het niets
-Dwalen, zoeken naar iets
-
-Een oase, en water
-Met hoop op een later
-
-Kijk naar omhoog 
-Boven die aardse boog
-
-Zie het firmament
-Geniet van het moment
-
-Die schitteringen
-En schakeringen
-
-Doen dromen van meer
-Weer en weer en weer
-
-Maar ook, wat géén ster kan….
-
-Eén zandkorrel volstaat
-En maakt van liefde haat….`
-            },
-            {
-                title: "Die kus",
-                slug: "die-kus",
-                text: ` 's Avonds. Duisternis
-
-Of toch niet, er is een kaars 
-Zachte muziek ook
-
-Handen zoeken
-En vinden handen
-
-Die tedere aanraking
-Van vingers
-Eén voor één
-
-Ogen zoeken 
-En vinden ogen
-Een glinstering
-
-Ogen worden spiegels
-Geluk ontmoet geluk
-Verlangen vindt verlangen
-
-Geen woord, enkel een zucht
-Warmte in harten
-Angst ook, voor verlies
-
-Die laatste stap nog
-Naar Het Verbond
-
-De muziek valt stil
-De kaars is uit
-
-Maar wat dan nog ? 
-Toen kwam hij toch
-
-Die Kus…`
             }
         ];
 
         let currentIndex = 0;
         let clickedCard = null;
-        let originalClickedCard = null;
         let savedScrollPosition = 0;
         const grid = document.getElementById('grid');
         const modal = document.getElementById('modal');
@@ -2548,31 +1648,6 @@ Die Kus…`
                 // Ignore errors in iframe/restricted contexts
             }
         }
-
-        // Share functionality
-        function getShareUrl() {
-            const poem = poems[currentIndex];
-            const slug = poem.slug || getSlug(poem.title);
-            const baseUrl = window.location.origin;
-            return `${baseUrl}/${slug}.html`;
-        }
-
-        function copyShareUrl() {
-            const shareBtn = document.getElementById('shareBtn');
-            const url = getShareUrl();
-            
-            navigator.clipboard.writeText(url).then(() => {
-                shareBtn.classList.add('copied');
-                
-                setTimeout(() => {
-                    shareBtn.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy URL:', err);
-            });
-        }
-
-        document.getElementById('shareBtn').addEventListener('click', copyShareUrl);
 
         // Create grid cards
         poems.forEach((poem, index) => {
@@ -2629,7 +1704,6 @@ Die Kus…`
         function openModal(index, card) {
             currentIndex = index;
             clickedCard = card;
-            originalClickedCard = card;
             
             const poem = poems[currentIndex];
             
@@ -2686,9 +1760,8 @@ Die Kus…`
             modalPaper.style.height = '100vh';
             modalPaper.classList.add('fullscreen');
             
-            // Lock body scroll
+            // Lock body scroll with saved position
             document.body.style.top = `-${savedScrollPosition}px`;
-            document.documentElement.classList.add('modal-open');
             document.body.classList.add('modal-open');
             
             // Focus modal paper for keyboard scrolling
@@ -2698,108 +1771,56 @@ Die Kus…`
         }
 
         function closeModal() {
-            // Reset share button state
-            document.getElementById('shareBtn').classList.remove('copied');
-            
-            const isMobile = window.innerWidth <= 768;
-            
             if (clickedCard) {
+                // Restore scroll position before getting rect
+                document.body.classList.remove('modal-open');
+                document.body.style.top = '';
+                window.scrollTo(0, savedScrollPosition);
+                
                 // Reset modal scroll position and remove scrolled class
                 modalPaper.scrollTop = 0;
                 modalPaper.classList.remove('scrolled');
                 document.getElementById('modalTitle').classList.remove('sticky', 'visible', 'at-top');
                 
-                // Hide controls
-                document.querySelector('.modal-controls').style.transition = 'opacity 0.15s ease';
-                document.querySelector('.modal-controls').style.opacity = '0';
-                document.getElementById('navPrev').style.transition = 'opacity 0.15s ease';
-                document.getElementById('navPrev').style.opacity = '0';
-                document.getElementById('navNext').style.transition = 'opacity 0.15s ease';
-                document.getElementById('navNext').style.opacity = '0';
-                
+                const rect = clickedCard.getBoundingClientRect();
                 const cardContent = modalPaper.querySelector('.card-content');
                 
-                if (isMobile) {
-                    // On mobile: fade out modal, then restore scroll, then show card
-                    modalPaper.style.transition = 'opacity 0.25s ease';
+                // Set current padding inline so it can transition when fullscreen class is removed
+                cardContent.style.paddingTop = '100px';
+                
+                // Force reflow
+                cardContent.offsetHeight;
+                
+                // Now animate padding to 0
+                cardContent.style.paddingTop = '0';
+                
+                // Hide controls
+                document.querySelector('.modal-close').style.transition = 'opacity 0.15s ease';
+                document.querySelector('.modal-close').style.opacity = '0';
+                
+                // Animate back to card position
+                modalPaper.classList.remove('fullscreen');
+                modalPaper.style.top = rect.top + 'px';
+                modalPaper.style.left = rect.left + 'px';
+                modalPaper.style.width = rect.width + 'px';
+                modalPaper.style.height = rect.height + 'px';
+                
+                // Fade out modal paper and show card at the end
+                setTimeout(() => {
                     modalPaper.style.opacity = '0';
-                    
-                    setTimeout(() => {
-                        // Now restore scroll while modal is invisible
-                        document.documentElement.classList.remove('modal-open');
-                        document.body.classList.remove('modal-open');
-                        document.body.style.top = '';
-                        window.scrollTo(0, savedScrollPosition);
-                        
-                        // Reset modal state
-                        modal.classList.remove('active');
-                        modalPaper.classList.remove('fullscreen');
-                        modalPaper.style.opacity = '1';
-                        modalPaper.style.transition = '';
-                        
-                        // Show the card
-                        clickedCard.style.opacity = '1';
-                        
-                        // Reset controls
-                        document.querySelector('.modal-controls').style.opacity = '';
-                        document.querySelector('.modal-controls').style.transition = '';
-                        document.getElementById('navPrev').style.opacity = '';
-                        document.getElementById('navPrev').style.transition = '';
-                        document.getElementById('navNext').style.opacity = '';
-                        document.getElementById('navNext').style.transition = '';
-                    }, 250);
-                } else {
-                    // On desktop: full position animation
-                    // Unlock scroll and restore position
-                    document.documentElement.classList.remove('modal-open');
-                    document.body.classList.remove('modal-open');
-                    document.body.style.top = '';
-                    window.scrollTo({ top: savedScrollPosition, left: 0, behavior: 'instant' });
-                    
-                    // Wait for next frame to ensure scroll is complete
-                    requestAnimationFrame(() => {
-                        // Get card position after scroll restoration
-                        const rect = clickedCard.getBoundingClientRect();
-                        
-                        // Set current padding inline so it can transition when fullscreen class is removed
-                        cardContent.style.paddingTop = '100px';
-                        
-                        // Force reflow
-                        cardContent.offsetHeight;
-                        
-                        // Now animate padding to 0
-                        cardContent.style.paddingTop = '0';
-                        
-                        // Animate back to card position
-                        modalPaper.classList.remove('fullscreen');
-                        modalPaper.style.top = rect.top + 'px';
-                        modalPaper.style.left = rect.left + 'px';
-                        modalPaper.style.width = rect.width + 'px';
-                        modalPaper.style.height = rect.height + 'px';
-                        
-                        // Fade out modal paper and show card at the end
-                        setTimeout(() => {
-                            modalPaper.style.opacity = '0';
-                            clickedCard.style.opacity = '1';
-                        }, 400);
-                        
-                        setTimeout(() => {
-                            modal.classList.remove('active');
-                            modalPaper.style.opacity = '1';
-                            cardContent.style.paddingTop = '';
-                            // Reset controls
-                            document.querySelector('.modal-controls').style.opacity = '';
-                            document.querySelector('.modal-controls').style.transition = '';
-                            document.getElementById('navPrev').style.opacity = '';
-                            document.getElementById('navPrev').style.transition = '';
-                            document.getElementById('navNext').style.opacity = '';
-                            document.getElementById('navNext').style.transition = '';
-                        }, 550);
-                    });
-                }
+                    clickedCard.style.opacity = '1';
+                }, 400);
+                
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                    modalPaper.style.opacity = '1';
+                    cardContent.style.paddingTop = '';
+                    // Reset controls
+                    document.querySelector('.modal-close').style.opacity = '';
+                    document.querySelector('.modal-close').style.transition = '';
+                }, 550);
             } else {
                 modal.classList.remove('active');
-                document.documentElement.classList.remove('modal-open');
                 document.body.classList.remove('modal-open');
                 document.body.style.top = '';
                 window.scrollTo(0, savedScrollPosition);
@@ -2810,61 +1831,6 @@ Die Kus…`
             closeModal();
             setTimeout(clearHash, 550);
         });
-
-        // Navigation arrows
-        document.getElementById('navPrev').addEventListener('click', () => {
-            navigatePoem(-1);
-        });
-
-        document.getElementById('navNext').addEventListener('click', () => {
-            navigatePoem(1);
-        });
-
-        function navigatePoem(direction) {
-            const newIndex = currentIndex + direction;
-            
-            // Wrap around
-            const targetIndex = newIndex < 0 ? poems.length - 1 : newIndex >= poems.length ? 0 : newIndex;
-            
-            // Update content
-            const poem = poems[targetIndex];
-            currentIndex = targetIndex;
-            
-            document.getElementById('modalTitle').textContent = poem.title;
-            document.getElementById('modalText').innerHTML = poem.text.replace(/\n/g, '<br>');
-            
-            // Update image if available
-            const modalImage = document.getElementById('modalImage');
-            const modalImageContainer = document.getElementById('modalImageContainer');
-            const illustrationCredit = document.getElementById('illustrationCredit');
-            if (poem.image) {
-                modalImage.src = poem.image;
-                modalImage.alt = 'Illustration pour ' + poem.title;
-                modalImageContainer.style.display = '';
-                illustrationCredit.style.display = '';
-                illustrationCredit.classList.remove('visible');
-            } else {
-                modalImage.src = '';
-                modalImageContainer.style.display = 'none';
-                illustrationCredit.style.display = 'none';
-            }
-            
-            // Reset scroll position
-            modalPaper.scrollTop = 0;
-            modalPaper.classList.remove('scrolled');
-            document.getElementById('modalTitle').classList.remove('sticky', 'visible');
-            
-            // Update hash
-            updateHash();
-            
-            // Restore original card opacity and update clickedCard for close animation
-            if (originalClickedCard) {
-                originalClickedCard.style.opacity = '1';
-            }
-            clickedCard = document.querySelector(`.poem-card[data-index="${targetIndex}"]`);
-            clickedCard.style.opacity = '0';
-            originalClickedCard = clickedCard;
-        }
 
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -2879,17 +1845,13 @@ Die Kus…`
             if (e.key === 'Escape') {
                 closeModal();
                 setTimeout(clearHash, 550);
-            } else if (e.key === 'ArrowLeft') {
-                navigatePoem(-1);
-            } else if (e.key === 'ArrowRight') {
-                navigatePoem(1);
             }
         });
 
         function openPoemByHash() {
             const hash = window.location.hash.slice(1);
             if (hash) {
-                const index = poems.findIndex(p => (p.slug || getSlug(p.title)) === hash);
+                const index = poems.findIndex(p => getSlug(p.title) === hash);
                 if (index !== -1) {
                     const poem = poems[index];
                     const card = document.querySelector(`.poem-card[data-index="${index}"]`);
@@ -2919,28 +1881,6 @@ Die Kus…`
 
         // Update copyright year
         document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Cycle subtitle text with vertical slide
-        const subtitleTexts = document.querySelectorAll('.subtitle-text');
-        let currentSubtitle = 0;
-        
-        setInterval(() => {
-            const current = subtitleTexts[currentSubtitle];
-            const next = subtitleTexts[(currentSubtitle + 1) % subtitleTexts.length];
-            
-            current.classList.remove('active');
-            current.classList.add('exit');
-            
-            next.classList.remove('exit');
-            next.classList.add('active');
-            
-            // Reset exit class after transition
-            setTimeout(() => {
-                current.classList.remove('exit');
-            }, 600);
-            
-            currentSubtitle = (currentSubtitle + 1) % subtitleTexts.length;
-        }, 6000);
 
         // Header scroll effect
         const pageHeader = document.querySelector('.page-header');
