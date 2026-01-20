@@ -140,6 +140,63 @@
             margin-bottom: 104px;
             transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
             transform-origin: center top;
+            position: relative;
+        }
+
+        .dark-mode-toggle {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .dark-mode-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .dark-mode-toggle .sun-icon {
+            display: none;
+        }
+
+        .dark-mode-toggle .moon-icon {
+            display: block;
+        }
+
+        /* Manual dark mode class */
+        html.dark-mode .dark-mode-toggle .sun-icon {
+            display: block;
+        }
+
+        html.dark-mode .dark-mode-toggle .moon-icon {
+            display: none;
+        }
+
+        html.dark-mode .dark-mode-toggle {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        html.dark-mode .dark-mode-toggle:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        @media (max-width: 768px) {
+            .dark-mode-toggle {
+                right: 10px;
+            }
         }
 
         .page-header.scrolled {
@@ -546,7 +603,7 @@
         }
 
         .modal-paper.fullscreen {
-            padding: 80px 120px;
+            padding: 80px 120px 0 120px;
             justify-content: flex-start;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -593,6 +650,8 @@
             top: -40px;
             left: 0;
             right: 0;
+            padding-left: 120px;
+            padding-right: 120px;
             text-align: center;
             font-size: 32px;
             line-height: 40px;
@@ -672,6 +731,140 @@
             opacity: 1;
         }
 
+        .modal-footer {
+            display: none;
+        }
+
+        .modal-paper.fullscreen .modal-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 160px;
+            padding-bottom: 18px;
+        }
+
+        .modal-paper.fullscreen .modal-signature {
+            width: 256px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .modal-paper.fullscreen .modal-signature path {
+            fill: none;
+            stroke: #000;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.75px;
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 0;
+        }
+
+        /* Modal signature hover animation - only on devices with hover capability */
+        @media (hover: hover) and (pointer: fine) {
+            .modal-paper.fullscreen .modal-signature:hover path:nth-child(1) { 
+                animation: drawSignatureReverse 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.1s; 
+            }
+            
+            /* Hover animation - Letters */
+            .modal-paper.fullscreen .modal-signature:hover path:nth-child(2) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.2s; 
+            }
+            .modal-paper.fullscreen .modal-signature:hover path:nth-child(3) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.4s; 
+            }
+            .modal-paper.fullscreen .modal-signature:hover path:nth-child(4) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.55s; 
+            }
+            .modal-paper.fullscreen .modal-signature:hover path:nth-child(5) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.65s; 
+            }
+            .modal-paper.fullscreen .modal-signature:hover path:nth-child(6) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.7s; 
+            }
+            .modal-paper.fullscreen .modal-signature:hover path:nth-child(7) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.75s; 
+            }
+            .modal-paper.fullscreen .modal-signature:hover path:nth-child(8) { 
+                animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                animation-delay: 0.8s; 
+            }
+        }
+
+        .modal-paper.fullscreen .modal-copyright {
+            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+            font-size: 16px;
+            color: rgba(51, 51, 51, 0.5);
+            text-align: center;
+        }
+
+        .poem-nav-buttons {
+            display: none;
+        }
+
+        .modal-paper.fullscreen .poem-nav-buttons {
+            display: none; /* Hidden by default (desktop) */
+        }
+
+        .poem-nav-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .poem-nav-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+            opacity: 0.04;
+            z-index: -1;
+        }
+
+        .poem-nav-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 1px;
+            background: linear-gradient(180deg, #000000 0%, #000000 100%);
+            opacity: 0.04;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 0;
+        }
+
+        .poem-nav-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .poem-nav-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 1;
+            position: relative;
+            z-index: 1;
+            opacity: 0.72;
+        }
+
         .modal-controls {
             position: fixed;
             top: 30px;
@@ -691,25 +884,63 @@
             width: 40px;
             height: 40px;
             border: none;
-            background: rgba(0, 0, 0, 0.04);
+            background: transparent;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: background 0.2s ease;
             color: #000;
             position: relative;
+            box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0);
+            transition: box-shadow 0.5s ease;
         }
 
         .modal-btn:hover {
-            background: rgba(0, 0, 0, 0.06);
+            box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
+        }
+
+        .modal-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+            opacity: 0.04;
+            z-index: -1;
+        }
+
+        .modal-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 1px;
+            background: linear-gradient(180deg, #000000 0%, #000000 100%);
+            opacity: 0.04;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal-btn:hover::before {
+            opacity: 0;
         }
 
         .modal-btn svg {
             width: 20px;
             height: 20px;
             stroke-width: 1;
+            position: relative;
+            z-index: 1;
+            opacity: 0.72;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal-btn:hover svg {
+            opacity: 1;
         }
 
         .modal-btn .tooltip {
@@ -754,14 +985,14 @@
         .modal-share .share-icon,
         .modal-share .checkmark-icon {
             position: absolute;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-
-        .modal-share .share-icon {
-            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
         .modal-share .checkmark-icon {
+            opacity: 0;
+        }
+
+        .modal-share:hover .checkmark-icon {
             opacity: 0;
         }
 
@@ -770,6 +1001,10 @@
         }
 
         .modal-share.copied .checkmark-icon {
+            opacity: 1;
+        }
+
+        .modal-share.copied:hover .checkmark-icon {
             opacity: 1;
         }
 
@@ -828,7 +1063,8 @@
             position: fixed;
             top: 100px;
             bottom: 0;
-            width: 200px;
+            width: 25%; /* 25% of window width - scales proportionally */
+            min-width: 150px; /* Minimum width for very small screens */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -840,18 +1076,18 @@
 
         .modal-nav.prev {
             left: 0;
-            padding-left: 30px;
+            padding-left: 2%; /* 2% padding instead of fixed 30px */
             justify-content: flex-start;
         }
 
         .modal-nav.next {
             right: 0;
-            padding-right: 30px;
+            padding-right: 2%; /* 2% padding instead of fixed 30px */
             justify-content: flex-end;
         }
 
         .modal-overlay.active .modal-nav {
-            pointer-events: auto;
+            pointer-events: auto; /* Enable to detect hover and clicks */
         }
 
         .modal-nav:hover {
@@ -957,7 +1193,7 @@
                 color: rgba(255, 255, 255, 0.5);
             }
 
-            .modal-paper .poem-text {
+            .modal-overlay.active .modal-paper .poem-text {
                 color: #cccccc;
             }
 
@@ -965,13 +1201,36 @@
                 color: #cccccc;
             }
 
-            .modal-btn {
-                background: rgba(255, 255, 255, 0.04);
+            .poem-nav-btn::after {
+                background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+            }
+
+            .poem-nav-btn::before {
+                background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+            }
+
+            .poem-nav-btn {
                 color: #fff;
             }
 
+            .modal-btn {
+                color: #fff;
+            }
+
+            .modal-btn::after {
+                background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+            }
+
+            .modal-btn::before {
+                background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+            }
+
+            .modal-btn:hover::before {
+                opacity: 0;
+            }
+
             .modal-btn:hover {
-                background: rgba(255, 255, 255, 0.06);
+                box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
             }
 
             .modal-btn .tooltip {
@@ -1003,6 +1262,14 @@
             .modal-paper.fullscreen .illustration-credit a:hover {
                 color: rgba(255, 255, 255, 0.72);
             }
+
+            .modal-paper.fullscreen .modal-signature path {
+                stroke: #fff;
+            }
+
+            .modal-paper.fullscreen .modal-copyright {
+                color: rgba(255, 255, 255, 0.5);
+            }
         }
 
         @media (prefers-color-scheme: dark) and (hover: hover) and (pointer: fine) {
@@ -1026,6 +1293,10 @@
                 display: none;
             }
 
+            .modal-controls {
+                display: none;
+            }
+
             .poem-card {
                 padding: 28px 24px;
             }
@@ -1044,20 +1315,38 @@
             }
 
             .modal-paper.fullscreen {
-                padding: 60px 40px;
+                padding: 60px 30px 0 30px;
             }
 
             .modal-paper.fullscreen .title {
-                font-size: 1.6rem;
+                font-size: 32px;
+                line-height: 32px;
             }
 
             .modal-paper.fullscreen .title.sticky {
-                font-size: 1.6rem;
-                line-height: 1.2;
+                font-size: 32px;
+                line-height: 32px;
+                padding-left: 30px;
+                padding-right: 30px;
             }
 
             .modal-paper.fullscreen .poem-text {
-                font-size: 1.1rem;
+                font-size: 20px;
+                line-height: 28px;
+            }
+
+            .modal-paper.fullscreen .poem-nav-buttons {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                margin-top: 80px;
+                margin-bottom: 104px;
+            }
+
+            .modal-paper.fullscreen .modal-footer {
+                margin-top: 0;
+                padding-bottom: 60px;
             }
 
             .page-header .subtitle {
@@ -1090,6 +1379,170 @@
             font-style: italic;
             color: var(--text-body);
             line-height: 1.8;
+        }
+
+        /* CRITICAL: Final dark mode override to win cascade */
+        @media (prefers-color-scheme: dark) {
+            .modal-paper.fullscreen .poem-text {
+                color: #cccccc !important;
+            }
+            
+            .modal-paper .poem-text {
+                color: #cccccc !important;
+            }
+        }
+
+        /* Manual dark mode toggle support */
+        html.dark-mode {
+            --bg-color: #121212;
+            --paper-color: #202020;
+            --text-primary: #e5e5e5;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-muted: rgba(255, 255, 255, 0.2);
+            --text-body: rgba(255, 255, 255, 0.6);
+            --text-body-full: rgba(255, 255, 255, 0.75);
+            --divider-color: rgba(255, 255, 255, 0.2);
+            --shadow-spread: rgba(0, 0, 0, 0);
+            --shadow-spread-hover: rgba(255, 255, 255, 0.05);
+            --shadow-soft: rgba(0, 0, 0, 0.3);
+            --shadow-softer: rgba(0, 0, 0, 0.2);
+            --close-btn-hover: rgba(255, 255, 255, 0.1);
+            --close-btn-stroke: rgba(255, 255, 255, 0.5);
+        }
+
+        html.dark-mode ::selection {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        html.dark-mode body::before {
+            display: none;
+        }
+
+        html.dark-mode .page-header .subtitle {
+            color: #cccccc;
+        }
+
+        html.dark-mode .page-header h1 {
+            color: #cccccc;
+        }
+
+        html.dark-mode .poem-card {
+            background: #202020;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
+        }
+
+        html.dark-mode .poem-card .number {
+            color: rgba(255,255,255,0.2);
+        }
+
+        html.dark-mode .poem-card .title {
+            color: #e5e5e5;
+        }
+
+        html.dark-mode .poem-card .preview {
+            color: #cccccc;
+        }
+
+        html.dark-mode .poem-card-wrapper .hover-title {
+            color: #cccccc;
+        }
+
+        html.dark-mode .modal-paper {
+            background: #202020;
+        }
+
+        html.dark-mode .modal-paper.fullscreen::before {
+            background-image: linear-gradient(180deg, rgba(32,32,32,0.96) 0%, rgba(32,32,32,0.50) 75%, rgba(32,32,32,0.00) 100%);
+        }
+
+        html.dark-mode .modal-paper .number {
+            color: rgba(255,255,255,0.2);
+        }
+
+        html.dark-mode .modal-paper .title {
+            color: #cccccc;
+        }
+
+        html.dark-mode .modal-paper.fullscreen .author {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        html.dark-mode .modal-paper .poem-text {
+            color: #cccccc !important;
+        }
+
+        html.dark-mode .modal-paper.fullscreen .poem-text {
+            color: #cccccc !important;
+        }
+
+        html.dark-mode .modal-btn {
+            color: #fff;
+        }
+
+        html.dark-mode .modal-btn::after {
+            background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+        }
+
+        html.dark-mode .modal-btn::before {
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+        }
+
+        html.dark-mode .modal-btn:hover::before {
+            opacity: 0;
+        }
+
+        html.dark-mode .modal-btn:hover {
+            box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
+        }
+
+        html.dark-mode .modal-btn .tooltip {
+            background: rgba(255, 255, 255, 0.24);
+            color: #fff;
+        }
+
+        html.dark-mode .modal-nav-btn {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+        }
+
+        html.dark-mode .modal-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        html.dark-mode .poem-nav-btn::after {
+            background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+        }
+
+        html.dark-mode .poem-nav-btn::before {
+            background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+        }
+
+        html.dark-mode .page-footer .copyright {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        html.dark-mode .page-footer .signature path {
+            stroke: #fff;
+        }
+
+        html.dark-mode .modal-paper.fullscreen .illustration-credit {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        html.dark-mode .modal-paper.fullscreen .illustration-credit a:hover {
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            html.dark-mode .poem-card-wrapper:hover .poem-card,
+            html.dark-mode .poem-card-wrapper:focus-within .poem-card {
+                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 60px rgba(0, 0, 0, 0.08), 0 15px 30px rgba(0, 0, 0, 0.05);
+            }
+
+            html.dark-mode .poem-card-wrapper:hover .poem-card .preview,
+            html.dark-mode .poem-card-wrapper:focus-within .poem-card .preview {
+                color: #ffffff;
+            }
         }
     </style>
     
@@ -1847,6 +2300,36 @@ Die Kus…</p>
                     <img class="poem-image" id="modalImage" src="" alt="">
                 </div>
                 <p class="illustration-credit" id="illustrationCredit">Illustré par <a href="https://artlambi.be/" target="_blank" rel="noopener">Arthur Lambillotte</a></p>
+                <div class="poem-nav-buttons">
+                    <button class="poem-nav-btn" id="poemNavPrev" aria-label="Poème précédent">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                            <polyline points="12.5 16.6666667 5.83333333 10.0000151 12.5 3.33333333" stroke-linecap="square"/>
+                        </svg>
+                    </button>
+                    <button class="poem-nav-btn" id="poemNavClose" aria-label="Fermer">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                            <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25"/>
+                        </svg>
+                    </button>
+                    <button class="poem-nav-btn" id="poemNavNext" aria-label="Poème suivant">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                            <polyline transform="translate(10.8333, 10) scale(-1, 1) translate(-10.8333, -10)" points="14.1666667 16.6666667 7.5 10.0000151 14.1666667 3.33333333" stroke-linecap="square"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <svg class="modal-signature" viewBox="0 -5 1080 321" aria-label="Christian Lambillotte signature">
+                        <path d="M1059.29,8.47c-94.87,14.4-381.18,105.04-462.49,132.14-81.32,27.11-256.66,92.33-396.42,142.31s-166.17,20.21-172.8,10.16c-9.32-14.12.85-39.53,107.58-111.81C251.1,102.75,373.05,40.5,437.39,40.72"/>
+                        <path d="M363.85,213.46s17.7,44.05,176.15-149.93l-111.39,138.64s58.35-66.45,48.19-50.26-38.21,55.72-9.22,29.93,41.6-42.92,41.6-42.92c0,0-19.76,30.87,38.21-11.29,0,0-63.62,69.46,27.11-1.69,0,0-51.93,53.56,14.68,2.26,55.72-42.92,35.76,1.88,20.71,1.88"/>
+                        <path d="M729.78,0s-60.41,99.94-74.81,121.69c0,0,50.53-67.47,83.85-70.86"/>
+                        <path d="M577.88,113.79s7.34,1.27,14.96-5.65"/>
+                        <path d="M745.03,77.74s-12.59,12.35-4.04,16.91"/>
+                        <path d="M764.23,68.33s4.14,2.45,10.92-2.07"/>
+                        <path d="M792.18,73.13"/>
+                        <path d="M788.23,72.83s7.91-4.32,15.53-5.83,14.68-4.34,21.74-8.15,10.73-5.5,21.18-4.94,13.27-.85,18.92-4.24,17.51-6.21,27.11-6.78"/>
+                    </svg>
+                    <p class="modal-copyright">©<span class="modal-year"></span>. Tous droits réservés</p>
+                </div>
             </div>
         </div>
         <div class="modal-controls">
@@ -1874,14 +2357,14 @@ Die Kus…</p>
         <div class="modal-nav prev" id="navPrev">
             <button class="modal-nav-btn" aria-label="Poème précédent">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                    <path d="M12.5 15L7.5 10L12.5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline points="12.5 16.6666667 5.83333333 10.0000151 12.5 3.33333333" stroke-linecap="square"/>
                 </svg>
             </button>
         </div>
         <div class="modal-nav next" id="navNext">
             <button class="modal-nav-btn" aria-label="Poème suivant">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                    <path d="M7.5 15L12.5 10L7.5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline transform="translate(10.8333, 10) scale(-1, 1) translate(-10.8333, -10)" points="14.1666667 16.6666667 7.5 10.0000151 14.1666667 3.33333333" stroke-linecap="square"/>
                 </svg>
             </button>
         </div>
@@ -1892,6 +2375,7 @@ Die Kus…</p>
             {
                 title: "30 ans en 30 lignes",
                 slug: "30-ans-en-30-lignes",
+                date: "2019-03-18", // March 18, 2019
                 text: `Avoir trente ans, et réfléchir
 Leçons du passé, espoirs et désirs
 
@@ -1933,6 +2417,7 @@ Mais quelle tristesse qu'on ne se verra plus...''`
             {
                 title: "L'essentiel retrouvé ?",
                 slug: "l-essentiel-retrouve",
+                date: "2020-05-01", // May 1, 2020
                 text: `Humanité, amitié, fraternité :
 Voilà l'essentiel, oublié
 
@@ -1975,6 +2460,7 @@ A redécouvrir la vraie fraternité…`
             {
                 title: "Anaïs",
                 slug: "anais",
+                date: "2020-04-28", // April 28, 2020
                 text: `Dire que tu n'as même pas un an…
 Toi, fruit de l'amour de tes parents
 Jamais sans doute tu ne sauras
@@ -2012,6 +2498,7 @@ A tout jamais, même après ma m...`
                 title: "Le foetus et le squelette",
                 slug: "le-foetus-et-le-squelette",
                 image: "https://artlambi.github.io/poetry/img/foetus-squelette.jpg",
+                date: "2020-06-04", // June 4, 2020
                 text: `Deux conditions, de deux vies
 L'une à commencer, l'autre finie
 Le fœtus est, mais pas encore vraiment
@@ -2094,6 +2581,7 @@ Resta muet`
                 title: "Ode à la pomme de terre",
                 slug: "ode-a-la-pomme-de-terre",
                 image: "https://artlambi.github.io/poetry/img/pomme-de-terre.jpg",
+                date: "2020-04-28", // April 28, 2020
                 text: `Oh Chère Patate
 
 Quand je t'ai vue
@@ -2154,6 +2642,7 @@ Qui serions… dans la purée….`
             {
                 title: "L'Orpheline de guerre...",
                 slug: "l-orpheline-de-guerre",
+                date: "2021-07-04", // July 4, 2021
                 text: `Je suis un GRAND enfant
 J'aurai bientôt NEUF ans !
 
@@ -2208,6 +2697,7 @@ Et grandir en m'amusant…`
             {
                 title: "Membre de l'humanité",
                 slug: "membre-de-l-humanite",
+                date: "2020-05-01", // May 1, 2020
                 text: `Membre de l'humanité
 Sans n'avoir rien demandé
 
@@ -2280,6 +2770,7 @@ Espoir…. N'en disons pas plus…`
             {
                 title: "Come dire",
                 slug: "come-dire",
+                date: "2021-09-15", // September 15, 2021
                 text: `Come dire
 A chi non vuole sentire
 Le tue parole
@@ -2310,34 +2801,47 @@ Spero che un giorno`
             {
                 title: "Een moment van diep geluk",
                 slug: "een-moment-van-diep-geluk",
+                date: "2022-12-30", // December 30, 2022 (newest poem!)
                 text: `Kwam het door een glimlach
 Die ik even zag ?
+
 Of was het een woord, een blik 
 Een tel van een ogenblik ?
+
 Een gedachte of een beeld
 Ooit met iemand gedeeld ?
+
 Een parfum met een herinnering 
 Een lang vergeten omhelzing ?
+
 Een bloem en haar pracht
 Een vriend(in) die aan mij dacht ?
+
 Kwam het door muziek, of een ander mooi geluid ?
 Het maakt allemaal niet uit
+
 Wat er echt toe doet :
 Het deed me goed
+
 Het helpt niet, te zitten kniezen
 Ooit moet je wel kiezen
+
 Niet voor optimisme
 Noch voor pessimisme
+
 Die twee vijanden van elkaar
 En beiden onbetrouwbaar
+
 Ik kies voor idealisme
 Met zin voor realisme
+
 Het is nooit alles kommer noch kwel
 Ga ! Ga en leef wel.`
             },
             {
                 title: "Op de bergtop",
                 slug: "op-de-bergtop",
+                date: "2021-09-30", // September 30, 2021
                 text: `Daar in de Pyreneeën
 Met zicht op zeeën
 
@@ -2383,17 +2887,21 @@ Ik val van mijn berg…`
             {
                 title: "De ring",
                 slug: "de-ring",
+                date: "2022-05-25", // May 25, 2022
                 text: `Ik zoek  naar de ring
 Die ooit mijn vinger sierde
 Wat ik zo lang vierde
 En toch verging
+
 Ik zoek naar een reden
 Vrees geen waarheid
 Denk aan voorbije tijd
 Nu lang verleden
+
 Ja,  het is voorbij
 Sedert jaren al
 Toch een 
+
 Wij nooit meer zij aan zij
 Maar je gaf mij kind'ren
 Twee`
@@ -2401,6 +2909,7 @@ Twee`
             {
                 title: "De traan",
                 slug: "de-traan",
+                date: "2021-09-12", // September 12, 2021
                 text: `Het begon met een traan
 Niet meer weten wat gedaan
 
@@ -2436,6 +2945,7 @@ De voorbode van vreugd ?`
             {
                 title: "Zandkorrel",
                 slug: "zandkorrel",
+                date: "2021-09-23", // September 23, 2021
                 text: `Meer sterren 
 In het heelal
 
@@ -2477,6 +2987,7 @@ En maakt van liefde haat….`
             {
                 title: "Die kus",
                 slug: "die-kus",
+                date: "2021-07-04", // July 4, 2021
                 text: ` 's Avonds. Duisternis
 
 Of toch niet, er is een kaars 
@@ -2534,7 +3045,7 @@ Die Kus…`
 
         function updateHash() {
             try {
-                const slug = getSlug(poems[currentIndex].title);
+                const slug = getSlug(shuffledPoems[currentIndex].title);
                 history.replaceState(null, '', '#' + slug);
             } catch (e) {
                 // Ignore errors in iframe/restricted contexts
@@ -2551,7 +3062,7 @@ Die Kus…`
 
         // Share functionality
         function getShareUrl() {
-            const poem = poems[currentIndex];
+            const poem = shuffledPoems[currentIndex];
             const slug = poem.slug || getSlug(poem.title);
             const baseUrl = window.location.origin;
             return `${baseUrl}/${slug}.html`;
@@ -2574,8 +3085,35 @@ Die Kus…`
 
         document.getElementById('shareBtn').addEventListener('click', copyShareUrl);
 
+        // Shuffle array function (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const shuffled = [...array]; // Create a copy
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        // Sort by date function (newest first)
+        function sortByDate(array) {
+            return [...array].sort((a, b) => {
+                // Poems without dates go to the end
+                if (!a.date && !b.date) return 0;
+                if (!a.date) return 1;
+                if (!b.date) return -1;
+                // Compare dates (newest first)
+                return new Date(b.date) - new Date(a.date);
+            });
+        }
+        
+        // CURRENT MODE: Chronological order (newest first)
+        // To switch back to random order, change line below to:
+        // const shuffledPoems = shuffleArray(poems);
+        const shuffledPoems = sortByDate(poems);
+        
         // Create grid cards
-        poems.forEach((poem, index) => {
+        shuffledPoems.forEach((poem, index) => {
             const wrapper = document.createElement('div');
             wrapper.className = 'poem-card-wrapper';
             
@@ -2631,7 +3169,7 @@ Die Kus…`
             clickedCard = card;
             originalClickedCard = card;
             
-            const poem = poems[currentIndex];
+            const poem = shuffledPoems[currentIndex];
             
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
@@ -2663,6 +3201,17 @@ Die Kus…`
             
             // Get the clicked card's position
             const rect = card.getBoundingClientRect();
+            
+            // DEBUG: Log the rect values
+            console.log('Opening poem:', poem.title);
+            console.log('Card rect:', {
+                top: rect.top,
+                left: rect.left,
+                width: rect.width,
+                height: rect.height
+            });
+            console.log('Window scroll:', window.scrollY);
+            console.log('Viewport size:', window.innerWidth, 'x', window.innerHeight);
             
             // Set initial position to match the card
             modalPaper.style.transition = 'none';
@@ -2719,6 +3268,11 @@ Die Kus…`
                 
                 const cardContent = modalPaper.querySelector('.card-content');
                 
+                // ALWAYS clear cardContent padding immediately, regardless of mobile/desktop
+                if (cardContent) {
+                    cardContent.style.paddingTop = '';
+                }
+                
                 if (isMobile) {
                     // On mobile: fade out modal, then restore scroll, then show card
                     modalPaper.style.transition = 'opacity 0.25s ease';
@@ -2734,8 +3288,21 @@ Die Kus…`
                         // Reset modal state
                         modal.classList.remove('active');
                         modalPaper.classList.remove('fullscreen');
-                        modalPaper.style.opacity = '1';
-                        modalPaper.style.transition = '';
+                        
+                        // Explicitly clear ALL positioning and transform properties
+                        modalPaper.style.cssText = '';
+                        modalPaper.style.removeProperty('top');
+                        modalPaper.style.removeProperty('left');
+                        modalPaper.style.removeProperty('width');
+                        modalPaper.style.removeProperty('height');
+                        modalPaper.style.removeProperty('opacity');
+                        modalPaper.style.removeProperty('transition');
+                        modalPaper.style.removeProperty('transform');
+                        
+                        if (cardContent) {
+                            cardContent.style.cssText = '';
+                            cardContent.style.removeProperty('padding-top');
+                        }
                         
                         // Show the card
                         clickedCard.style.opacity = '1';
@@ -2787,6 +3354,14 @@ Die Kus…`
                             modal.classList.remove('active');
                             modalPaper.style.opacity = '1';
                             cardContent.style.paddingTop = '';
+                            
+                            // Clear ALL modalPaper inline styles
+                            modalPaper.style.top = '';
+                            modalPaper.style.left = '';
+                            modalPaper.style.width = '';
+                            modalPaper.style.height = '';
+                            modalPaper.style.transition = '';
+                            
                             // Reset controls
                             document.querySelector('.modal-controls').style.opacity = '';
                             document.querySelector('.modal-controls').style.transition = '';
@@ -2820,14 +3395,28 @@ Die Kus…`
             navigatePoem(1);
         });
 
+        // Inline poem navigation buttons
+        document.getElementById('poemNavPrev').addEventListener('click', () => {
+            navigatePoem(-1);
+        });
+
+        document.getElementById('poemNavNext').addEventListener('click', () => {
+            navigatePoem(1);
+        });
+
+        document.getElementById('poemNavClose').addEventListener('click', () => {
+            closeModal();
+            setTimeout(clearHash, 550);
+        });
+
         function navigatePoem(direction) {
             const newIndex = currentIndex + direction;
             
             // Wrap around
-            const targetIndex = newIndex < 0 ? poems.length - 1 : newIndex >= poems.length ? 0 : newIndex;
+            const targetIndex = newIndex < 0 ? shuffledPoems.length - 1 : newIndex >= shuffledPoems.length ? 0 : newIndex;
             
             // Update content
-            const poem = poems[targetIndex];
+            const poem = shuffledPoems[targetIndex];
             currentIndex = targetIndex;
             
             document.getElementById('modalTitle').textContent = poem.title;
@@ -2886,12 +3475,28 @@ Die Kus…`
             }
         });
 
+        // Forward scroll events from nav areas to modal paper
+        document.getElementById('navPrev').addEventListener('wheel', (e) => {
+            if (modal.classList.contains('active')) {
+                modalPaper.scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.getElementById('navNext').addEventListener('wheel', (e) => {
+            if (modal.classList.contains('active')) {
+                modalPaper.scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
         function openPoemByHash() {
             const hash = window.location.hash.slice(1);
             if (hash) {
-                const index = poems.findIndex(p => (p.slug || getSlug(p.title)) === hash);
+                // Find in shuffled array
+                const index = shuffledPoems.findIndex(p => (p.slug || getSlug(p.title)) === hash);
                 if (index !== -1) {
-                    const poem = poems[index];
+                    const poem = shuffledPoems[index];
                     const card = document.querySelector(`.poem-card[data-index="${index}"]`);
                     
                     // Update Open Graph and Twitter meta tags
@@ -2918,7 +3523,9 @@ Die Kus…`
         window.addEventListener('hashchange', openPoemByHash);
 
         // Update copyright year
-        document.getElementById('year').textContent = new Date().getFullYear();
+        const currentYear = new Date().getFullYear();
+        document.getElementById('year').textContent = currentYear;
+        document.querySelector('.modal-year').textContent = currentYear;
 
         // Cycle subtitle text with vertical slide
         const subtitleTexts = document.querySelectorAll('.subtitle-text');
