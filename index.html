@@ -810,6 +810,30 @@
             display: none;
         }
 
+        /* Mobile: sticky bottom navigation on scroll up */
+        @media (max-width: 768px) {
+            .modal-paper.fullscreen .poem-nav-buttons {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                justify-content: center;
+                gap: 12px;
+                padding: 20px;
+                background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.96) 25%, rgba(255,255,255,1) 100%);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                z-index: 100;
+                transform: translateY(100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .modal-paper.fullscreen.scrolling-up .poem-nav-buttons {
+                transform: translateY(0);
+            }
+        }
+
         .modal-paper.fullscreen .poem-nav-buttons {
             display: none; /* Hidden by default (desktop) */
         }
@@ -1244,6 +1268,12 @@
                 color: #fff;
             }
 
+            @media (max-width: 768px) {
+                .modal-paper.fullscreen .poem-nav-buttons {
+                    background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.96) 25%, rgba(32,32,32,1) 100%);
+                }
+            }
+
             .modal-btn {
                 color: #fff;
             }
@@ -1570,6 +1600,12 @@
             background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
         }
 
+        @media (max-width: 768px) {
+            html.dark-mode .modal-paper.fullscreen .poem-nav-buttons {
+                background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.96) 25%, rgba(32,32,32,1) 100%);
+            }
+        }
+
         html.dark-mode .page-footer .copyright {
             color: rgba(255, 255, 255, 0.5);
         }
@@ -1658,8 +1694,8 @@
                 {
                     "@type": "CreativeWork",
                     "position": 8,
-                    "name": "Come dire",
-                    "@id": "#come-dire"
+                    "name": "Basta il dolore",
+                    "@id": "#basta-il-dolore"
                 },
                 {
                     "@type": "CreativeWork",
@@ -2098,8 +2134,8 @@ Mais ce soir….
 Homme redéfinit, grâce à un virus ?
 Espoir…. N'en disons pas plus…</p>
             </article>
-            <article class="poem-article" id="come-dire">
-                <h2>Come dire</h2>
+            <article class="poem-article" id="basta-il-dolore">
+                <h2>Basta il dolore</h2>
                 <p>Come dire
 A chi non vuole sentire
 Le tue parole
@@ -2819,8 +2855,8 @@ Homme redéfinit, grâce à un virus ?
 Espoir…. N'en disons pas plus…`
             },
             {
-                title: "Come dire",
-                slug: "come-dire",
+                title: "Basta il dolore",
+                slug: "basta-il-dolore",
                 date: "2021-09-15", // September 15, 2021
                 text: `Come dire
 A chi non vuole sentire
@@ -3635,6 +3671,15 @@ Die Kus…`
                 this.classList.add('scrolled');
             } else {
                 this.classList.remove('scrolled');
+            }
+            
+            // Show mobile nav when scrolling up (on mobile only)
+            if (window.innerWidth <= 768) {
+                if (isScrollingUp && currentScrollTop > 100) {
+                    this.classList.add('scrolling-up');
+                } else {
+                    this.classList.remove('scrolling-up');
+                }
             }
             
             // Show sticky title when scrolling up and main title is out of view

@@ -33,7 +33,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.christianlambillotte.be/come-dire.html</loc>
+    <loc>https://www.christianlambillotte.be/basta-il-dolore.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
@@ -54,6 +54,10 @@
   </url>
   <url>
     <loc>https://www.christianlambillotte.be/zandkorrel.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.christianlambillotte.be/die-kus.html</loc>
     <priority>0.8</priority>
   </url>
 </urlset>
