@@ -3329,6 +3329,10 @@ Die Kus…`
             modalPaper.classList.add('fullscreen');
             modalPaper.classList.remove('scrolling-up'); // Ensure nav is hidden on open
             
+            // Reset scroll tracking
+            lastModalScrollTop = 0;
+            modalPaper.scrollTop = 0;
+            
             // Lock body scroll
             document.body.style.top = `-${savedScrollPosition}px`;
             document.body.classList.add('modal-open');
