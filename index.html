@@ -812,14 +812,18 @@
 
         /* Mobile: sticky bottom navigation on scroll up */
         @media (max-width: 768px) {
-            .modal-paper.fullscreen .poem-nav-buttons {
+            .modal-overlay .poem-nav-buttons {
+                display: none;
+            }
+
+            .modal-overlay.active .poem-nav-buttons {
                 display: flex;
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 right: 0;
                 justify-content: center;
-                gap: 12px;
+                gap: 40px;
                 padding: 20px;
                 background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.72) 50%, rgba(255,255,255,0.96) 100%);
                 z-index: 100;
@@ -827,8 +831,13 @@
                 transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            .modal-paper.fullscreen.scrolling-up .poem-nav-buttons {
-                transform: translateY(0);
+            /* Ensure hidden by default */
+            .modal-overlay.active:not(.scrolling-up) .poem-nav-buttons {
+                transform: translateY(100%) !important;
+            }
+
+            .modal-overlay.active.scrolling-up .poem-nav-buttons {
+                transform: translateY(0) !important;
             }
 
             .poem-nav-btn {
@@ -839,8 +848,8 @@
 
         /* Desktop: hide poem nav buttons */
         @media (min-width: 769px) {
-            .modal-paper.fullscreen .poem-nav-buttons {
-                display: none;
+            .poem-nav-buttons {
+                display: none !important;
             }
         }
 
@@ -1275,7 +1284,7 @@
             }
 
             @media (max-width: 768px) {
-                .modal-paper.fullscreen .poem-nav-buttons {
+                .modal-overlay.active .poem-nav-buttons {
                     background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.72) 50%, rgba(32,32,32,0.96) 100%);
                 }
             }
@@ -1606,8 +1615,12 @@
             background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
         }
 
+        html.dark-mode .poem-nav-btn {
+            color: #fff;
+        }
+
         @media (max-width: 768px) {
-            html.dark-mode .modal-paper.fullscreen .poem-nav-buttons {
+            html.dark-mode .modal-overlay.active .poem-nav-buttons {
                 background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.72) 50%, rgba(32,32,32,0.96) 100%);
             }
         }
@@ -2395,23 +2408,6 @@ Die Kus…</p>
                     <img class="poem-image" id="modalImage" src="" alt="">
                 </div>
                 <p class="illustration-credit" id="illustrationCredit">Illustré par <a href="https://artlambi.be/" target="_blank" rel="noopener">Arthur Lambillotte</a></p>
-                <div class="poem-nav-buttons">
-                    <button class="poem-nav-btn" id="poemNavPrev" aria-label="Poème précédent">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                            <polyline points="12.5 16.6666667 5.83333333 10.0000151 12.5 3.33333333" stroke-linecap="square"/>
-                        </svg>
-                    </button>
-                    <button class="poem-nav-btn" id="poemNavClose" aria-label="Fermer">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                            <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25"/>
-                        </svg>
-                    </button>
-                    <button class="poem-nav-btn" id="poemNavNext" aria-label="Poème suivant">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                            <polyline transform="translate(10.8333, 10) scale(-1, 1) translate(-10.8333, -10)" points="14.1666667 16.6666667 7.5 10.0000151 14.1666667 3.33333333" stroke-linecap="square"/>
-                        </svg>
-                    </button>
-                </div>
                 <div class="modal-footer">
                     <svg class="modal-signature" viewBox="0 -5 1080 321" aria-label="Christian Lambillotte signature">
                         <path d="M1059.29,8.47c-94.87,14.4-381.18,105.04-462.49,132.14-81.32,27.11-256.66,92.33-396.42,142.31s-166.17,20.21-172.8,10.16c-9.32-14.12.85-39.53,107.58-111.81C251.1,102.75,373.05,40.5,437.39,40.72"/>
@@ -2456,6 +2452,23 @@ Die Kus…</p>
         </div>
         <div class="modal-nav next" id="navNext">
             <button class="modal-nav-btn" aria-label="Poème suivant">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                    <polyline transform="translate(10.8333, 10) scale(-1, 1) translate(-10.8333, -10)" points="14.1666667 16.6666667 7.5 10.0000151 14.1666667 3.33333333" stroke-linecap="square"/>
+                </svg>
+            </button>
+        </div>
+        <div class="poem-nav-buttons">
+            <button class="poem-nav-btn" id="poemNavPrev" aria-label="Poème précédent">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                    <polyline points="12.5 16.6666667 5.83333333 10.0000151 12.5 3.33333333" stroke-linecap="square"/>
+                </svg>
+            </button>
+            <button class="poem-nav-btn" id="poemNavClose" aria-label="Fermer">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                    <path d="M16.25,16.25 L3.75,3.75 M16.25,3.75 L3.75,16.25"/>
+                </svg>
+            </button>
+            <button class="poem-nav-btn" id="poemNavNext" aria-label="Poème suivant">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
                     <polyline transform="translate(10.8333, 10) scale(-1, 1) translate(-10.8333, -10)" points="14.1666667 16.6666667 7.5 10.0000151 14.1666667 3.33333333" stroke-linecap="square"/>
                 </svg>
@@ -3327,7 +3340,7 @@ Die Kus…`
             modalPaper.style.width = '100vw';
             modalPaper.style.height = '100vh';
             modalPaper.classList.add('fullscreen');
-            modalPaper.classList.remove('scrolling-up'); // Ensure nav is hidden on open
+            modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
             
             // Reset scroll tracking
             lastModalScrollTop = 0;
@@ -3352,7 +3365,8 @@ Die Kus…`
             if (clickedCard) {
                 // Reset modal scroll position and remove scrolled class
                 modalPaper.scrollTop = 0;
-                modalPaper.classList.remove('scrolled', 'scrolling-up');
+                modalPaper.classList.remove('scrolled');
+                modal.classList.remove('scrolling-up');
                 document.getElementById('modalTitle').classList.remove('sticky', 'visible', 'at-top');
                 
                 // Hide controls
@@ -3685,11 +3699,12 @@ Die Kus…`
             }
             
             // Show mobile nav when scrolling up (on mobile only)
+            const modalOverlay = document.getElementById('modal');
             if (window.innerWidth <= 768) {
                 if (isScrollingUp && currentScrollTop > 100) {
-                    this.classList.add('scrolling-up');
+                    modalOverlay.classList.add('scrolling-up');
                 } else {
-                    this.classList.remove('scrolling-up');
+                    modalOverlay.classList.remove('scrolling-up');
                 }
             }
             
