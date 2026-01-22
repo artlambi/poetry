@@ -1006,19 +1006,26 @@
             d: path("M 16.25 3.75 L 16.25 3.75");
         }
 
+        .modal-share .morph-path-1,
+        .modal-share .morph-path-2 {
+            transform-origin: center;
+            will-change: transform;
+        }
+
+        .modal-share:hover:not(.copied) .morph-path-1,
         .modal-share:hover:not(.copied) .morph-path-2 {
             animation: arrowBounce 0.3s ease;
         }
 
         @keyframes arrowBounce {
             0% {
-                d: path("M 9.75 1.9166 L 9.75 11.5");
+                transform: translateY(0);
             }
             50% {
-                d: path("M 9.75 1.9166 L 9.75 10");
+                transform: translateY(-2.5px);
             }
             100% {
-                d: path("M 9.75 1.9166 L 9.75 11.5");
+                transform: translateY(0);
             }
         }
 
