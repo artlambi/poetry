@@ -1,25 +1,42 @@
 # Christian Lambillotte - Poetry Collection
 
-> A personal collection of poems by Christian Lambillotte, presented in an elegant digital format.
-
-This website showcases original poetry written by Christian Lambillotte, a Belgian poet. The site features an interactive reading experience where poems can be viewed in a fullscreen modal with smooth animations.
-
-## Poems
-
-- [30 ans en 30 lignes](https://www.christianlambillotte.be/30-ans-en-30-lignes.html): A reflection on turning thirty, life lessons, and the passage of time.
-- [L'essentiel retrouvé ?](https://www.christianlambillotte.be/l-essentiel-retrouve.html): A meditation on humanity, friendship, and fraternity in difficult times.
-- [Anaïs](https://www.christianlambillotte.be/anais.html): A tender poem dedicated to the poet's granddaughter.
-- [Le foetus et le squelette](https://www.christianlambillotte.be/le-foetus-et-le-squelette.html): A philosophical dialogue between a fetus and a skeleton about life and death.
-- [Ode à la pomme de terre](https://www.christianlambillotte.be/ode-a-la-pomme-de-terre.html): A humorous ode celebrating the potato in all its forms.
-- [L'Orpheline de guerre](https://www.christianlambillotte.be/l-orpheline-de-guerre.html): A poignant poem from the perspective of a young war orphan.
+> A bilingual poetry collection by Christian Lambillotte featuring works in French, Italian, and Dutch.
 
 ## About
 
-- **Author**: Christian Lambillotte
-- **Language**: French, Dutch
-- **Location**: Belgium
-- **Website**: [christianlambillotte.be](https://www.christianlambillotte.be)
+This website showcases the poetry of Christian Lambillotte, a multilingual poet whose work explores themes of humanity, love, loss, and the human condition. The collection includes 14 poems written between 2019 and 2025.
 
-## Contact
+## Content
 
-For inquiries about the poetry or permissions, please visit the website.
+- **14 poems** in French, Italian, and Dutch
+- **Illustrated works** by Arthur Lambillotte
+- **Multilingual** collection (French primary, with Italian and Dutch poems)
+- **Topics**: Life reflections, family, humanity, existential themes
+
+## Featured Poems
+
+- "30 ans en 30 lignes" - Reflections on turning thirty
+- "L'essentiel retrouvé ?" - On humanity and brotherhood
+- "Anaïs" - A grandfather's love for his granddaughter
+- "Le foetus et le squelette" - A dialogue between life and death
+- "Ode à la pomme de terre" - A humorous ode to the potato
+- "Basta il dolore" (Italian) - On love and uncertainty
+- "Een moment van diep geluk" (Dutch) - A moment of deep happiness
+
+## Technical
+
+- Static HTML/CSS/JavaScript site
+- Responsive design with dark mode support
+- SEO optimized with individual poem pages
+- Social media sharing capabilities
+- Accessibility focused
+
+## Links
+
+- Main site: https://www.christianlambillotte.be
+- Illustrator: https://artlambi.be
+- Sitemap: https://www.christianlambillotte.be/sitemap.xml
+
+## Copyright
+
+© 2019-2026 Christian Lambillotte. All rights reserved.

@@ -6,5 +6,8 @@ Illustrations: Arthur Lambillotte
 Website: artlambi.be
 
 /* SITE */
-Language: French, Dutch
+Language: French, Italian, Dutch
 Standards: HTML5, CSS3, JavaScript
+Components: Single-page application with fullscreen poem viewer
+Features: Dark mode, responsive design, social sharing, SEO optimized
+Last update: 2026/01/22
