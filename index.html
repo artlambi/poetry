@@ -1008,6 +1008,11 @@
             transition-delay: 0.7s;
         }
 
+        /* Instant tooltips after first hover */
+        .instant-tooltips .modal-btn:hover .tooltip {
+            transition-delay: 0s;
+        }
+
         /* Close button specific */
         .modal-close svg path {
             transition: d 0.2s ease;
@@ -2477,6 +2482,42 @@ Die Kus…</p>
     </div>
 
     <script>
+        // Tooltip delay management - don't delay subsequent tooltips
+        let tooltipTimeout = null;
+        
+        const resetTooltipState = () => {
+            document.querySelectorAll('.modal-controls, .poem-nav-buttons').forEach(container => {
+                container.classList.remove('instant-tooltips');
+            });
+        };
+        
+        // Find all elements with tooltips
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltipElements = document.querySelectorAll('.modal-btn, .modal-nav-btn, .poem-nav-btn');
+            
+            tooltipElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    // Find the parent container
+                    const container = element.closest('.modal-controls, .poem-nav-buttons');
+                    
+                    if (container) {
+                        // Add instant class - will take effect for NEXT tooltip
+                        container.classList.add('instant-tooltips');
+                    }
+                    
+                    // Clear any existing timeout
+                    if (tooltipTimeout) {
+                        clearTimeout(tooltipTimeout);
+                    }
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    // Reset the tooltip state after 1 second of no hovers
+                    tooltipTimeout = setTimeout(resetTooltipState, 1000);
+                });
+            });
+        });
+
         const poems = [
             {
                 title: "30 ans en 30 lignes",
