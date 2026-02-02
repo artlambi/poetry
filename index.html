@@ -278,24 +278,37 @@
             width: 360px;
             height: auto;
             flex-shrink: 0;
+        }
+
+        /* Light mode - show light portrait with multiply */
+        .bio-portrait-light {
+            display: block;
             mix-blend-mode: multiply;
         }
 
+        .bio-portrait-dark {
+            display: none;
+        }
+
+        /* Dark mode - show dark portrait with screen */
         @media (prefers-color-scheme: dark) {
-            .bio-portrait {
-                mix-blend-mode: normal;
+            .bio-portrait-light {
+                display: none;
+            }
+            
+            .bio-portrait-dark {
+                display: block;
+                mix-blend-mode: screen;
             }
         }
 
-        html.dark-mode .bio-portrait {
-            mix-blend-mode: normal;
+        html.dark-mode .bio-portrait-light {
+            display: none;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .bio-portrait {
-                mix-blend-mode: normal;
-                opacity: 0.85;
-            }
+        html.dark-mode .bio-portrait-dark {
+            display: block;
+            mix-blend-mode: screen;
         }
 
         .bio-text {
@@ -2505,7 +2518,8 @@ Die Kus…</p>
 
     <section class="bio-section">
         <div class="bio-container">
-            <img src="https://www.christianlambillotte.be/img/portrait.jpg" alt="Portrait de Christian Lambillotte" class="bio-portrait">
+            <img src="https://www.christianlambillotte.be/img/portrait.jpg" alt="Portrait de Christian Lambillotte" class="bio-portrait bio-portrait-light">
+            <img src="https://www.christianlambillotte.be/img/portrait-dark.jpg" alt="Portrait de Christian Lambillotte" class="bio-portrait bio-portrait-dark">
             <div class="bio-text">
                 <p><strong>Christian Lambillotte</strong> (1957-2026) était fils, frère, père, grand-père, scout, franc-maçon, écrivain et poète amateur.</p>
                 <p>Gantois passionné par l'Afrique, à laquelle il a consacré une partie de sa vie professionnelle, il nourrissait un vif intérêt pour les langues et attachait une grande importance à l'amitié, au débat et aux moments simples partagés avec ceux qui l'entouraient.</p>
