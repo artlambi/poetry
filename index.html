@@ -262,6 +262,85 @@
             animation-delay: 0.15s;
         }
 
+        .bio-section {
+            max-width: 1200px;
+            margin: 120px auto 0;
+            padding: 0 60px;
+        }
+
+        .bio-container {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        .bio-portrait {
+            width: 360px;
+            height: 360px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .bio-text {
+            flex: 1;
+        }
+
+        .bio-text p {
+            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+            font-size: 24px;
+            line-height: 34px;
+            color: var(--text-body-full);
+            margin: 0 0 20px 0;
+        }
+
+        .bio-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bio-text strong {
+            font-weight: 600;
+        }
+
+        @media (max-width: 900px) {
+            .bio-section {
+                margin-top: 80px;
+                padding: 0 40px;
+            }
+
+            .bio-container {
+                flex-direction: column;
+                gap: 40px;
+                align-items: center;
+            }
+
+            .bio-portrait {
+                width: 100%;
+                max-width: 360px;
+                height: auto;
+                aspect-ratio: 1;
+            }
+
+            .bio-text {
+                text-align: center;
+            }
+
+            .bio-text p {
+                font-size: 20px;
+                line-height: 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .bio-section {
+                padding: 0 20px;
+            }
+
+            .bio-text p {
+                font-size: 18px;
+                line-height: 28px;
+            }
+        }
+
         .page-footer {
             display: flex;
             flex-wrap: wrap;
@@ -2400,6 +2479,17 @@ Die Kus…</p>
             </article>
         </noscript>
     </main>
+
+    <section class="bio-section">
+        <div class="bio-container">
+            <img src="https://www.christianlambillotte.be/img/portrait.jpg" alt="Portrait de Christian Lambillotte" class="bio-portrait">
+            <div class="bio-text">
+                <p><strong>Christian Lambillotte</strong> (1957-2026) était fils, frère, père, grand-père, scout, franc-maçon, écrivain et poète amateur.</p>
+                <p>Gantois passionné par l'Afrique, à laquelle il a consacré une partie de sa vie professionnelle, il nourrissait un vif intérêt pour les langues et attachait une grande importance à l'amitié, au débat et aux moments simples partagés avec ceux qui l'entouraient.</p>
+                <p>Si son œuvre littéraire n'a pas été publiée de son vivant, ses écrits sont aujourd'hui rassemblés et préservés avec soin par ses enfants.</p>
+            </div>
+        </div>
+    </section>
 
     <footer class="page-footer">
         <p class="copyright">©<span id="year"></span>. Tous droits réservés</p>
