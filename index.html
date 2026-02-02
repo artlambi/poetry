@@ -123,7 +123,7 @@
             }
         }
 
-        body > *:not(.page-footer) {
+        body > *:not(.page-footer):not(.bio-section) {
             position: relative;
             z-index: 1;
         }
@@ -275,23 +275,10 @@
         }
 
         .bio-portrait {
-            height: 360px;
-            width: auto;
+            width: 360px;
+            height: auto;
             flex-shrink: 0;
-            display: block;
-        }
-
-        /* Light mode - blend into background with filter */
-        @media (prefers-color-scheme: light) {
-            .bio-portrait {
-                mix-blend-mode: multiply;
-                filter: contrast(1.1) brightness(1.05);
-            }
-        }
-
-        html:not(.dark-mode) .bio-portrait {
             mix-blend-mode: multiply;
-            filter: contrast(1.1) brightness(1.05);
         }
 
         @media (prefers-color-scheme: dark) {
