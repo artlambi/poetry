@@ -325,6 +325,27 @@
             line-height: 34px;
             color: rgba(51, 51, 51, 0.72);
             margin: 0 0 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .bio-text.visible p:nth-child(1) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0s;
+        }
+
+        .bio-text.visible p:nth-child(2) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.15s;
+        }
+
+        .bio-text.visible p:nth-child(3) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.3s;
         }
 
         .bio-text p:last-child {
@@ -3891,6 +3912,24 @@ Die Kus…`
                 wrapper.classList.add('visible');
             }, 500 + (row * 120));
         });
+
+        // Bio text scroll animation
+        const bioText = document.querySelector('.bio-text');
+        if (bioText) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        bioText.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.2,
+                rootMargin: '0px 0px -100px 0px'
+            });
+            
+            observer.observe(bioText);
+        }
 
         // Modal scroll handler for top fade effect and image zoom
         let lastModalScrollTop = 0;
