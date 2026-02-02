@@ -281,6 +281,23 @@
             mix-blend-mode: multiply;
         }
 
+        @media (prefers-color-scheme: dark) {
+            .bio-portrait {
+                mix-blend-mode: normal;
+            }
+        }
+
+        html.dark-mode .bio-portrait {
+            mix-blend-mode: normal;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .bio-portrait {
+                mix-blend-mode: normal;
+                opacity: 0.85;
+            }
+        }
+
         .bio-text {
             flex: 1;
         }
@@ -1718,6 +1735,11 @@
             html.dark-mode .modal-overlay.active .poem-nav-buttons {
                 background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.72) 50%, rgba(32,32,32,0.96) 100%);
             }
+        }
+
+        html.dark-mode .bio-portrait {
+            mix-blend-mode: normal;
+            opacity: 0.85;
         }
 
         html.dark-mode .page-footer .copyright {
