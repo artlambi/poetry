@@ -275,10 +275,10 @@
         }
 
         .bio-portrait {
-            width: 360px;
             height: 360px;
-            object-fit: cover;
+            width: auto;
             flex-shrink: 0;
+            mix-blend-mode: multiply;
         }
 
         .bio-text {
@@ -315,9 +315,8 @@
 
             .bio-portrait {
                 width: 100%;
-                max-width: 360px;
                 height: auto;
-                aspect-ratio: 1;
+                max-width: 360px;
             }
 
             .bio-text {
