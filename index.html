@@ -266,6 +266,7 @@
             max-width: 1200px;
             margin: 120px auto 0;
             padding: 0 60px;
+            isolation: isolate;
         }
 
         .bio-container {
@@ -278,7 +279,18 @@
             height: 360px;
             width: auto;
             flex-shrink: 0;
-            mix-blend-mode: darken;
+            display: block;
+        }
+
+        /* Light mode - blend into background */
+        @media (prefers-color-scheme: light) {
+            .bio-portrait {
+                mix-blend-mode: multiply;
+            }
+        }
+
+        html:not(.dark-mode) .bio-portrait {
+            mix-blend-mode: multiply;
         }
 
         @media (prefers-color-scheme: dark) {
