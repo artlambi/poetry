@@ -281,6 +281,9 @@
             width: 360px;
             height: auto;
             flex-shrink: 0;
+            transform: scale(var(--bio-image-scale, 1.1));
+            transform-origin: center center;
+            transition: transform 0.15s ease-out;
         }
 
         /* Light mode - show light portrait with multiply */
@@ -3930,6 +3933,32 @@ Die Kus…`
             
             observer.observe(bioText);
         }
+
+        // Bio image zoom effect on scroll
+        const bioPortraits = document.querySelectorAll('.bio-portrait');
+        
+        function updateBioImageZoom() {
+            bioPortraits.forEach(portrait => {
+                const rect = portrait.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                // Calculate visible percentage
+                const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
+                const visiblePercent = Math.max(0, visibleHeight / rect.height);
+                
+                // Map visibility (10% to 100%) to scale (1.1 to 1.0)
+                const startVisibility = 0.1;
+                const progress = Math.max(0, Math.min(1, (visiblePercent - startVisibility) / (1 - startVisibility)));
+                const scale = 1.1 - (progress * 0.1);
+                
+                portrait.style.setProperty('--bio-image-scale', scale);
+            });
+        }
+
+        // Update on scroll
+        window.addEventListener('scroll', updateBioImageZoom);
+        // Initial update
+        updateBioImageZoom();
 
         // Modal scroll handler for top fade effect and image zoom
         let lastModalScrollTop = 0;
