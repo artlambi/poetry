@@ -130,7 +130,7 @@
             }
         }
 
-        body > *:not(.page-footer):not(.bio-section) {
+        body > *:not(.page-footer):not(.bio-section):not(.dark-mode-toggle) {
             position: relative;
             z-index: 1;
         }
@@ -160,25 +160,36 @@
         }
 
         .dark-mode-toggle {
-            position: fixed;
+            position: fixed !important;
             top: 60px;
+            left: auto !important;
             right: 130px;
             width: 40px;
             height: 40px;
-            border: 2px solid red;
-            background: red;
+            border: none;
+            background: transparent;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s ease, opacity 0.2s ease;
-            color: white;
+            transition: opacity 0.2s ease;
+            color: rgba(255, 255, 255, 0.6);
             z-index: 9999;
+            pointer-events: auto;
         }
 
         .dark-mode-toggle:hover {
-            background: rgba(0, 0, 0, 0.08);
+            opacity: 0.8;
+        }
+
+        /* Light mode styles */
+        html:not(.dark-mode) .dark-mode-toggle {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        html:not(.dark-mode) .dark-mode-toggle:hover {
+            opacity: 0.7;
         }
 
         .dark-mode-toggle svg {
@@ -186,6 +197,7 @@
             height: 20px;
             position: absolute;
             transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
         }
 
         .dark-mode-toggle .sun-icon {
@@ -207,15 +219,6 @@
         html.dark-mode .dark-mode-toggle .moon-icon {
             opacity: 0;
             transform: rotate(90deg) scale(0.5);
-        }
-
-        html.dark-mode .dark-mode-toggle {
-            background: rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        html.dark-mode .dark-mode-toggle:hover {
-            background: rgba(255, 255, 255, 0.12);
         }
 
         @media (max-width: 768px) {
