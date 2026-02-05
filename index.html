@@ -161,20 +161,20 @@
 
         .dark-mode-toggle {
             position: fixed;
-            top: 64px;
-            right: calc(50% - 540px + 130px);
+            top: 60px;
+            right: 130px;
             width: 40px;
             height: 40px;
-            border: none;
-            background: rgba(0, 0, 0, 0.04);
+            border: 2px solid red;
+            background: red;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: background 0.2s ease, opacity 0.2s ease;
-            color: rgba(0, 0, 0, 0.5);
-            z-index: 100;
+            color: white;
+            z-index: 9999;
         }
 
         .dark-mode-toggle:hover {
@@ -216,13 +216,6 @@
 
         html.dark-mode .dark-mode-toggle:hover {
             background: rgba(255, 255, 255, 0.12);
-        }
-
-        /* Responsive positioning */
-        @media (max-width: 1200px) {
-            .dark-mode-toggle {
-                right: 60px;
-            }
         }
 
         @media (max-width: 768px) {
