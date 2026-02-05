@@ -823,6 +823,91 @@
             mask-image: none;
         }
 
+        /* Word-by-word transition animations */
+        .modal-paper .poem-text .word {
+            display: inline-block;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .modal-paper .card-content.transitioning-out .poem-text .word {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .modal-paper .card-content.transitioning-in .poem-text .word {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .modal-paper .card-content.transitioning-out .title {
+            animation: titleSlideOut 0.4s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+        }
+
+        .modal-paper .card-content.transitioning-in .title {
+            opacity: 0;
+            animation: titleSlideIn 0.5s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+            animation-delay: 0.05s;
+        }
+
+        .modal-paper .card-content.transitioning-out .poem-image-container {
+            animation: imageSlideOut 0.4s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+        }
+
+        .modal-paper .card-content.transitioning-in .poem-image-container {
+            animation: imageSlideIn 0.5s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+            animation-delay: 0.15s;
+        }
+
+        @keyframes titleSlideOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-15px);
+                filter: blur(3px);
+            }
+        }
+
+        @keyframes titleSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+                filter: blur(3px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes imageSlideOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.96);
+            }
+        }
+
+        @keyframes imageSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         .modal-paper .poem-image-container {
             display: none;
         }
@@ -3363,6 +3448,32 @@ Die Kus…`
         const modal = document.getElementById('modal');
         const modalPaper = document.getElementById('modalPaper');
 
+        // Helper function to wrap words in spans
+        function wrapWords(text) {
+            return text.split(/(<br>|\n)/).map(part => {
+                if (part === '<br>' || part === '\n') {
+                    return '<br>';
+                }
+                return part.split(' ').map((word, i) => {
+                    if (word.trim()) {
+                        return `<span class="word">${word}</span>`;
+                    }
+                    return word;
+                }).join(' ');
+            }).join('');
+        }
+
+        // Helper function to animate words in sequence
+        function animateWordsIn(container, delay = 20) {
+            const words = container.querySelectorAll('.word');
+            words.forEach((word, index) => {
+                setTimeout(() => {
+                    word.style.opacity = '1';
+                    word.style.transform = 'translateY(0)';
+                }, index * delay);
+            });
+        }
+
         // Deep linking helper functions
         function getSlug(title) {
             return title
@@ -3513,6 +3624,7 @@ Die Kus…`
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
             // Convert line breaks to <br> while preserving HTML tags like <em>
+            // Don't wrap words initially - they're only wrapped during transitions
             document.getElementById('modalText').innerHTML = poem.text.replace(/\n/g, '<br>');
             
             // Set image if available
@@ -3759,44 +3871,75 @@ Die Kus…`
             // Wrap around
             const targetIndex = newIndex < 0 ? shuffledPoems.length - 1 : newIndex >= shuffledPoems.length ? 0 : newIndex;
             
-            // Update content
-            const poem = shuffledPoems[targetIndex];
-            currentIndex = targetIndex;
+            const cardContent = modalPaper.querySelector('.card-content');
+            const modalText = document.getElementById('modalText');
             
-            document.getElementById('modalTitle').textContent = poem.title;
-            document.getElementById('modalText').innerHTML = poem.text.replace(/\n/g, '<br>');
+            // Start exit animation
+            cardContent.classList.add('transitioning-out');
             
-            // Update image if available
-            const modalImage = document.getElementById('modalImage');
-            const modalImageContainer = document.getElementById('modalImageContainer');
-            const illustrationCredit = document.getElementById('illustrationCredit');
-            if (poem.image) {
-                modalImage.src = poem.image;
-                modalImage.alt = 'Illustration pour ' + poem.title;
-                modalImageContainer.style.display = '';
-                illustrationCredit.style.display = '';
-                illustrationCredit.classList.remove('visible');
-            } else {
-                modalImage.src = '';
-                modalImageContainer.style.display = 'none';
-                illustrationCredit.style.display = 'none';
-            }
-            
-            // Reset scroll position
-            modalPaper.scrollTop = 0;
-            modalPaper.classList.remove('scrolled');
-            document.getElementById('modalTitle').classList.remove('sticky', 'visible');
-            
-            // Update hash
-            updateHash();
-            
-            // Restore original card opacity and update clickedCard for close animation
-            if (originalClickedCard) {
-                originalClickedCard.style.opacity = '1';
-            }
-            clickedCard = document.querySelector(`.poem-card[data-index="${targetIndex}"]`);
-            clickedCard.style.opacity = '0';
-            originalClickedCard = clickedCard;
+            // After exit animation completes, update content and start enter animation
+            setTimeout(() => {
+                // Update content
+                const poem = shuffledPoems[targetIndex];
+                currentIndex = targetIndex;
+                
+                const titleElement = document.getElementById('modalTitle');
+                titleElement.textContent = poem.title;
+                // Set title opacity to 0 immediately so it doesn't flash
+                titleElement.style.opacity = '0';
+                
+                // Wrap words and set initial state (invisible)
+                const wrappedText = wrapWords(poem.text.replace(/\n/g, '<br>'));
+                modalText.innerHTML = wrappedText;
+                
+                // Update image if available
+                const modalImage = document.getElementById('modalImage');
+                const modalImageContainer = document.getElementById('modalImageContainer');
+                const illustrationCredit = document.getElementById('illustrationCredit');
+                if (poem.image) {
+                    modalImage.src = poem.image;
+                    modalImage.alt = 'Illustration pour ' + poem.title;
+                    modalImageContainer.style.display = '';
+                    illustrationCredit.style.display = '';
+                    illustrationCredit.classList.remove('visible');
+                } else {
+                    modalImage.src = '';
+                    modalImageContainer.style.display = 'none';
+                    illustrationCredit.style.display = 'none';
+                }
+                
+                // Reset scroll position
+                modalPaper.scrollTop = 0;
+                modalPaper.classList.remove('scrolled');
+                document.getElementById('modalTitle').classList.remove('sticky', 'visible');
+                
+                // Update hash
+                updateHash();
+                
+                // Restore original card opacity and update clickedCard for close animation
+                if (originalClickedCard) {
+                    originalClickedCard.style.opacity = '1';
+                }
+                clickedCard = document.querySelector(`.poem-card[data-index="${targetIndex}"]`);
+                clickedCard.style.opacity = '0';
+                originalClickedCard = clickedCard;
+                
+                // Remove exit animation class and add enter animation class
+                cardContent.classList.remove('transitioning-out');
+                cardContent.classList.add('transitioning-in');
+                
+                // Animate words in sequence
+                setTimeout(() => {
+                    animateWordsIn(modalText, 15);
+                }, 100);
+                
+                // Remove enter animation class after it completes
+                setTimeout(() => {
+                    cardContent.classList.remove('transitioning-in');
+                    // Reset title opacity
+                    document.getElementById('modalTitle').style.opacity = '';
+                }, 1000);
+            }, 400);
         }
 
         modal.addEventListener('click', (e) => {
