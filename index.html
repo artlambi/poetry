@@ -151,10 +151,18 @@
             position: relative;
         }
 
+        /* Theme transition for smooth mode switching */
+        html.theme-transition,
+        html.theme-transition *,
+        html.theme-transition *::before,
+        html.theme-transition *::after {
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease !important;
+        }
+
         .dark-mode-toggle {
-            position: absolute;
-            top: 0;
-            right: 20px;
+            position: fixed;
+            top: 64px;
+            right: calc(50% - 540px + 130px);
             width: 40px;
             height: 40px;
             border: none;
@@ -164,7 +172,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s ease;
+            transition: background 0.2s ease, opacity 0.2s ease;
+            color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
         }
 
         .dark-mode-toggle:hover {
@@ -174,36 +184,51 @@
         .dark-mode-toggle svg {
             width: 20px;
             height: 20px;
+            position: absolute;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .dark-mode-toggle .sun-icon {
-            display: none;
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
         }
 
         .dark-mode-toggle .moon-icon {
-            display: block;
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
         }
 
         /* Manual dark mode class */
         html.dark-mode .dark-mode-toggle .sun-icon {
-            display: block;
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
         }
 
         html.dark-mode .dark-mode-toggle .moon-icon {
-            display: none;
+            opacity: 0;
+            transform: rotate(90deg) scale(0.5);
         }
 
         html.dark-mode .dark-mode-toggle {
             background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.6);
         }
 
         html.dark-mode .dark-mode-toggle:hover {
             background: rgba(255, 255, 255, 0.12);
         }
 
+        /* Responsive positioning */
+        @media (max-width: 1200px) {
+            .dark-mode-toggle {
+                right: 60px;
+            }
+        }
+
         @media (max-width: 768px) {
             .dark-mode-toggle {
-                right: 10px;
+                right: 20px;
+                top: 44px;
             }
         }
 
@@ -2028,6 +2053,23 @@
     </script>
 </head>
 <body>
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Basculer le mode sombre">
+        <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M8.845,4.197 C8.415,5.57 8.02,8.083 9.97,10.03 C11.92,11.977 14.427,11.583 15.802,11.153 C15.2230811,14.0655693 12.5750157,16.097897 9.61181804,15.9038187 C6.64862035,15.7097405 4.28825955,13.3493797 4.09418126,10.386182 C3.90010297,7.42298426 5.93243071,4.7749189 8.845,4.196 L8.845,4.197 Z" stroke="currentColor" stroke-width="1"/>
+        </svg>
+        <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="4.75" stroke="currentColor" stroke-width="1"/>
+            <line x1="10" y1="0" x2="10" y2="2" stroke="currentColor" stroke-width="1"/>
+            <line x1="10" y1="18" x2="10" y2="20" stroke="currentColor" stroke-width="1"/>
+            <line x1="0" y1="10" x2="2" y2="10" stroke="currentColor" stroke-width="1"/>
+            <line x1="18" y1="10" x2="20" y2="10" stroke="currentColor" stroke-width="1"/>
+            <line x1="2.93" y1="2.93" x2="4.34" y2="4.34" stroke="currentColor" stroke-width="1"/>
+            <line x1="15.66" y1="15.66" x2="17.07" y2="17.07" stroke="currentColor" stroke-width="1"/>
+            <line x1="2.93" y1="17.07" x2="4.34" y2="15.66" stroke="currentColor" stroke-width="1"/>
+            <line x1="15.66" y1="4.34" x2="17.07" y2="2.93" stroke="currentColor" stroke-width="1"/>
+        </svg>
+    </button>
+
     <header class="page-header">
         <p class="subtitle">
             <span class="subtitle-text active">La poésie de</span>
@@ -4214,6 +4256,61 @@ Die Kus…`
                 if (containerRect.bottom < windowHeight - 25 && !illustrationCredit.classList.contains('visible')) {
                     illustrationCredit.classList.add('visible');
                 }
+            }
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved preference or system preference
+        function getPreferredTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                return savedTheme;
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        
+        // Apply theme
+        function applyTheme(theme, animate = false) {
+            if (animate) {
+                html.classList.add('theme-transition');
+            }
+            
+            if (theme === 'dark') {
+                html.classList.add('dark-mode');
+            } else {
+                html.classList.remove('dark-mode');
+            }
+            
+            if (animate) {
+                // Remove transition class after animation completes
+                setTimeout(() => {
+                    html.classList.remove('theme-transition');
+                }, 400);
+            }
+        }
+        
+        // Initialize theme on page load (no animation)
+        applyTheme(getPreferredTheme(), false);
+        
+        // Toggle theme on button click
+        darkModeToggle.addEventListener('click', () => {
+            const isDark = html.classList.contains('dark-mode');
+            const newTheme = isDark ? 'light' : 'dark';
+            
+            // Save preference
+            localStorage.setItem('theme', newTheme);
+            
+            // Apply with animation
+            applyTheme(newTheme, true);
+        });
+        
+        // Listen for system preference changes (only if no saved preference)
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                applyTheme(e.matches ? 'dark' : 'light', true);
             }
         });
 
