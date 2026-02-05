@@ -81,7 +81,7 @@
             }
         }
 
-        /* Manual dark mode override */
+        /* Manual dark mode override - forces dark when system is light */
         html.dark-mode {
             --bg-color: #121212;
             --paper-color: #202020;
@@ -97,6 +97,24 @@
             --shadow-softer: rgba(0, 0, 0, 0.2);
             --close-btn-hover: rgba(255, 255, 255, 0.1);
             --close-btn-stroke: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Manual light mode override - forces light when system is dark */
+        html.light-mode {
+            --bg-color: #ecebeb;
+            --paper-color: #fff;
+            --text-primary: #000000;
+            --text-secondary: rgba(0, 0, 0, 0.4);
+            --text-muted: rgba(0, 0, 0, 0.2);
+            --text-body: rgba(0, 0, 0, 0.5);
+            --text-body-full: rgba(0, 0, 0, 0.65);
+            --divider-color: rgba(0, 0, 0, 0.3);
+            --shadow-spread: rgba(0, 0, 0, 0);
+            --shadow-spread-hover: rgba(0, 0, 0, 0.015);
+            --shadow-soft: rgba(0, 0, 0, 0.025);
+            --shadow-softer: rgba(0, 0, 0, 0.015);
+            --close-btn-hover: rgba(0, 0, 0, 0.05);
+            --close-btn-stroke: rgba(0, 0, 0, 0.4);
         }
 
         html, body {
@@ -228,7 +246,31 @@
             transform: rotate(0deg) scale(1);
         }
 
-        /* Manual dark mode class */
+        /* Dark mode - show sun icon */
+        html.dark-mode .dark-mode-toggle .sun-icon,
+        html:not(.light-mode) .dark-mode-toggle .sun-icon {
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
+        }
+
+        html.dark-mode .dark-mode-toggle .moon-icon,
+        html:not(.light-mode) .dark-mode-toggle .moon-icon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            html:not(.light-mode) .dark-mode-toggle .sun-icon {
+                opacity: 1;
+                transform: rotate(0deg) scale(1);
+            }
+
+            html:not(.light-mode) .dark-mode-toggle .moon-icon {
+                opacity: 0;
+                transform: rotate(90deg) scale(0.5);
+            }
+        }
+
         html.dark-mode .dark-mode-toggle .sun-icon {
             opacity: 1;
             transform: rotate(0deg) scale(1);
@@ -237,6 +279,16 @@
         html.dark-mode .dark-mode-toggle .moon-icon {
             opacity: 0;
             transform: rotate(90deg) scale(0.5);
+        }
+
+        html.light-mode .dark-mode-toggle .sun-icon {
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
+        }
+
+        html.light-mode .dark-mode-toggle .moon-icon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
         }
 
         @media (max-width: 768px) {
@@ -341,11 +393,11 @@
 
         /* Dark mode - show dark portrait with screen */
         @media (prefers-color-scheme: dark) {
-            .bio-portrait-light {
+            html:not(.light-mode) .bio-portrait-light {
                 display: none;
             }
             
-            .bio-portrait-dark {
+            html:not(.light-mode) .bio-portrait-dark {
                 display: block;
                 mix-blend-mode: screen;
             }
@@ -358,6 +410,15 @@
         html.dark-mode .bio-portrait-dark {
             display: block;
             mix-blend-mode: screen;
+        }
+
+        html.light-mode .bio-portrait-light {
+            display: block;
+            mix-blend-mode: multiply;
+        }
+
+        html.light-mode .bio-portrait-dark {
+            display: none;
         }
 
         .bio-text {
@@ -4294,7 +4355,9 @@ Die Kus…`
             
             if (theme === 'dark') {
                 html.classList.add('dark-mode');
+                html.classList.remove('light-mode');
             } else {
+                html.classList.add('light-mode');
                 html.classList.remove('dark-mode');
             }
             
@@ -4311,7 +4374,12 @@ Die Kus…`
         
         // Toggle theme on button click
         darkModeToggle.addEventListener('click', () => {
-            const isDark = html.classList.contains('dark-mode');
+            // Check if currently dark (either by class or by system preference without light-mode override)
+            const hasDarkClass = html.classList.contains('dark-mode');
+            const hasLightClass = html.classList.contains('light-mode');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            const isDark = hasDarkClass || (systemPrefersDark && !hasLightClass);
             const newTheme = isDark ? 'light' : 'dark';
             
             // Save preference
