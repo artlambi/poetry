@@ -6,8 +6,11 @@ Illustrations: Arthur Lambillotte
 Website: artlambi.be
 
 /* SITE */
-Language: French, Italian, Dutch
+Languages: French, Dutch, Italian
 Standards: HTML5, CSS3, JavaScript
-Components: Single-page application with fullscreen poem viewer
-Features: Dark mode, responsive design, social sharing, SEO optimized
-Last update: 2026/01/22
+Software: Custom design and development
+Last update: 2026/02/05
+
+/* THANKS */
+Fonts: EB Garamond (Google Fonts), Gill Sans Nova (Adobe Fonts)
+Inspiration: Poetry, life, and the human experience

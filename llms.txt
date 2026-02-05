@@ -1,42 +1,59 @@
-# Christian Lambillotte - Poetry Collection
+# Christian Lambillotte Poetry Website
 
-> A bilingual poetry collection by Christian Lambillotte featuring works in French, Italian, and Dutch.
+> Recueil de poésie de Christian Lambillotte : entre questionnements existentiels et tendresse familiale, une œuvre poétique qui célèbre l'essentiel de la vie.
 
 ## About
 
-This website showcases the poetry of Christian Lambillotte, a multilingual poet whose work explores themes of humanity, love, loss, and the human condition. The collection includes 14 poems written between 2019 and 2025.
+This is the official poetry collection website of Christian Lambillotte, featuring French and Dutch poems exploring themes of life, humanity, family, love, and existential reflection.
+
+## Biographical Information
+
+**Christian Lambillotte** (1957-2026) was a son, brother, father, grandfather, scout, Freemason, writer, and amateur poet.
+
+Born in Ghent (Gent), Belgium, he was passionate about Africa, to which he dedicated part of his professional life. He had a keen interest in languages and placed great importance on friendship, debate, and simple moments shared with those around him.
+
+Although his literary work was not published during his lifetime, his writings are now carefully collected and preserved by his children.
 
 ## Content
 
-- **14 poems** in French, Italian, and Dutch
-- **Illustrated works** by Arthur Lambillotte
-- **Multilingual** collection (French primary, with Italian and Dutch poems)
-- **Topics**: Life reflections, family, humanity, existential themes
+The site includes:
+- 7 French poems (poèmes français)
+- 6 Dutch poems (Nederlandse gedichten)
+- 1 Italian poem (poesia italiana)
 
-## Featured Poems
+Poems cover themes including:
+- Life's journey and aging (30 ans en 30 lignes)
+- Humanity and fraternity (L'essentiel retrouvé, Membre de l'humanité)
+- Family and love (Anaïs)
+- Existential dialogue (Le foetus et le squelette)
+- Humor and celebration (Ode à la pomme de terre)
+- War and loss (L'Orpheline de guerre)
+- Moments of happiness (Een moment van diep geluk)
+- Nature and reflection (Op de bergtop, Zandkorrel)
+- Love and intimacy (De ring, Die kus)
 
-- "30 ans en 30 lignes" - Reflections on turning thirty
-- "L'essentiel retrouvé ?" - On humanity and brotherhood
-- "Anaïs" - A grandfather's love for his granddaughter
-- "Le foetus et le squelette" - A dialogue between life and death
-- "Ode à la pomme de terre" - A humorous ode to the potato
-- "Basta il dolore" (Italian) - On love and uncertainty
-- "Een moment van diep geluk" (Dutch) - A moment of deep happiness
+## Languages
+
+- Primary: French (Français)
+- Secondary: Dutch (Nederlands)
+- Tertiary: Italian (Italiano)
+
+## Author
+
+Christian Lambillotte (1957-2026) - Belgian poet from Ghent
+Passionate about Africa, languages, and human connection
 
 ## Technical
 
-- Static HTML/CSS/JavaScript site
-- Responsive design with dark mode support
-- SEO optimized with individual poem pages
-- Social media sharing capabilities
-- Accessibility focused
+- Built with: HTML5, CSS3, JavaScript
+- Illustrations by: Arthur Lambillotte (artlambi.be)
+- Features: Responsive design, dark mode support, interactive poem viewer
+- Accessibility: Semantic HTML, keyboard navigation
 
-## Links
+## Contact
 
-- Main site: https://www.christianlambillotte.be
-- Illustrator: https://artlambi.be
-- Sitemap: https://www.christianlambillotte.be/sitemap.xml
+Website: christianlambillotte.be
 
-## Copyright
+---
 
-© 2019-2026 Christian Lambillotte. All rights reserved.
+Last updated: February 2026
