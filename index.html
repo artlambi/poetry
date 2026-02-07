@@ -2235,14 +2235,32 @@
     <script>
         // Apply saved theme immediately to prevent flash of wrong theme
         (function() {
+            var html = document.documentElement;
             var saved = localStorage.getItem('theme');
+
             if (saved === 'dark') {
-                document.documentElement.classList.add('dark-mode');
+                html.classList.add('dark-mode');
             } else if (saved === 'light') {
-                document.documentElement.classList.add('light-mode');
+                html.classList.add('light-mode');
             } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.classList.add('dark-mode');
+                html.classList.add('dark-mode');
             }
+
+            // Follow system theme changes when no manual override
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                if (localStorage.getItem('theme')) return;
+
+                html.classList.add('theme-transition');
+                html.classList.remove('dark-mode', 'light-mode');
+
+                if (e.matches) {
+                    html.classList.add('dark-mode');
+                }
+
+                setTimeout(function() {
+                    html.classList.remove('theme-transition');
+                }, 550);
+            });
         })();
     </script>
 </head>
