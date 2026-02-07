@@ -175,6 +175,13 @@
         .dark-mode-toggle svg {
             width: 20px;
             height: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            padding: 2px;
+        }
+
+        html.dark-mode .dark-mode-toggle svg {
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .dark-mode-toggle .sun-icon {
@@ -1986,6 +1993,10 @@
 
         html.light-mode .dark-mode-toggle:hover {
             background: rgba(0, 0, 0, 0.08);
+        }
+
+        html.light-mode .dark-mode-toggle svg {
+            border-color: rgba(0, 0, 0, 0.2);
         }
 
         html.light-mode .page-header .subtitle {
