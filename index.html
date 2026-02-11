@@ -2251,13 +2251,29 @@
             var html = document.documentElement;
             var saved = localStorage.getItem('theme');
 
+            function setFavicon(isDark) {
+                var color = isDark ? '%23ffffff' : '%23000000';
+                var svg = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cpath fill=%22' + color + '%22 d=%22M26.358,20.803C27.319,20.803 28.166,21.163 28.9,21.882C29.633,22.6 30,23.445 30,24.414C30,25.384 29.633,26.224 28.9,26.934C28.166,27.645 27.319,28 26.358,28C25.413,28 24.575,27.645 23.841,26.934C23.107,26.224 22.741,25.384 22.741,24.414C22.741,23.445 23.107,22.6 23.841,21.882C24.575,21.163 25.413,20.803 26.358,20.803ZM5.617,20.803C6.578,20.803 7.425,21.163 8.159,21.882C8.893,22.6 9.259,23.445 9.259,24.414C9.259,25.384 8.893,26.224 8.159,26.934C7.425,27.645 6.578,28 5.617,28C4.656,28 3.813,27.645 3.088,26.934C2.363,26.224 2,25.384 2,24.414C2,23.445 2.363,22.6 3.088,21.882C3.813,21.163 4.656,20.803 5.617,20.803ZM12.37,6.611C12.37,5.658 12.733,4.818 13.458,4.091C14.183,3.364 15.035,3 16.013,3C16.991,3 17.838,3.364 18.555,4.091C19.271,4.818 19.63,5.658 19.63,6.611C19.63,7.547 19.271,8.379 18.555,9.106C17.838,9.833 16.991,10.197 16.013,10.197C15.035,10.197 14.183,9.833 13.458,9.106C12.733,8.379 12.37,7.547 12.37,6.611Z%22/%3E%3C/svg%3E';
+                var link = document.querySelector('link[rel="icon"]');
+                if (link) link.href = svg;
+            }
+            window._setFavicon = setFavicon;
+
+            var isDark;
             if (saved === 'dark') {
                 html.classList.add('dark-mode');
+                isDark = true;
             } else if (saved === 'light') {
                 html.classList.add('light-mode');
+                isDark = false;
             } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 html.classList.add('dark-mode');
+                isDark = true;
+            } else {
+                isDark = false;
             }
+
+            if (saved) setFavicon(isDark);
 
             // Follow system theme changes when no manual override
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
@@ -4485,10 +4501,12 @@ Die Kus…`
                     html.classList.remove('dark-mode');
                     html.classList.add('light-mode');
                     localStorage.setItem('theme', 'light');
+                    window._setFavicon(false);
                 } else {
                     html.classList.remove('light-mode');
                     html.classList.add('dark-mode');
                     localStorage.setItem('theme', 'dark');
+                    window._setFavicon(true);
                 }
 
                 // Remove transition class after animation completes
