@@ -1,59 +1,35 @@
-# Christian Lambillotte Poetry Website
+# Les poèmes de Christian Lambillotte
 
-> Recueil de poésie de Christian Lambillotte : entre questionnements existentiels et tendresse familiale, une œuvre poétique qui célèbre l'essentiel de la vie.
+> Recueil de poésie de Christian Lambillotte (1957–2026), poète belge amateur de Gand. Ses poèmes, écrits en français, néerlandais et italien, explorent les thèmes de la vie, de l'humanité, de la famille et de la réflexion existentielle. Ses écrits, non publiés de son vivant, sont rassemblés et préservés par ses enfants.
 
-## About
+Christian Lambillotte était fils, frère, père, grand-père, scout, franc-maçon, écrivain et poète amateur. Gantois passionné par l'Afrique, à laquelle il a consacré une partie de sa vie professionnelle, il nourrissait un vif intérêt pour les langues et attachait une grande importance à l'amitié, au débat et aux moments simples partagés avec ceux qui l'entouraient.
 
-This is the official poetry collection website of Christian Lambillotte, featuring French and Dutch poems exploring themes of life, humanity, family, love, and existential reflection.
+Le site présente 15 poèmes répartis en trois langues : 7 en français, 7 en néerlandais et 1 en italien. Chaque poème peut être lu en plein écran avec un mode clair et un mode sombre.
 
-## Biographical Information
+## Poèmes en français
 
-**Christian Lambillotte** (1957-2026) was a son, brother, father, grandfather, scout, Freemason, writer, and amateur poet.
+- [30 ans en 30 lignes](https://www.christianlambillotte.be/30-ans-en-30-lignes.html): Réflexion sur le cap des trente ans, le parcours de vie, les choix et le bagage accumulé.
+- [L'essentiel retrouvé ?](https://www.christianlambillotte.be/l-essentiel-retrouve.html): Méditation sur l'humanité, l'amitié et la fraternité oubliées au profit de l'ambition et du nationalisme.
+- [Anaïs](https://www.christianlambillotte.be/anais.html): Poème d'un grand-père à sa petite-fille, célébrant sa naissance et lui souhaitant courage et bonheur.
+- [Le foetus et le squelette](https://www.christianlambillotte.be/le-foetus-et-le-squelette.html): Dialogue imaginaire entre un fœtus et un squelette sur la vie, la mort et ce qui se trouve entre les deux.
+- [Ode à la pomme de terre](https://www.christianlambillotte.be/ode-a-la-pomme-de-terre.html): Hommage humoristique et tendre à la pomme de terre sous toutes ses formes.
+- [L'Orpheline de guerre](https://www.christianlambillotte.be/l-orpheline-de-guerre.html): Le récit poignant d'une enfant de neuf ans qui ne comprend pas pourquoi ses parents ne reviennent pas.
+- [Membre de l'humanité](https://www.christianlambillotte.be/membre-de-l-humanite.html): Réflexion sur 200.000 ans d'histoire humaine, entre violence et espoir.
 
-Born in Ghent (Gent), Belgium, he was passionate about Africa, to which he dedicated part of his professional life. He had a keen interest in languages and placed great importance on friendship, debate, and simple moments shared with those around him.
+## Poème en italien
 
-Although his literary work was not published during his lifetime, his writings are now carefully collected and preserved by his children.
+- [Basta il dolore](https://www.christianlambillotte.be/basta-il-dolore.html): Poème d'amour et de doute, sur l'attente et l'espoir d'un geste de l'autre.
 
-## Content
+## Gedichten in het Nederlands
 
-The site includes:
-- 7 French poems (poèmes français)
-- 6 Dutch poems (Nederlandse gedichten)
-- 1 Italian poem (poesia italiana)
+- [Een moment van diep geluk](https://www.christianlambillotte.be/een-moment-van-diep-geluk.html): Over een vluchtig moment van geluk en de keuze voor idealisme met zin voor realisme.
+- [Op de bergtop](https://www.christianlambillotte.be/op-de-bergtop.html): Overpeinzingen op een bergtop in de Pyreneeën over de chaos van de mensheid.
+- [De ring](https://www.christianlambillotte.be/de-ring.html): Kort gedicht over verlies, herinnering en wat overblijft na een relatie.
+- [De traan](https://www.christianlambillotte.be/de-traan.html): Over een traan zonder reden, verdriet om de wereld en de voorbode van vreugde.
+- [Zandkorrel](https://www.christianlambillotte.be/zandkorrel.html): Meditatie over de oneindigheid van het heelal, de nietigheid van de mens en de kracht van liefde.
+- [Die kus](https://www.christianlambillotte.be/die-kus.html): Een intiem gedicht over de spanning en tederheid die leiden tot een kus.
 
-Poems cover themes including:
-- Life's journey and aging (30 ans en 30 lignes)
-- Humanity and fraternity (L'essentiel retrouvé, Membre de l'humanité)
-- Family and love (Anaïs)
-- Existential dialogue (Le foetus et le squelette)
-- Humor and celebration (Ode à la pomme de terre)
-- War and loss (L'Orpheline de guerre)
-- Moments of happiness (Een moment van diep geluk)
-- Nature and reflection (Op de bergtop, Zandkorrel)
-- Love and intimacy (De ring, Die kus)
+## Credits
 
-## Languages
-
-- Primary: French (Français)
-- Secondary: Dutch (Nederlands)
-- Tertiary: Italian (Italiano)
-
-## Author
-
-Christian Lambillotte (1957-2026) - Belgian poet from Ghent
-Passionate about Africa, languages, and human connection
-
-## Technical
-
-- Built with: HTML5, CSS3, JavaScript
-- Illustrations by: Arthur Lambillotte (artlambi.be)
-- Features: Responsive design, dark mode support, interactive poem viewer
-- Accessibility: Semantic HTML, keyboard navigation
-
-## Contact
-
-Website: christianlambillotte.be
-
----
-
-Last updated: February 2026
+- Poésie : Christian Lambillotte
+- Illustrations & site web : [Arthur Lambillotte](https://artlambi.be)
