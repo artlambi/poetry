@@ -3765,7 +3765,7 @@ Die Kus…`
 
         function updateHash() {
             try {
-                const slug = getSlug(shuffledPoems[currentIndex].title);
+                const slug = getSlug(displayPoems[currentIndex].title);
                 history.replaceState(null, '', '#' + slug);
             } catch (e) {
                 // Ignore errors in iframe/restricted contexts
@@ -3782,7 +3782,7 @@ Die Kus…`
 
         // Share functionality
         function getShareUrl() {
-            const poem = shuffledPoems[currentIndex];
+            const poem = displayPoems[currentIndex];
             const slug = poem.slug || getSlug(poem.title);
             const baseUrl = window.location.origin;
             return `${baseUrl}/${slug}.html`;
@@ -3836,13 +3836,13 @@ Die Kus…`
             });
         }
         
-        // CURRENT MODE: Chronological order (newest first)
-        // To switch back to random order, change line below to:
-        // const shuffledPoems = shuffleArray(poems);
-        const shuffledPoems = sortByDate(poems);
+        // CURRENT MODE: Manual order (as defined in poems array)
+        // To switch to chronological order, change line below to:
+        // const displayPoems = sortByDate(poems);
+        const displayPoems = poems;
         
         // Create grid cards
-        shuffledPoems.forEach((poem, index) => {
+        displayPoems.forEach((poem, index) => {
             const wrapper = document.createElement('div');
             wrapper.className = 'poem-card-wrapper';
             
@@ -3898,7 +3898,7 @@ Die Kus…`
             clickedCard = card;
             originalClickedCard = card;
             
-            const poem = shuffledPoems[currentIndex];
+            const poem = displayPoems[currentIndex];
             
             // Set full content immediately (overflow hidden will clip it)
             document.getElementById('modalTitle').textContent = poem.title;
@@ -4148,7 +4148,7 @@ Die Kus…`
             const newIndex = currentIndex + direction;
             
             // Wrap around
-            const targetIndex = newIndex < 0 ? shuffledPoems.length - 1 : newIndex >= shuffledPoems.length ? 0 : newIndex;
+            const targetIndex = newIndex < 0 ? displayPoems.length - 1 : newIndex >= displayPoems.length ? 0 : newIndex;
             
             const cardContent = modalPaper.querySelector('.card-content');
             const modalText = document.getElementById('modalText');
@@ -4159,7 +4159,7 @@ Die Kus…`
             // After exit animation completes, update content and start enter animation
             setTimeout(() => {
                 // Update content
-                const poem = shuffledPoems[targetIndex];
+                const poem = displayPoems[targetIndex];
                 currentIndex = targetIndex;
                 
                 const titleElement = document.getElementById('modalTitle');
@@ -4284,9 +4284,9 @@ Die Kus…`
             const hash = window.location.hash.slice(1);
             if (hash) {
                 // Find in shuffled array
-                const index = shuffledPoems.findIndex(p => (p.slug || getSlug(p.title)) === hash);
+                const index = displayPoems.findIndex(p => (p.slug || getSlug(p.title)) === hash);
                 if (index !== -1) {
-                    const poem = shuffledPoems[index];
+                    const poem = displayPoems[index];
                     const card = document.querySelector(`.poem-card[data-index="${index}"]`);
                     
                     // Update Open Graph and Twitter meta tags
