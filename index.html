@@ -11,8 +11,7 @@
     <link rel="canonical" href="https://www.christianlambillotte.be/">
     
     <!-- Theme color for Safari toolbar -->
-    <meta name="theme-color" content="#ecebeb" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ecebeb">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -107,30 +106,6 @@
         @media (prefers-color-scheme: dark) {
             ::selection {
                 background: rgba(255, 255, 255, 0.2);
-            }
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url(https://artlambi.github.io/poetry/img/noise.png);
-            background-repeat: repeat;
-            background-size: 100px 100px;
-            transform: translateZ(0);
-            mix-blend-mode: plus-darker;
-            opacity: 0.08;
-            pointer-events: none;
-            z-index: 0;
-            display: none;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            body::before {
-                display: none;
             }
         }
 
@@ -811,14 +786,6 @@
             top: 30px;
             opacity: 1;
             filter: blur(0);
-        }
-
-        .modal-paper .author {
-            display: none;
-        }
-
-        .modal-paper.fullscreen .author {
-            display: none;
         }
 
         .modal-paper.fullscreen .poem-text {
@@ -1515,10 +1482,6 @@
                 color: #cccccc;
             }
 
-            .modal-paper.fullscreen .author {
-                color: rgba(255, 255, 255, 0.5);
-            }
-
             .modal-overlay.active .modal-paper .poem-text {
                 color: #cccccc;
             }
@@ -1762,10 +1725,6 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        html.dark-mode body::before {
-            display: none;
-        }
-
         html.dark-mode .page-header .subtitle {
             color: #cccccc;
         }
@@ -1817,10 +1776,6 @@
 
         html.dark-mode .modal-paper .title {
             color: #cccccc;
-        }
-
-        html.dark-mode .modal-paper.fullscreen .author {
-            color: rgba(255, 255, 255, 0.5);
         }
 
         html.dark-mode .modal-paper .poem-text {
@@ -1956,10 +1911,6 @@
             background: rgba(0, 0, 0, 0.1);
         }
 
-        html.light-mode body::before {
-            display: block;
-        }
-
         html.light-mode .bio-portrait-light {
             display: block;
             mix-blend-mode: multiply;
@@ -2041,10 +1992,6 @@
 
         html.light-mode .modal-paper .title {
             color: #000000;
-        }
-
-        html.light-mode .modal-paper.fullscreen .author {
-            color: rgba(0, 0, 0, 0.5);
         }
 
         html.light-mode .modal-paper .poem-text {
@@ -2277,10 +2224,8 @@
                 isDark = false;
             }
 
-            if (saved) {
-                setFavicon(isDark);
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ecebeb');
-            }
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ecebeb');
+            if (saved) setFavicon(isDark);
 
             // Follow system theme changes when no manual override
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
@@ -2292,6 +2237,8 @@
                 if (e.matches) {
                     html.classList.add('dark-mode');
                 }
+
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', e.matches ? '#121212' : '#ecebeb');
 
                 setTimeout(function() {
                     html.classList.remove('theme-transition');
@@ -3739,6 +3686,19 @@ Die Kus…`
         const grid = document.getElementById('grid');
         const modal = document.getElementById('modal');
         const modalPaper = document.getElementById('modalPaper');
+        const modalControls = document.querySelector('.modal-controls');
+        const navPrev = document.getElementById('navPrev');
+        const navNext = document.getElementById('navNext');
+        const shareBtn = document.getElementById('shareBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const poemNavPrev = document.getElementById('poemNavPrev');
+        const poemNavNext = document.getElementById('poemNavNext');
+        const poemNavClose = document.getElementById('poemNavClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalText = document.getElementById('modalText');
+        const modalImage = document.getElementById('modalImage');
+        const modalImageContainer = document.getElementById('modalImageContainer');
+        const illustrationCredit = document.getElementById('illustrationCredit');
 
         // Helper function to wrap words in spans
         function wrapWords(text) {
@@ -3802,9 +3762,8 @@ Die Kus…`
         }
 
         function copyShareUrl() {
-            const shareBtn = document.getElementById('shareBtn');
             const url = getShareUrl();
-            
+
             navigator.clipboard.writeText(url).then(() => {
                 if (window._haptics) window._haptics.trigger('success');
                 shareBtn.classList.add('copied');
@@ -3818,42 +3777,9 @@ Die Kus…`
             });
         }
 
-        // Attach share button listener when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('shareBtn').addEventListener('click', copyShareUrl);
-            });
-        } else {
-            // DOM already loaded
-            document.getElementById('shareBtn').addEventListener('click', copyShareUrl);
-        }
+        shareBtn.addEventListener('click', copyShareUrl);
 
 
-        // Shuffle array function (Fisher-Yates shuffle)
-        function shuffleArray(array) {
-            const shuffled = [...array]; // Create a copy
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        }
-        
-        // Sort by date function (newest first)
-        function sortByDate(array) {
-            return [...array].sort((a, b) => {
-                // Poems without dates go to the end
-                if (!a.date && !b.date) return 0;
-                if (!a.date) return 1;
-                if (!b.date) return -1;
-                // Compare dates (newest first)
-                return new Date(b.date) - new Date(a.date);
-            });
-        }
-        
-        // CURRENT MODE: Manual order (as defined in poems array)
-        // To switch to chronological order, change line below to:
-        // const displayPoems = sortByDate(poems);
         const displayPoems = poems;
         
         // Create grid cards
@@ -3918,15 +3844,12 @@ Die Kus…`
             const poem = displayPoems[currentIndex];
             
             // Set full content immediately (overflow hidden will clip it)
-            document.getElementById('modalTitle').textContent = poem.title;
+            modalTitle.textContent = poem.title;
             // Convert line breaks to <br> while preserving HTML tags like <em>
             // Don't wrap words initially - they're only wrapped during transitions
-            document.getElementById('modalText').innerHTML = poem.text.replace(/\n/g, '<br>');
+            modalText.innerHTML = poem.text.replace(/\n/g, '<br>');
             
             // Set image if available
-            const modalImage = document.getElementById('modalImage');
-            const modalImageContainer = document.getElementById('modalImageContainer');
-            const illustrationCredit = document.getElementById('illustrationCredit');
             if (poem.image) {
                 modalImage.src = poem.image;
                 modalImage.alt = 'Illustration pour ' + poem.title;
@@ -3948,17 +3871,6 @@ Die Kus…`
             
             // Get the clicked card's position
             const rect = card.getBoundingClientRect();
-            
-            // DEBUG: Log the rect values
-            console.log('Opening poem:', poem.title);
-            console.log('Card rect:', {
-                top: rect.top,
-                left: rect.left,
-                width: rect.width,
-                height: rect.height
-            });
-            console.log('Window scroll:', window.scrollY);
-            console.log('Viewport size:', window.innerWidth, 'x', window.innerHeight);
             
             // Set initial position to match the card
             modalPaper.style.transition = 'none';
@@ -3999,7 +3911,7 @@ Die Kus…`
 
         function closeModal() {
             // Reset share button state
-            document.getElementById('shareBtn').classList.remove('copied');
+            shareBtn.classList.remove('copied');
             
             const isMobile = window.innerWidth <= 768;
             
@@ -4008,15 +3920,15 @@ Die Kus…`
                 modalPaper.scrollTop = 0;
                 modalPaper.classList.remove('scrolled');
                 modal.classList.remove('scrolling-up');
-                document.getElementById('modalTitle').classList.remove('sticky', 'visible', 'at-top');
+                modalTitle.classList.remove('sticky', 'visible', 'at-top');
                 
                 // Hide controls
-                document.querySelector('.modal-controls').style.transition = 'opacity 0.15s ease';
-                document.querySelector('.modal-controls').style.opacity = '0';
-                document.getElementById('navPrev').style.transition = 'opacity 0.15s ease';
-                document.getElementById('navPrev').style.opacity = '0';
-                document.getElementById('navNext').style.transition = 'opacity 0.15s ease';
-                document.getElementById('navNext').style.opacity = '0';
+                modalControls.style.transition = 'opacity 0.15s ease';
+                modalControls.style.opacity = '0';
+                navPrev.style.transition = 'opacity 0.15s ease';
+                navPrev.style.opacity = '0';
+                navNext.style.transition = 'opacity 0.15s ease';
+                navNext.style.opacity = '0';
                 
                 const cardContent = modalPaper.querySelector('.card-content');
                 
@@ -4040,32 +3952,19 @@ Die Kus…`
                         // Reset modal state
                         modal.classList.remove('active');
                         modalPaper.classList.remove('fullscreen');
-                        
-                        // Explicitly clear ALL positioning and transform properties
                         modalPaper.style.cssText = '';
-                        modalPaper.style.removeProperty('top');
-                        modalPaper.style.removeProperty('left');
-                        modalPaper.style.removeProperty('width');
-                        modalPaper.style.removeProperty('height');
-                        modalPaper.style.removeProperty('opacity');
-                        modalPaper.style.removeProperty('transition');
-                        modalPaper.style.removeProperty('transform');
-                        
+
                         if (cardContent) {
                             cardContent.style.cssText = '';
-                            cardContent.style.removeProperty('padding-top');
                         }
                         
                         // Show the card
                         clickedCard.style.opacity = '1';
-                        
+
                         // Reset controls
-                        document.querySelector('.modal-controls').style.opacity = '';
-                        document.querySelector('.modal-controls').style.transition = '';
-                        document.getElementById('navPrev').style.opacity = '';
-                        document.getElementById('navPrev').style.transition = '';
-                        document.getElementById('navNext').style.opacity = '';
-                        document.getElementById('navNext').style.transition = '';
+                        modalControls.style.cssText = '';
+                        navPrev.style.cssText = '';
+                        navNext.style.cssText = '';
                     }, 250);
                 } else {
                     // On desktop: full position animation
@@ -4104,23 +4003,11 @@ Die Kus…`
                         
                         setTimeout(() => {
                             modal.classList.remove('active');
-                            modalPaper.style.opacity = '1';
-                            cardContent.style.paddingTop = '';
-                            
-                            // Clear ALL modalPaper inline styles
-                            modalPaper.style.top = '';
-                            modalPaper.style.left = '';
-                            modalPaper.style.width = '';
-                            modalPaper.style.height = '';
-                            modalPaper.style.transition = '';
-                            
-                            // Reset controls
-                            document.querySelector('.modal-controls').style.opacity = '';
-                            document.querySelector('.modal-controls').style.transition = '';
-                            document.getElementById('navPrev').style.opacity = '';
-                            document.getElementById('navPrev').style.transition = '';
-                            document.getElementById('navNext').style.opacity = '';
-                            document.getElementById('navNext').style.transition = '';
+                            modalPaper.style.cssText = '';
+                            cardContent.style.cssText = '';
+                            modalControls.style.cssText = '';
+                            navPrev.style.cssText = '';
+                            navNext.style.cssText = '';
                         }, 550);
                     });
                 }
@@ -4133,35 +4020,35 @@ Die Kus…`
             }
         }
 
-        document.getElementById('closeBtn').addEventListener('click', () => {
+        closeBtn.addEventListener('click', () => {
             if (window._haptics) window._haptics.trigger('light');
             closeModal();
             setTimeout(clearHash, 550);
         });
 
         // Navigation arrows
-        document.getElementById('navPrev').addEventListener('click', () => {
+        navPrev.addEventListener('click', () => {
             if (window._haptics) window._haptics.trigger('selection');
             navigatePoem(-1);
         });
 
-        document.getElementById('navNext').addEventListener('click', () => {
+        navNext.addEventListener('click', () => {
             if (window._haptics) window._haptics.trigger('selection');
             navigatePoem(1);
         });
 
         // Inline poem navigation buttons
-        document.getElementById('poemNavPrev').addEventListener('click', () => {
+        poemNavPrev.addEventListener('click', () => {
             if (window._haptics) window._haptics.trigger('selection');
             navigatePoem(-1);
         });
 
-        document.getElementById('poemNavNext').addEventListener('click', () => {
+        poemNavNext.addEventListener('click', () => {
             if (window._haptics) window._haptics.trigger('selection');
             navigatePoem(1);
         });
 
-        document.getElementById('poemNavClose').addEventListener('click', () => {
+        poemNavClose.addEventListener('click', () => {
             if (window._haptics) window._haptics.trigger('light');
             closeModal();
             setTimeout(clearHash, 550);
@@ -4174,8 +4061,7 @@ Die Kus…`
             const targetIndex = newIndex < 0 ? displayPoems.length - 1 : newIndex >= displayPoems.length ? 0 : newIndex;
             
             const cardContent = modalPaper.querySelector('.card-content');
-            const modalText = document.getElementById('modalText');
-            
+
             // Start exit animation
             cardContent.classList.add('transitioning-out');
             
@@ -4185,19 +4071,15 @@ Die Kus…`
                 const poem = displayPoems[targetIndex];
                 currentIndex = targetIndex;
                 
-                const titleElement = document.getElementById('modalTitle');
-                titleElement.textContent = poem.title;
+                modalTitle.textContent = poem.title;
                 // Set title opacity to 0 immediately so it doesn't flash
-                titleElement.style.opacity = '0';
-                
+                modalTitle.style.opacity = '0';
+
                 // Wrap words and set initial state (invisible)
                 const wrappedText = wrapWords(poem.text.replace(/\n/g, '<br>'));
                 modalText.innerHTML = wrappedText;
-                
+
                 // Update image if available
-                const modalImage = document.getElementById('modalImage');
-                const modalImageContainer = document.getElementById('modalImageContainer');
-                const illustrationCredit = document.getElementById('illustrationCredit');
                 if (poem.image) {
                     modalImage.src = poem.image;
                     modalImage.alt = 'Illustration pour ' + poem.title;
@@ -4213,7 +4095,7 @@ Die Kus…`
                 // Reset scroll position
                 modalPaper.scrollTop = 0;
                 modalPaper.classList.remove('scrolled');
-                document.getElementById('modalTitle').classList.remove('sticky', 'visible');
+                modalTitle.classList.remove('sticky', 'visible');
                 
                 // Update hash
                 updateHash();
@@ -4239,7 +4121,7 @@ Die Kus…`
                 setTimeout(() => {
                     cardContent.classList.remove('transitioning-in');
                     // Reset title opacity
-                    document.getElementById('modalTitle').style.opacity = '';
+                    modalTitle.style.opacity = '';
                 }, 1000);
             }, 400);
         }
@@ -4293,14 +4175,14 @@ Die Kus…`
         });
 
         // Forward scroll events from nav areas to modal paper
-        document.getElementById('navPrev').addEventListener('wheel', (e) => {
+        navPrev.addEventListener('wheel', (e) => {
             if (modal.classList.contains('active')) {
                 modalPaper.scrollTop += e.deltaY;
                 e.preventDefault();
             }
         }, { passive: false });
 
-        document.getElementById('navNext').addEventListener('wheel', (e) => {
+        navNext.addEventListener('wheel', (e) => {
             if (modal.classList.contains('active')) {
                 modalPaper.scrollTop += e.deltaY;
                 e.preventDefault();
@@ -4441,29 +4323,27 @@ Die Kus…`
         let lastModalScrollTop = 0;
         let isScrollingUp = false;
         
-        document.getElementById('modalPaper').addEventListener('scroll', function() {
+        modalPaper.addEventListener('scroll', function() {
             const currentScrollTop = this.scrollTop;
             isScrollingUp = currentScrollTop < lastModalScrollTop;
             lastModalScrollTop = currentScrollTop;
-            
+
             if (currentScrollTop > 20) {
                 this.classList.add('scrolled');
             } else {
                 this.classList.remove('scrolled');
             }
-            
+
             // Show mobile nav when scrolling up (on mobile only)
-            const modalOverlay = document.getElementById('modal');
             if (window.innerWidth <= 768) {
                 if (isScrollingUp && currentScrollTop > 100) {
-                    modalOverlay.classList.add('scrolling-up');
+                    modal.classList.add('scrolling-up');
                 } else {
-                    modalOverlay.classList.remove('scrolling-up');
+                    modal.classList.remove('scrolling-up');
                 }
             }
-            
+
             // Show sticky title when scrolling up and main title is out of view
-            const modalTitle = document.getElementById('modalTitle');
             const titleOriginalTop = 100; // padding-top of card-content
             const titleOutOfView = currentScrollTop > titleOriginalTop + 60; // title height ~60px
             
@@ -4487,10 +4367,6 @@ Die Kus…`
             }
             
             // Image zoom effect - progressive based on visibility
-            const modalImage = document.getElementById('modalImage');
-            const modalImageContainer = document.getElementById('modalImageContainer');
-            const illustrationCredit = document.getElementById('illustrationCredit');
-            
             if (modalImage.src && modalImageContainer.style.display !== 'none') {
                 const containerRect = modalImageContainer.getBoundingClientRect();
                 const windowHeight = window.innerHeight;
