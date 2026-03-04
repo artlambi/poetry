@@ -3028,6 +3028,12 @@ Die Kus…</p>
         </div>
     </div>
 
+    <script type="module">
+        import { WebHaptics } from 'https://esm.sh/web-haptics@0.0.6';
+        const haptics = new WebHaptics();
+        window._haptics = haptics;
+    </script>
+
     <script>
         // Tooltip delay management - don't delay subsequent tooltips
         let tooltipTimeout = null;
@@ -3793,12 +3799,14 @@ Die Kus…`
             const url = getShareUrl();
             
             navigator.clipboard.writeText(url).then(() => {
+                if (window._haptics) window._haptics.trigger('success');
                 shareBtn.classList.add('copied');
-                
+
                 setTimeout(() => {
                     shareBtn.classList.remove('copied');
                 }, 2000);
             }).catch(err => {
+                if (window._haptics) window._haptics.trigger('error');
                 console.error('Failed to copy URL:', err);
             });
         }
@@ -3856,6 +3864,7 @@ Die Kus…`
                 <p class="preview">${poem.text}</p>
             `;
             card.addEventListener('click', function() {
+                if (window._haptics) window._haptics.trigger('medium');
                 openModal(index, card);
                 updateHash();
             });
@@ -3863,6 +3872,7 @@ Die Kus…`
             card.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
+                    if (window._haptics) window._haptics.trigger('medium');
                     openModal(index, card);
                     updateHash();
                 }
@@ -4117,29 +4127,35 @@ Die Kus…`
         }
 
         document.getElementById('closeBtn').addEventListener('click', () => {
+            if (window._haptics) window._haptics.trigger('light');
             closeModal();
             setTimeout(clearHash, 550);
         });
 
         // Navigation arrows
         document.getElementById('navPrev').addEventListener('click', () => {
+            if (window._haptics) window._haptics.trigger('selection');
             navigatePoem(-1);
         });
 
         document.getElementById('navNext').addEventListener('click', () => {
+            if (window._haptics) window._haptics.trigger('selection');
             navigatePoem(1);
         });
 
         // Inline poem navigation buttons
         document.getElementById('poemNavPrev').addEventListener('click', () => {
+            if (window._haptics) window._haptics.trigger('selection');
             navigatePoem(-1);
         });
 
         document.getElementById('poemNavNext').addEventListener('click', () => {
+            if (window._haptics) window._haptics.trigger('selection');
             navigatePoem(1);
         });
 
         document.getElementById('poemNavClose').addEventListener('click', () => {
+            if (window._haptics) window._haptics.trigger('light');
             closeModal();
             setTimeout(clearHash, 550);
         });
@@ -4223,6 +4239,7 @@ Die Kus…`
 
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
+                if (window._haptics) window._haptics.trigger('light');
                 closeModal();
                 setTimeout(clearHash, 550);
             }
@@ -4232,6 +4249,7 @@ Die Kus…`
             if (!modal.classList.contains('active')) return;
             
             if (e.key === 'Escape') {
+                if (window._haptics) window._haptics.trigger('light');
                 closeModal();
                 setTimeout(clearHash, 550);
             } else if (e.key === 'ArrowUp') {
@@ -4245,10 +4263,12 @@ Die Kus…`
             } else if (e.key === 'ArrowLeft') {
                 // Navigate to previous poem (always works)
                 e.preventDefault();
+                if (window._haptics) window._haptics.trigger('selection');
                 navigatePoem(-1);
             } else if (e.key === 'ArrowRight') {
                 // Navigate to next poem (always works)
                 e.preventDefault();
+                if (window._haptics) window._haptics.trigger('selection');
                 navigatePoem(1);
             } else if (e.key === 'PageUp') {
                 e.preventDefault();
@@ -4491,6 +4511,7 @@ Die Kus…`
         const darkModeToggle = document.querySelector('.dark-mode-toggle');
         if (darkModeToggle) {
             darkModeToggle.addEventListener('click', function() {
+                if (window._haptics) window._haptics.trigger('light');
                 const html = document.documentElement;
                 const isDark = html.classList.contains('dark-mode');
 
