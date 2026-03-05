@@ -3899,10 +3899,21 @@ Die Kus…`
             var measure = document.createElement('div');
             measure.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:0;visibility:hidden;pointer-events:none';
             document.body.appendChild(measure);
-            modalPaper.style.height = measure.clientHeight + 'px';
+            var measuredH = measure.clientHeight;
             document.body.removeChild(measure);
+            var vpH = window.visualViewport ? window.visualViewport.height : 'N/A';
+            var innerH = window.innerHeight;
+            var screenH = screen.height;
+            modalPaper.style.height = measuredH + 'px';
             modalPaper.style.bottom = '';
             modalPaper.classList.add('fullscreen');
+
+            // DEBUG: show height values (remove after debugging)
+            var dbg = document.createElement('div');
+            dbg.id = 'dbg-heights';
+            dbg.style.cssText = 'position:fixed;top:8px;right:8px;background:rgba(0,0,0,0.85);color:#0f0;font:12px/1.4 monospace;padding:8px 12px;z-index:99999;border-radius:6px;pointer-events:none';
+            dbg.innerHTML = 'measured: ' + measuredH + 'px<br>visualVP: ' + vpH + 'px<br>innerH: ' + innerH + 'px<br>screen: ' + screenH + 'px<br>modal: ' + modalPaper.style.height + '<br>offsetH: ' + modalPaper.offsetHeight + 'px';
+            document.body.appendChild(dbg);
             modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
 
             // Reset scroll tracking
