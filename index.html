@@ -3895,8 +3895,8 @@ Die Kus…`
             modalPaper.style.top = '0';
             modalPaper.style.left = '0';
             modalPaper.style.width = '100vw';
-            modalPaper.style.height = '';
-            modalPaper.style.bottom = '0';
+            modalPaper.style.height = window.innerHeight + 'px';
+            modalPaper.style.bottom = '';
             modalPaper.classList.add('fullscreen');
             modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
             
@@ -4327,7 +4327,13 @@ Die Kus…`
         // Modal scroll handler for top fade effect and image zoom
         let lastModalScrollTop = 0;
         let isScrollingUp = false;
-        
+
+        window.addEventListener('resize', function() {
+            if (modalPaper.classList.contains('fullscreen')) {
+                modalPaper.style.height = window.innerHeight + 'px';
+            }
+        });
+
         modalPaper.addEventListener('scroll', function() {
             const currentScrollTop = this.scrollTop;
             isScrollingUp = currentScrollTop < lastModalScrollTop;
