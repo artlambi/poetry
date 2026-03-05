@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les poèmes de Christian Lambillotte | Recueil de poésie</title>
     <meta name="description" content="Recueil de poésie de Christian Lambillotte : entre questionnements existentiels et tendresse familiale, une œuvre poétique qui célèbre l'essentiel de la vie.">
     <meta name="keywords" content="Christian Lambillotte, poèmes, poésie, recueil, littérature, poète">
@@ -725,7 +725,7 @@
         }
 
         .modal-paper.fullscreen {
-            padding: 80px 120px env(safe-area-inset-bottom, 0px) 120px;
+            padding: 80px 120px 0 120px;
             justify-content: flex-start;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -1621,7 +1621,7 @@
             }
 
             .modal-paper.fullscreen {
-                padding: 60px 30px env(safe-area-inset-bottom, 0px) 30px;
+                padding: 60px 30px 0 30px;
             }
 
             .modal-paper.fullscreen .title {
@@ -3891,7 +3891,8 @@ Die Kus…`
             modalPaper.style.top = '0';
             modalPaper.style.left = '0';
             modalPaper.style.width = '100vw';
-            modalPaper.style.height = '100dvh';
+            modalPaper.style.height = '';
+            modalPaper.style.bottom = '0';
             modalPaper.classList.add('fullscreen');
             modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
             
