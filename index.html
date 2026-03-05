@@ -3909,6 +3909,10 @@ Die Kus…`
             document.body.style.top = `-${savedScrollPosition}px`;
             document.body.classList.add('modal-open');
 
+            // Update theme-color to match modal background so Safari toolbar is seamless
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#202020' : '#ffffff');
+
             // Focus modal paper for keyboard scrolling
             setTimeout(() => {
                 modalPaper.focus();
@@ -3916,9 +3920,13 @@ Die Kus…`
         }
 
         function closeModal() {
+            // Restore theme-color to match page background
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ecebeb');
+
             // Reset share button state
             shareBtn.classList.remove('copied');
-            
+
             const isMobile = window.innerWidth <= 768;
             
             if (clickedCard) {
