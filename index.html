@@ -731,15 +731,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        .modal-paper.fullscreen.settled {
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: auto !important;
-            height: auto !important;
-        }
-
         .modal-paper.fullscreen::before {
             content: "";
             position: fixed;
@@ -3904,24 +3895,23 @@ Die Kus…`
             modalPaper.style.top = '0';
             modalPaper.style.left = '0';
             modalPaper.style.width = '100vw';
-            modalPaper.style.height = window.innerHeight + 'px';
+            modalPaper.style.height = (window.visualViewport ? window.visualViewport.height : window.innerHeight) + 'px';
             modalPaper.style.bottom = '';
             modalPaper.classList.add('fullscreen');
             modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
-            
+
             // Reset scroll tracking
             lastModalScrollTop = 0;
             modalPaper.scrollTop = 0;
-            
+
             // Lock body scroll
             document.body.style.top = `-${savedScrollPosition}px`;
             document.body.classList.add('modal-open');
-            
-            // After animation, lock to viewport edges for proper iOS Safari sizing
+
+            // Focus modal paper for keyboard scrolling
             setTimeout(() => {
-                modalPaper.classList.add('settled');
                 modalPaper.focus();
-            }, 550);
+            }, 100);
         }
 
         function closeModal() {
@@ -3953,8 +3943,6 @@ Die Kus…`
                 }
                 
                 // Remove settled so inline styles take effect again for close animation
-                modalPaper.classList.remove('settled');
-
                 if (isMobile) {
                     // On mobile: fade out modal, then restore scroll, then show card
                     modalPaper.style.transition = 'opacity 0.25s ease';
@@ -3969,7 +3957,7 @@ Die Kus…`
                         
                         // Reset modal state
                         modal.classList.remove('active');
-                        modalPaper.classList.remove('fullscreen', 'settled');
+                        modalPaper.classList.remove('fullscreen');
                         modalPaper.style.cssText = '';
 
                         if (cardContent) {
@@ -4335,6 +4323,15 @@ Die Kus…`
             window.addEventListener('scroll', updateBioImageZoom);
             // Initial update
             updateBioImageZoom();
+        }
+
+        // Keep fullscreen modal height in sync with visible viewport (iOS Safari toolbar)
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', function() {
+                if (modalPaper.classList.contains('fullscreen')) {
+                    modalPaper.style.height = window.visualViewport.height + 'px';
+                }
+            });
         }
 
         // Modal scroll handler for top fade effect and image zoom
