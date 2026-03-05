@@ -1625,7 +1625,7 @@
             }
 
             .modal-paper.fullscreen {
-                padding: 60px 30px 100px 30px;
+                padding: 60px 30px 0 30px;
             }
 
             .modal-paper.fullscreen .title {
@@ -3895,7 +3895,12 @@ Die Kus…`
             modalPaper.style.top = '0';
             modalPaper.style.left = '0';
             modalPaper.style.width = '100vw';
-            modalPaper.style.height = '100vh';
+            // Measure actual visible viewport height (works around iOS Safari toolbar)
+            var measure = document.createElement('div');
+            measure.style.cssText = 'position:fixed;top:0;bottom:0;left:0;width:0;visibility:hidden;pointer-events:none';
+            document.body.appendChild(measure);
+            modalPaper.style.height = measure.clientHeight + 'px';
+            document.body.removeChild(measure);
             modalPaper.style.bottom = '';
             modalPaper.classList.add('fullscreen');
             modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
