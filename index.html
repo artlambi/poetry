@@ -3895,7 +3895,7 @@ Die Kus…`
             modalPaper.style.top = '0';
             modalPaper.style.left = '0';
             modalPaper.style.width = '100vw';
-            modalPaper.style.height = (window.visualViewport ? window.visualViewport.height : window.innerHeight) + 'px';
+            modalPaper.style.height = window.innerHeight + 'px';
             modalPaper.style.bottom = '';
             modalPaper.classList.add('fullscreen');
             modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
@@ -3908,10 +3908,12 @@ Die Kus…`
             document.body.style.top = `-${savedScrollPosition}px`;
             document.body.classList.add('modal-open');
 
-            // Focus modal paper for keyboard scrolling
+            // After animation, switch to -webkit-fill-available for correct iOS Safari height
             setTimeout(() => {
+                modalPaper.style.transition = 'none';
+                modalPaper.style.height = '-webkit-fill-available';
                 modalPaper.focus();
-            }, 100);
+            }, 550);
         }
 
         function closeModal() {
@@ -4323,15 +4325,6 @@ Die Kus…`
             window.addEventListener('scroll', updateBioImageZoom);
             // Initial update
             updateBioImageZoom();
-        }
-
-        // Keep fullscreen modal height in sync with visible viewport (iOS Safari toolbar)
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', function() {
-                if (modalPaper.classList.contains('fullscreen')) {
-                    modalPaper.style.height = window.visualViewport.height + 'px';
-                }
-            });
         }
 
         // Modal scroll handler for top fade effect and image zoom
