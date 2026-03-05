@@ -122,6 +122,29 @@
             width: 100%;
         }
 
+        /* On mobile, use document scrolling so content flows behind Safari toolbar */
+        @media (max-width: 768px) {
+            html.modal-open,
+            body.modal-open {
+                position: static;
+                overflow: auto;
+                height: auto;
+            }
+            body.modal-open > *:not(.modal-overlay) {
+                display: none;
+            }
+            body.modal-open .modal-overlay {
+                position: relative;
+            }
+            body.modal-open .modal-paper.fullscreen {
+                position: relative;
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+                overflow: visible;
+            }
+        }
+
         .page-header {
             text-align: center;
             margin-bottom: 104px;
@@ -3906,8 +3929,14 @@ Die Kus…`
             modalPaper.scrollTop = 0;
 
             // Lock body scroll
-            document.body.style.top = `-${savedScrollPosition}px`;
+            var isMobileOpen = window.innerWidth <= 768;
+            if (!isMobileOpen) {
+                document.body.style.top = `-${savedScrollPosition}px`;
+            }
             document.body.classList.add('modal-open');
+            if (isMobileOpen) {
+                window.scrollTo(0, 0);
+            }
 
             // Update theme-color to match modal background so Safari toolbar is seamless
             var isDark = document.documentElement.classList.contains('dark-mode');
@@ -3917,6 +3946,20 @@ Die Kus…`
             setTimeout(() => {
                 modalPaper.focus();
             }, 100);
+
+            // On mobile, after animation completes, clear inline styles so CSS media query takes over
+            // This switches from position:fixed (animation) to position:relative (document scroll)
+            if (isMobileOpen) {
+                setTimeout(() => {
+                    modalPaper.style.position = 'relative';
+                    modalPaper.style.width = '100%';
+                    modalPaper.style.height = 'auto';
+                    modalPaper.style.top = '0';
+                    modalPaper.style.left = '0';
+                    modalPaper.style.overflow = 'visible';
+                    window.scrollTo(0, 0);
+                }, 550);
+            }
         }
 
         function closeModal() {
@@ -3959,10 +4002,12 @@ Die Kus…`
                     
                     setTimeout(() => {
                         // Now restore scroll while modal is invisible
-                        
+
                         document.body.classList.remove('modal-open');
                         document.body.style.top = '';
-                        window.scrollTo(0, savedScrollPosition);
+                        requestAnimationFrame(() => {
+                            window.scrollTo(0, savedScrollPosition);
+                        });
                         
                         // Reset modal state
                         modal.classList.remove('active');
@@ -4108,7 +4153,11 @@ Die Kus…`
                 }
                 
                 // Reset scroll position
-                modalPaper.scrollTop = 0;
+                if (window.innerWidth <= 768) {
+                    window.scrollTo(0, 0);
+                } else {
+                    modalPaper.scrollTop = 0;
+                }
                 modalPaper.classList.remove('scrolled');
                 modalTitle.classList.remove('sticky', 'visible');
                 
@@ -4159,11 +4208,13 @@ Die Kus…`
             } else if (e.key === 'ArrowUp') {
                 // Scroll up
                 e.preventDefault();
-                modalPaper.scrollBy({ top: -40, behavior: 'smooth' });
+                var scrollTarget = window.innerWidth <= 768 ? window : modalPaper;
+                scrollTarget.scrollBy({ top: -40, behavior: 'smooth' });
             } else if (e.key === 'ArrowDown') {
                 // Scroll down
                 e.preventDefault();
-                modalPaper.scrollBy({ top: 40, behavior: 'smooth' });
+                var scrollTarget = window.innerWidth <= 768 ? window : modalPaper;
+                scrollTarget.scrollBy({ top: 40, behavior: 'smooth' });
             } else if (e.key === 'ArrowLeft') {
                 // Navigate to previous poem (always works)
                 e.preventDefault();
@@ -4176,16 +4227,23 @@ Die Kus…`
                 navigatePoem(1);
             } else if (e.key === 'PageUp') {
                 e.preventDefault();
-                modalPaper.scrollBy({ top: -window.innerHeight * 0.8, behavior: 'smooth' });
+                var scrollTarget = window.innerWidth <= 768 ? window : modalPaper;
+                scrollTarget.scrollBy({ top: -window.innerHeight * 0.8, behavior: 'smooth' });
             } else if (e.key === 'PageDown' || e.key === ' ') {
                 e.preventDefault();
-                modalPaper.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
+                var scrollTarget = window.innerWidth <= 768 ? window : modalPaper;
+                scrollTarget.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
             } else if (e.key === 'Home') {
                 e.preventDefault();
-                modalPaper.scrollTo({ top: 0, behavior: 'smooth' });
+                var scrollTarget = window.innerWidth <= 768 ? window : modalPaper;
+                scrollTarget.scrollTo({ top: 0, behavior: 'smooth' });
             } else if (e.key === 'End') {
                 e.preventDefault();
-                modalPaper.scrollTo({ top: modalPaper.scrollHeight, behavior: 'smooth' });
+                if (window.innerWidth <= 768) {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                } else {
+                    modalPaper.scrollTo({ top: modalPaper.scrollHeight, behavior: 'smooth' });
+                }
             }
         });
 
@@ -4338,15 +4396,14 @@ Die Kus…`
         let lastModalScrollTop = 0;
         let isScrollingUp = false;
 
-        modalPaper.addEventListener('scroll', function() {
-            const currentScrollTop = this.scrollTop;
+        function handleModalScroll(currentScrollTop) {
             isScrollingUp = currentScrollTop < lastModalScrollTop;
             lastModalScrollTop = currentScrollTop;
 
             if (currentScrollTop > 20) {
-                this.classList.add('scrolled');
+                modalPaper.classList.add('scrolled');
             } else {
-                this.classList.remove('scrolled');
+                modalPaper.classList.remove('scrolled');
             }
 
             // Show mobile nav when scrolling up (on mobile only)
@@ -4402,6 +4459,16 @@ Die Kus…`
                 if (containerRect.bottom < windowHeight - 25 && !illustrationCredit.classList.contains('visible')) {
                     illustrationCredit.classList.add('visible');
                 }
+            }
+        }
+
+        // Attach scroll listeners - modalPaper for desktop, window for mobile
+        modalPaper.addEventListener('scroll', function() {
+            handleModalScroll(this.scrollTop);
+        });
+        window.addEventListener('scroll', function() {
+            if (window.innerWidth <= 768 && modal.classList.contains('active')) {
+                handleModalScroll(window.scrollY);
             }
         });
 
