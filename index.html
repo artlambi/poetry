@@ -731,6 +731,15 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        .modal-paper.fullscreen.settled {
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: auto !important;
+            height: auto !important;
+        }
+
         .modal-paper.fullscreen::before {
             content: "";
             position: fixed;
@@ -3908,10 +3917,11 @@ Die Kus…`
             document.body.style.top = `-${savedScrollPosition}px`;
             document.body.classList.add('modal-open');
             
-            // Focus modal paper for keyboard scrolling
+            // After animation, lock to viewport edges for proper iOS Safari sizing
             setTimeout(() => {
+                modalPaper.classList.add('settled');
                 modalPaper.focus();
-            }, 100);
+            }, 550);
         }
 
         function closeModal() {
@@ -3942,6 +3952,9 @@ Die Kus…`
                     cardContent.style.paddingTop = '';
                 }
                 
+                // Remove settled so inline styles take effect again for close animation
+                modalPaper.classList.remove('settled');
+
                 if (isMobile) {
                     // On mobile: fade out modal, then restore scroll, then show card
                     modalPaper.style.transition = 'opacity 0.25s ease';
@@ -3956,7 +3969,7 @@ Die Kus…`
                         
                         // Reset modal state
                         modal.classList.remove('active');
-                        modalPaper.classList.remove('fullscreen');
+                        modalPaper.classList.remove('fullscreen', 'settled');
                         modalPaper.style.cssText = '';
 
                         if (cardContent) {
@@ -4327,12 +4340,6 @@ Die Kus…`
         // Modal scroll handler for top fade effect and image zoom
         let lastModalScrollTop = 0;
         let isScrollingUp = false;
-
-        window.addEventListener('resize', function() {
-            if (modalPaper.classList.contains('fullscreen')) {
-                modalPaper.style.height = window.innerHeight + 'px';
-            }
-        });
 
         modalPaper.addEventListener('scroll', function() {
             const currentScrollTop = this.scrollTop;
