@@ -1625,7 +1625,7 @@
             }
 
             .modal-paper.fullscreen {
-                padding: 60px 30px 0 30px;
+                padding: 60px 30px 100px 30px;
             }
 
             .modal-paper.fullscreen .title {
@@ -3895,7 +3895,7 @@ Die Kus…`
             modalPaper.style.top = '0';
             modalPaper.style.left = '0';
             modalPaper.style.width = '100vw';
-            modalPaper.style.height = window.innerHeight + 'px';
+            modalPaper.style.height = '100vh';
             modalPaper.style.bottom = '';
             modalPaper.classList.add('fullscreen');
             modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
@@ -3908,12 +3908,10 @@ Die Kus…`
             document.body.style.top = `-${savedScrollPosition}px`;
             document.body.classList.add('modal-open');
 
-            // After animation, switch to -webkit-fill-available for correct iOS Safari height
+            // Focus modal paper for keyboard scrolling
             setTimeout(() => {
-                modalPaper.style.transition = 'none';
-                modalPaper.style.height = '-webkit-fill-available';
                 modalPaper.focus();
-            }, 550);
+            }, 100);
         }
 
         function closeModal() {
