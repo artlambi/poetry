@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://use.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net; img-src 'self' data: https://www.christianlambillotte.be; connect-src 'self'">
     <title>Les poèmes de Christian Lambillotte | Recueil de poésie</title>
     <meta name="description" content="Recueil de poésie de Christian Lambillotte : entre questionnements existentiels et tendresse familiale, une œuvre poétique qui célèbre l'essentiel de la vie.">
     <meta name="keywords" content="Christian Lambillotte, poèmes, poésie, recueil, littérature, poète">
@@ -787,10 +788,6 @@
             top: 30px;
             opacity: 1;
             filter: blur(0);
-        }
-
-        .modal-paper.fullscreen .author {
-            display: none;
         }
 
         .modal-paper.fullscreen .poem-text {
@@ -2909,11 +2906,10 @@ Die Kus…</p>
         </svg>
     </footer>
 
-    <div class="modal-overlay" id="modal">
+    <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-paper" id="modalPaper" tabindex="-1">
             <div class="card-content">
                 <h2 class="title" id="modalTitle"></h2>
-                <p class="author" id="modalAuthor">Christian Lambillotte</p>
                 <div class="poem-text" id="modalText"></div>
                 <div class="poem-image-container" id="modalImageContainer">
                     <img class="poem-image" id="modalImage" src="" alt="">
@@ -3797,6 +3793,7 @@ Die Kus…`
             card.dataset.index = index;
             card.tabIndex = 0;
             card.setAttribute('role', 'button');
+            card.setAttribute('aria-haspopup', 'dialog');
             card.innerHTML = `
                 <h2 class="title">${poem.title}</h2>
                 <p class="preview">${poem.text}</p>
@@ -3890,6 +3887,7 @@ Die Kus…`
             
             // Show modal and animate to fullscreen
             modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
             
             // Animate to fullscreen
             modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
@@ -3966,6 +3964,7 @@ Die Kus…`
                         
                         // Reset modal state
                         modal.classList.remove('active');
+                        modal.setAttribute('aria-hidden', 'true');
                         modalPaper.classList.remove('fullscreen');
                         modalPaper.style.cssText = '';
 
@@ -4018,6 +4017,7 @@ Die Kus…`
                         
                         setTimeout(() => {
                             modal.classList.remove('active');
+                            modal.setAttribute('aria-hidden', 'true');
                             modalPaper.style.cssText = '';
                             cardContent.style.cssText = '';
                             modalControls.style.cssText = '';
@@ -4028,7 +4028,8 @@ Die Kus…`
                 }
             } else {
                 modal.classList.remove('active');
-                
+                modal.setAttribute('aria-hidden', 'true');
+
                 document.body.classList.remove('modal-open');
                 document.body.style.top = '';
                 window.scrollTo(0, savedScrollPosition);
@@ -4245,23 +4246,25 @@ Die Kus…`
         const subtitleTexts = document.querySelectorAll('.subtitle-text');
         let currentSubtitle = 0;
         
-        setInterval(() => {
+        const subtitleTimer = setInterval(() => {
             const current = subtitleTexts[currentSubtitle];
             const next = subtitleTexts[(currentSubtitle + 1) % subtitleTexts.length];
-            
+
             current.classList.remove('active');
             current.classList.add('exit');
-            
+
             next.classList.remove('exit');
             next.classList.add('active');
-            
+
             // Reset exit class after transition
             setTimeout(() => {
                 current.classList.remove('exit');
             }, 600);
-            
+
             currentSubtitle = (currentSubtitle + 1) % subtitleTexts.length;
         }, 6000);
+
+        window.addEventListener('pagehide', () => clearInterval(subtitleTimer));
 
         // Header scroll effect
         const pageHeader = document.querySelector('.page-header');

@@ -1,1 +1,8 @@
+# macOS
 .DS_Store
+
+# Local backups
+index-bkp.html
+
+# Agent / tooling state
+.claude/
