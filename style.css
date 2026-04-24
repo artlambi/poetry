@@ -127,10 +127,17 @@ body.modal-open {
 }
 
 .dark-mode-toggle .theme-icon-cutout {
-    transform-origin: 10px 10px;
-    /* fill transitions in step with the body bg so the cutout's interior
-       stays in sync if it's still partly visible during a theme switch */
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    /* Animate cx/cy (SVG attributes) instead of CSS transform.
+       CSS transform on a clipped element is applied AFTER the clip — so the
+       clipped crescent shape would just translate around. Animating cx/cy
+       moves the cutout's actual geometry, and the clip-path then correctly
+       clips against the ball area at each frame.
+       fill transitions in step with the body bg so the cutout's interior
+       stays in sync if it's still partly visible during a theme switch. */
+    cx: 14px;
+    cy: 6px;
+    transition: cx 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                cy 0.4s cubic-bezier(0.4, 0, 0.2, 1),
                 fill 0.5s ease !important;
 }
 
@@ -144,8 +151,9 @@ body.modal-open {
 
 /* Dark mode → SUN: cutout slides off so the ball is a full circle, rays radiate */
 html.dark-mode .dark-mode-toggle .theme-icon-cutout {
-    /* Slide cutout off-canvas; clipPath keeps it invisible outside the ball */
-    transform: translate(8px, -8px);
+    /* Move cutout outside the clip area so the ball renders as a full circle */
+    cx: 22px;
+    cy: -2px;
 }
 
 html.dark-mode .dark-mode-toggle .theme-icon-rays line {
