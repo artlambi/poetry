@@ -175,7 +175,10 @@
             }
 
             document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ecebeb');
-            if (saved) setFavicon(isDark);
+            // Always sync the favicon to the resolved theme — including when
+            // we're following the OS pref. Otherwise a first-time dark-OS
+            // visitor sees the default (light) favicon until they toggle.
+            setFavicon(isDark);
 
             // Follow OS theme changes. Any manual override is cleared the moment
             // the OS theme changes — the OS pref is the source of truth.
