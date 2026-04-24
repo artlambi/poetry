@@ -177,9 +177,10 @@
             document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ecebeb');
             if (saved) setFavicon(isDark);
 
-            // Follow system theme changes when no manual override
+            // Follow OS theme changes. Any manual override is cleared the moment
+            // the OS theme changes — the OS pref is the source of truth.
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-                if (localStorage.getItem('theme')) return;
+                localStorage.removeItem('theme');
 
                 html.classList.add('theme-transition');
                 html.classList.remove('dark-mode', 'light-mode');
@@ -189,6 +190,7 @@
                 }
 
                 document.querySelector('meta[name="theme-color"]').setAttribute('content', e.matches ? '#121212' : '#ecebeb');
+                setFavicon(e.matches);
 
                 setTimeout(function() {
                     html.classList.remove('theme-transition');
