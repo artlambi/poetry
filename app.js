@@ -705,10 +705,14 @@ function rafThrottle(handler) {
     };
 }
 
-let currentIndex = 0;
-let clickedCard = null;
-let originalClickedCard = null;
-let savedScrollPosition = 0;
+const state = {
+    currentIndex: 0,
+    clickedCard: null,
+    originalClickedCard: null,
+    savedScrollPosition: 0,
+    lastModalScrollTop: 0,
+    isScrollingUp: false,
+};
 const grid = document.getElementById('grid');
 const modal = document.getElementById('modal');
 const modalPaper = document.getElementById('modalPaper');
@@ -763,7 +767,7 @@ function getSlug(title) {
 
 function updateHash() {
     try {
-        const slug = getSlug(displayPoems[currentIndex].title);
+        const slug = getSlug(displayPoems[state.currentIndex].title);
         history.replaceState(null, '', '#' + slug);
     } catch (e) {
         // Ignore errors in iframe/restricted contexts
@@ -780,7 +784,7 @@ function clearHash() {
 
 // Share functionality
 function getShareUrl() {
-    const poem = displayPoems[currentIndex];
+    const poem = displayPoems[state.currentIndex];
     const slug = poem.slug || getSlug(poem.title);
     const baseUrl = window.location.origin;
     return `${baseUrl}/${slug}.html`;
@@ -863,11 +867,11 @@ displayPoems.forEach((poem, index) => {
 });
 
 function openModal(index, card) {
-    currentIndex = index;
-    clickedCard = card;
-    originalClickedCard = card;
+    state.currentIndex = index;
+    state.clickedCard = card;
+    state.originalClickedCard = card;
     
-    const poem = displayPoems[currentIndex];
+    const poem = displayPoems[state.currentIndex];
     
     // Set full content immediately (overflow hidden will clip it)
     modalTitle.textContent = poem.title;
@@ -890,7 +894,7 @@ function openModal(index, card) {
     }
     
     // Save scroll position before hiding body
-    savedScrollPosition = window.scrollY;
+    state.savedScrollPosition = window.scrollY;
     
     // Hide card
     card.style.opacity = '0';
@@ -924,11 +928,11 @@ function openModal(index, card) {
     modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
 
     // Reset scroll tracking
-    lastModalScrollTop = 0;
+    state.lastModalScrollTop = 0;
     modalPaper.scrollTop = 0;
 
     // Lock body scroll
-    document.body.style.top = `-${savedScrollPosition}px`;
+    document.body.style.top = `-${state.savedScrollPosition}px`;
     document.body.classList.add('modal-open');
 
     // Update theme-color to match modal background so Safari toolbar is seamless
@@ -951,7 +955,7 @@ function closeModal() {
 
     const isMobile = window.innerWidth <= 768;
     
-    if (clickedCard) {
+    if (state.clickedCard) {
         // Reset modal scroll position and remove scrolled class
         modalPaper.scrollTop = 0;
         modalPaper.classList.remove('scrolled');
@@ -984,7 +988,7 @@ function closeModal() {
                 
                 document.body.classList.remove('modal-open');
                 document.body.style.top = '';
-                window.scrollTo(0, savedScrollPosition);
+                window.scrollTo(0, state.savedScrollPosition);
                 
                 // Reset modal state
                 modal.classList.remove('active');
@@ -997,7 +1001,7 @@ function closeModal() {
                 }
                 
                 // Show the card
-                clickedCard.style.opacity = '1';
+                state.clickedCard.style.opacity = '1';
 
                 // Reset controls
                 modalControls.style.cssText = '';
@@ -1010,12 +1014,12 @@ function closeModal() {
             
             document.body.classList.remove('modal-open');
             document.body.style.top = '';
-            window.scrollTo({ top: savedScrollPosition, left: 0, behavior: 'instant' });
+            window.scrollTo({ top: state.savedScrollPosition, left: 0, behavior: 'instant' });
             
             // Wait for next frame to ensure scroll is complete
             requestAnimationFrame(() => {
                 // Get card position after scroll restoration
-                const rect = clickedCard.getBoundingClientRect();
+                const rect = state.clickedCard.getBoundingClientRect();
                 
                 // Set current padding inline so it can transition when fullscreen class is removed
                 cardContent.style.paddingTop = '100px';
@@ -1036,7 +1040,7 @@ function closeModal() {
                 // Fade out modal paper and show card at the end
                 setTimeout(() => {
                     modalPaper.style.opacity = '0';
-                    clickedCard.style.opacity = '1';
+                    state.clickedCard.style.opacity = '1';
                 }, 400);
                 
                 setTimeout(() => {
@@ -1056,7 +1060,7 @@ function closeModal() {
 
         document.body.classList.remove('modal-open');
         document.body.style.top = '';
-        window.scrollTo(0, savedScrollPosition);
+        window.scrollTo(0, state.savedScrollPosition);
     }
 }
 
@@ -1095,7 +1099,7 @@ poemNavClose.addEventListener('click', () => {
 });
 
 function navigatePoem(direction) {
-    const newIndex = currentIndex + direction;
+    const newIndex = state.currentIndex + direction;
     
     // Wrap around
     const targetIndex = newIndex < 0 ? displayPoems.length - 1 : newIndex >= displayPoems.length ? 0 : newIndex;
@@ -1109,7 +1113,7 @@ function navigatePoem(direction) {
     setTimeout(() => {
         // Update content
         const poem = displayPoems[targetIndex];
-        currentIndex = targetIndex;
+        state.currentIndex = targetIndex;
         
         modalTitle.textContent = poem.title;
         // Set title opacity to 0 immediately so it doesn't flash
@@ -1140,13 +1144,13 @@ function navigatePoem(direction) {
         // Update hash
         updateHash();
         
-        // Restore original card opacity and update clickedCard for close animation
-        if (originalClickedCard) {
-            originalClickedCard.style.opacity = '1';
+        // Restore original card opacity and update state.clickedCard for close animation
+        if (state.originalClickedCard) {
+            state.originalClickedCard.style.opacity = '1';
         }
-        clickedCard = document.querySelector(`.poem-card[data-index="${targetIndex}"]`);
-        clickedCard.style.opacity = '0';
-        originalClickedCard = clickedCard;
+        state.clickedCard = document.querySelector(`.poem-card[data-index="${targetIndex}"]`);
+        state.clickedCard.style.opacity = '0';
+        state.originalClickedCard = state.clickedCard;
         
         // Remove exit animation class and add enter animation class
         cardContent.classList.remove('transitioning-out');
@@ -1362,13 +1366,10 @@ if (!isMobile) {
 }
 
 // Modal scroll handler for top fade effect and image zoom
-let lastModalScrollTop = 0;
-let isScrollingUp = false;
-
 modalPaper.addEventListener('scroll', rafThrottle(function() {
     const currentScrollTop = this.scrollTop;
-    isScrollingUp = currentScrollTop < lastModalScrollTop;
-    lastModalScrollTop = currentScrollTop;
+    state.isScrollingUp = currentScrollTop < state.lastModalScrollTop;
+    state.lastModalScrollTop = currentScrollTop;
 
     if (currentScrollTop > 20) {
         this.classList.add('scrolled');
@@ -1378,7 +1379,7 @@ modalPaper.addEventListener('scroll', rafThrottle(function() {
 
     // Show mobile nav when scrolling up (on mobile only)
     if (window.innerWidth <= 768) {
-        if (isScrollingUp && currentScrollTop > 100) {
+        if (state.isScrollingUp && currentScrollTop > 100) {
             modal.classList.add('scrolling-up');
         } else {
             modal.classList.remove('scrolling-up');
@@ -1389,7 +1390,7 @@ modalPaper.addEventListener('scroll', rafThrottle(function() {
     const titleOriginalTop = 100; // padding-top of card-content
     const titleOutOfView = currentScrollTop > titleOriginalTop + 60; // title height ~60px
     
-    if (isScrollingUp && titleOutOfView) {
+    if (state.isScrollingUp && titleOutOfView) {
         // Scrolling up and title would be out of view - make it sticky
         if (!modalTitle.classList.contains('sticky')) {
             modalTitle.classList.add('sticky');
@@ -1397,13 +1398,13 @@ modalPaper.addEventListener('scroll', rafThrottle(function() {
             modalTitle.offsetHeight;
             modalTitle.classList.add('visible');
         }
-    } else if (isScrollingUp && !titleOutOfView && currentScrollTop > 0) {
+    } else if (state.isScrollingUp && !titleOutOfView && currentScrollTop > 0) {
         // Still scrolling up but title would be in view - keep sticky
         modalTitle.classList.add('sticky', 'visible');
     } else if (currentScrollTop === 0) {
         // Fully at top - instant remove
         modalTitle.classList.remove('sticky', 'visible');
-    } else if (!isScrollingUp) {
+    } else if (!state.isScrollingUp) {
         // Scrolling down - remove sticky, let it scroll naturally
         modalTitle.classList.remove('sticky', 'visible');
     }
