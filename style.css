@@ -108,9 +108,13 @@ body.modal-open {
     height: 20px;
 }
 
-/* Morphable theme icon: a filled "ball" + a mask cutout that creates the
-   crescent in moon state and slides off in sun state, plus 8 rays that
-   scale out from the center when the sun appears.
+/* Morphable theme icon: an outlined "ball" + a clipped cutout circle that
+   creates the crescent in moon state and slides off in sun state, plus 8
+   rays that scale out from the center when the sun appears.
+
+   The cutout's fill = page bg color (so it visually erases the part of the
+   ball outline it overlaps), and its own outline (inside the ball clip)
+   forms the inner crescent edge.
 
    Defaults below = MOON (light mode shows moon, signaling "click to go dark").
    `html.dark-mode` overrides below morph it into a SUN.
@@ -122,15 +126,12 @@ body.modal-open {
     overflow: visible;
 }
 
-.dark-mode-toggle .theme-icon-ball {
-    transform-origin: 10px 10px;
-    transform: scale(1.15);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
 .dark-mode-toggle .theme-icon-cutout {
     transform-origin: 10px 10px;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    /* fill transitions in step with the body bg so the cutout's interior
+       stays in sync if it's still partly visible during a theme switch */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                fill 0.5s ease !important;
 }
 
 .dark-mode-toggle .theme-icon-rays line {
@@ -141,13 +142,9 @@ body.modal-open {
                 opacity 0.2s ease !important;
 }
 
-/* Dark mode → SUN: full disc, no cutout, rays radiating */
-html.dark-mode .dark-mode-toggle .theme-icon-ball {
-    transform: scale(0.85);
-}
-
+/* Dark mode → SUN: cutout slides off so the ball is a full circle, rays radiate */
 html.dark-mode .dark-mode-toggle .theme-icon-cutout {
-    /* Slide cutout off-canvas so the ball renders as a full disc */
+    /* Slide cutout off-canvas; clipPath keeps it invisible outside the ball */
     transform: translate(8px, -8px);
 }
 

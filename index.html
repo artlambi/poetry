@@ -209,12 +209,16 @@
         <button class="dark-mode-toggle" type="button" aria-label="Toggle dark mode">
             <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
                 <defs>
-                    <mask id="theme-icon-mask">
-                        <rect x="0" y="0" width="20" height="20" fill="white"/>
-                        <circle class="theme-icon-cutout" cx="14" cy="6" r="5" fill="black"/>
-                    </mask>
+                    <clipPath id="theme-icon-clip">
+                        <circle cx="10" cy="10" r="5"/>
+                    </clipPath>
                 </defs>
-                <circle class="theme-icon-ball" cx="10" cy="10" r="5" mask="url(#theme-icon-mask)" fill="currentColor" stroke="none"/>
+                <!-- Outlined ball: always present (the moon body / sun body) -->
+                <circle class="theme-icon-ball" cx="10" cy="10" r="5"/>
+                <!-- Cutout circle: filled with page bg + outlined, clipped to the ball.
+                     Its fill covers part of the ball outline (creating the crescent's
+                     opening); its own outline draws the inner crescent edge. -->
+                <circle class="theme-icon-cutout" cx="14" cy="6" r="5" fill="var(--bg-color)" clip-path="url(#theme-icon-clip)"/>
                 <g class="theme-icon-rays">
                     <line x1="10" y1="0" x2="10" y2="2"/>
                     <line x1="10" y1="18" x2="10" y2="20"/>
