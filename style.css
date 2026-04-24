@@ -21,8 +21,9 @@
     --close-btn-stroke: rgba(0, 0, 0, 0.4);
 }
 
+/* Apply dark vars when system prefers dark, unless user explicitly picked light. */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not(.light-mode) {
         --bg-color: #121212;
         --paper-color: #202020;
         --text-primary: #e5e5e5;
@@ -1857,24 +1858,8 @@ html.dark-mode .modal-paper.fullscreen .modal-copyright {
     }
 }
 
-/* Force light mode (override system dark preference) */
-html.light-mode {
-    --bg-color: #ecebeb;
-    --paper-color: #fff;
-    --text-primary: #000000;
-    --text-secondary: rgba(0, 0, 0, 0.4);
-    --text-muted: rgba(0, 0, 0, 0.2);
-    --text-body: rgba(0, 0, 0, 0.5);
-    --text-body-full: rgba(0, 0, 0, 0.65);
-    --divider-color: rgba(0, 0, 0, 0.3);
-    --shadow-spread: rgba(0, 0, 0, 0);
-    --shadow-spread-hover: rgba(0, 0, 0, 0.015);
-    --shadow-soft: rgba(0, 0, 0, 0.025);
-    --shadow-softer: rgba(0, 0, 0, 0.015);
-    --close-btn-hover: rgba(0, 0, 0, 0.05);
-    --close-btn-stroke: rgba(0, 0, 0, 0.4);
-}
-
+/* Force light mode (override system dark preference).
+   Vars are inherited from :root since the @media dark block now skips html.light-mode. */
 html.light-mode ::selection {
     background: rgba(0, 0, 0, 0.1);
 }
