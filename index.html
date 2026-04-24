@@ -189,8 +189,13 @@
                     html.classList.add('dark-mode');
                 }
 
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', e.matches ? '#121212' : '#ecebeb');
                 setFavicon(e.matches);
+
+                // Delay theme-color update so the address bar transition lines
+                // up with the page-bg transition (see app.js toggle handler).
+                setTimeout(function() {
+                    document.querySelector('meta[name="theme-color"]').setAttribute('content', e.matches ? '#121212' : '#ecebeb');
+                }, 250);
 
                 setTimeout(function() {
                     html.classList.remove('theme-transition');

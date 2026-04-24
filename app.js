@@ -1467,19 +1467,26 @@ if (darkModeToggle) {
         // Enable smooth transition
         html.classList.add('theme-transition');
 
+        const newColor = isDark ? '#ecebeb' : '#121212';
         if (isDark) {
             html.classList.remove('dark-mode');
             html.classList.add('light-mode');
             localStorage.setItem('theme', 'light');
             window._setFavicon(false);
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ecebeb');
         } else {
             html.classList.remove('light-mode');
             html.classList.add('dark-mode');
             localStorage.setItem('theme', 'dark');
             window._setFavicon(true);
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#121212');
         }
+
+        // Delay the theme-color update so the address bar starts animating
+        // when the page bg has already shifted ~halfway. iOS Safari animates
+        // the address bar quickly (~300ms), so without the delay it finishes
+        // long before the 500ms page transition — that gap looks like a flicker.
+        setTimeout(function() {
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', newColor);
+        }, 250);
 
         // Remove transition class after animation completes
         setTimeout(function() {
