@@ -108,16 +108,13 @@ body.modal-open {
     height: 20px;
 }
 
-/* Morphable theme icon: an outlined "ball" + a clipped cutout circle that
-   creates the crescent in moon state and slides off in sun state, plus 8
-   rays that scale out from the center when the sun appears.
+/* Theme icon: a moon path and a sun circle that crossfade with a slight
+   scale, plus 8 rays that radiate from the center when the sun appears.
+   The moon's crescent is drawn as a single outlined path (no clip-path),
+   so there's no risk of an extra outline lingering outside the shape.
 
-   The cutout's fill = page bg color (so it visually erases the part of the
-   ball outline it overlaps), and its own outline (inside the ball clip)
-   forms the inner crescent edge.
-
-   Defaults below = MOON (light mode shows moon, signaling "click to go dark").
-   `html.dark-mode` overrides below morph it into a SUN.
+   Defaults below = MOON visible (light mode shows moon, "click to go dark").
+   `html.dark-mode` overrides below crossfade to the SUN.
 
    We use !important on transitions to defeat the universal
    `html.theme-transition *` rule, which would otherwise strip our transform
@@ -126,19 +123,18 @@ body.modal-open {
     overflow: visible;
 }
 
-.dark-mode-toggle .theme-icon-cutout {
-    /* Animate cx/cy (SVG attributes) instead of CSS transform.
-       CSS transform on a clipped element is applied AFTER the clip — so the
-       clipped crescent shape would just translate around. Animating cx/cy
-       moves the cutout's actual geometry, and the clip-path then correctly
-       clips against the ball area at each frame.
-       fill transitions in step with the body bg so the cutout's interior
-       stays in sync if it's still partly visible during a theme switch. */
-    cx: 14px;
-    cy: 6px;
-    transition: cx 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                cy 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                fill 0.5s ease !important;
+.dark-mode-toggle .theme-icon-moon {
+    transform-origin: 10px 10px;
+    transition: opacity 0.25s ease,
+                transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.dark-mode-toggle .theme-icon-sun {
+    transform-origin: 10px 10px;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.25s ease 0.1s,
+                transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s !important;
 }
 
 .dark-mode-toggle .theme-icon-rays line {
@@ -149,11 +145,15 @@ body.modal-open {
                 opacity 0.2s ease !important;
 }
 
-/* Dark mode → SUN: cutout slides off so the ball is a full circle, rays radiate */
-html.dark-mode .dark-mode-toggle .theme-icon-cutout {
-    /* Move cutout outside the clip area so the ball renders as a full circle */
-    cx: 22px;
-    cy: -2px;
+/* Dark mode → SUN: moon fades out, sun + rays fade in */
+html.dark-mode .dark-mode-toggle .theme-icon-moon {
+    opacity: 0;
+    transform: scale(0.6);
+}
+
+html.dark-mode .dark-mode-toggle .theme-icon-sun {
+    opacity: 1;
+    transform: scale(1);
 }
 
 html.dark-mode .dark-mode-toggle .theme-icon-rays line {

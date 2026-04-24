@@ -208,17 +208,13 @@
         <h1>Christian Lambillotte</h1>
         <button class="dark-mode-toggle" type="button" aria-label="Toggle dark mode">
             <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-                <defs>
-                    <clipPath id="theme-icon-clip">
-                        <circle cx="10" cy="10" r="5"/>
-                    </clipPath>
-                </defs>
-                <!-- Outlined ball: always present (the moon body / sun body) -->
-                <circle class="theme-icon-ball" cx="10" cy="10" r="5"/>
-                <!-- Cutout circle: filled with page bg + outlined, clipped to the ball.
-                     Its fill covers part of the ball outline (creating the crescent's
-                     opening); its own outline draws the inner crescent edge. -->
-                <circle class="theme-icon-cutout" cx="14" cy="6" r="5" fill="var(--bg-color)" clip-path="url(#theme-icon-clip)"/>
+                <!-- Moon: outlined crescent path (visible in light mode).
+                     Outer arc traces the ball's left side (large CCW); inner arc
+                     curves from the cutout circle through the upper-right of the
+                     ball (small CW). Opposite sweep flags = crescent shape. -->
+                <path class="theme-icon-moon" d="M 9.084 5.084 A 5 5 0 1 0 14.916 10.916 A 5 5 0 0 1 9.084 5.084 Z"/>
+                <!-- Sun ball: outlined circle (visible in dark mode) -->
+                <circle class="theme-icon-sun" cx="10" cy="10" r="5"/>
                 <g class="theme-icon-rays">
                     <line x1="10" y1="0" x2="10" y2="2"/>
                     <line x1="10" y1="18" x2="10" y2="20"/>
