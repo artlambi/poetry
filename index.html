@@ -3680,6 +3680,23 @@ Die Kus…`
             }
         ];
 
+        // Throttle a handler to one call per animation frame.
+        // Preserves `this` and the latest event.
+        function rafThrottle(handler) {
+            let ticking = false;
+            let lastEvent;
+            return function rafThrottled(event) {
+                lastEvent = event;
+                if (ticking) return;
+                ticking = true;
+                const self = this;
+                requestAnimationFrame(() => {
+                    handler.call(self, lastEvent);
+                    ticking = false;
+                });
+            };
+        }
+
         let currentIndex = 0;
         let clickedCard = null;
         let originalClickedCard = null;
@@ -3814,7 +3831,7 @@ Die Kus…`
             });
 
             // Cursor-following 3D tilt effect
-            card.addEventListener('mousemove', function(e) {
+            card.addEventListener('mousemove', rafThrottle(function(e) {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
@@ -3823,7 +3840,7 @@ Die Kus…`
                 const rotateX = (y - centerY) / centerY * -1.5;
                 const rotateY = (x - centerX) / centerX * 1.5;
                 card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
+            }));
 
             card.addEventListener('mouseleave', function() {
                 card.style.transform = 'rotateX(0) rotateY(0)';
@@ -4270,13 +4287,13 @@ Die Kus…`
         const pageHeader = document.querySelector('.page-header');
         const headerHeight = pageHeader.offsetHeight;
         
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', rafThrottle(function() {
             if (window.scrollY > headerHeight * 0.75) {
                 pageHeader.classList.add('scrolled');
             } else {
                 pageHeader.classList.remove('scrolled');
             }
-        });
+        }));
 
         // Staggered row animation on load
         const cardWrappers = document.querySelectorAll('.poem-card-wrapper');
@@ -4332,7 +4349,7 @@ Die Kus…`
             }
 
             // Update on scroll
-            window.addEventListener('scroll', updateBioImageZoom);
+            window.addEventListener('scroll', rafThrottle(updateBioImageZoom));
             // Initial update
             updateBioImageZoom();
         }
@@ -4341,7 +4358,7 @@ Die Kus…`
         let lastModalScrollTop = 0;
         let isScrollingUp = false;
 
-        modalPaper.addEventListener('scroll', function() {
+        modalPaper.addEventListener('scroll', rafThrottle(function() {
             const currentScrollTop = this.scrollTop;
             isScrollingUp = currentScrollTop < lastModalScrollTop;
             lastModalScrollTop = currentScrollTop;
@@ -4406,7 +4423,7 @@ Die Kus…`
                     illustrationCredit.classList.add('visible');
                 }
             }
-        });
+        }));
 
         // Dark mode toggle
         const darkModeToggle = document.querySelector('.dark-mode-toggle');
