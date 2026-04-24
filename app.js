@@ -993,6 +993,7 @@ function closeModal() {
                 // Reset modal state
                 modal.classList.remove('active');
                 modal.setAttribute('aria-hidden', 'true');
+                if (state.originalClickedCard) state.originalClickedCard.focus({ preventScroll: true });
                 modalPaper.classList.remove('fullscreen');
                 modalPaper.style.cssText = '';
 
@@ -1046,6 +1047,7 @@ function closeModal() {
                 setTimeout(() => {
                     modal.classList.remove('active');
                     modal.setAttribute('aria-hidden', 'true');
+                    if (state.originalClickedCard) state.originalClickedCard.focus({ preventScroll: true });
                     modalPaper.style.cssText = '';
                     cardContent.style.cssText = '';
                     modalControls.style.cssText = '';
@@ -1061,6 +1063,7 @@ function closeModal() {
         document.body.classList.remove('modal-open');
         document.body.style.top = '';
         window.scrollTo(0, state.savedScrollPosition);
+        if (state.originalClickedCard) state.originalClickedCard.focus({ preventScroll: true });
     }
 }
 
@@ -1185,6 +1188,26 @@ document.addEventListener('keydown', (e) => {
         if (window._haptics) window._haptics.trigger('light');
         closeModal();
         setTimeout(clearHash, 550);
+    } else if (e.key === 'Tab') {
+        // Trap focus within the modal so Tab can't escape into the (hidden) page.
+        const focusable = Array.from(
+            modal.querySelectorAll('button:not([disabled])')
+        ).filter(el => el.offsetParent !== null);
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const idx = focusable.indexOf(document.activeElement);
+        if (idx === -1) {
+            // Focus is outside the trap (e.g., on modalPaper). Pull it in.
+            e.preventDefault();
+            (e.shiftKey ? last : first).focus();
+        } else if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
     } else if (e.key === 'ArrowUp') {
         // Scroll up
         e.preventDefault();
