@@ -1456,6 +1456,34 @@ modalPaper.addEventListener('scroll', rafThrottle(function() {
     }
 }));
 
+// Interpolate theme-color frame-by-frame so the browser address bar (iOS
+// Safari, Android Chrome) shifts in lock-step with the page bg instead of
+// snapping to the new value and triggering its own out-of-sync animation —
+// which is what makes the address bar look like it's flickering.
+function animateThemeColor(fromHex, toHex, duration) {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) return;
+    const parse = (h) => [
+        parseInt(h.slice(1, 3), 16),
+        parseInt(h.slice(3, 5), 16),
+        parseInt(h.slice(5, 7), 16),
+    ];
+    const [fr, fg, fb] = parse(fromHex);
+    const [tr, tg, tb] = parse(toHex);
+    const start = performance.now();
+    function step(now) {
+        const raw = Math.min((now - start) / duration, 1);
+        // Match the CSS `ease` curve roughly so it tracks the page bg.
+        const t = raw < 0.5 ? 2 * raw * raw : 1 - Math.pow(-2 * raw + 2, 2) / 2;
+        const r = Math.round(fr + (tr - fr) * t);
+        const g = Math.round(fg + (tg - fg) * t);
+        const b = Math.round(fb + (tb - fb) * t);
+        meta.setAttribute('content', `rgb(${r}, ${g}, ${b})`);
+        if (raw < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+}
+
 // Dark mode toggle
 const darkModeToggle = document.querySelector('.dark-mode-toggle');
 if (darkModeToggle) {
@@ -1467,7 +1495,8 @@ if (darkModeToggle) {
         // Enable smooth transition
         html.classList.add('theme-transition');
 
-        const newColor = isDark ? '#ecebeb' : '#121212';
+        const fromColor = isDark ? '#121212' : '#ecebeb';
+        const toColor = isDark ? '#ecebeb' : '#121212';
         if (isDark) {
             html.classList.remove('dark-mode');
             html.classList.add('light-mode');
@@ -1480,13 +1509,7 @@ if (darkModeToggle) {
             window._setFavicon(true);
         }
 
-        // Delay the theme-color update so the address bar starts animating
-        // when the page bg has already shifted ~halfway. iOS Safari animates
-        // the address bar quickly (~300ms), so without the delay it finishes
-        // long before the 500ms page transition — that gap looks like a flicker.
-        setTimeout(function() {
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', newColor);
-        }, 250);
+        animateThemeColor(fromColor, toColor, 500);
 
         // Remove transition class after animation completes
         setTimeout(function() {
@@ -1494,4 +1517,7 @@ if (darkModeToggle) {
         }, 550);
     });
 }
+
+// Expose for the inline system-theme-change handler in index.html
+window._animateThemeColor = animateThemeColor;
 

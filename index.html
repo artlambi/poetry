@@ -191,11 +191,15 @@
 
                 setFavicon(e.matches);
 
-                // Delay theme-color update so the address bar transition lines
-                // up with the page-bg transition (see app.js toggle handler).
-                setTimeout(function() {
-                    document.querySelector('meta[name="theme-color"]').setAttribute('content', e.matches ? '#121212' : '#ecebeb');
-                }, 250);
+                // Interpolate theme-color to track the page bg (see app.js).
+                // Falls back to a single set if app.js hasn't loaded yet.
+                var fromColor = e.matches ? '#ecebeb' : '#121212';
+                var toColor = e.matches ? '#121212' : '#ecebeb';
+                if (window._animateThemeColor) {
+                    window._animateThemeColor(fromColor, toColor, 500);
+                } else {
+                    document.querySelector('meta[name="theme-color"]').setAttribute('content', toColor);
+                }
 
                 setTimeout(function() {
                     html.classList.remove('theme-transition');
