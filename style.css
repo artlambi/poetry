@@ -108,22 +108,65 @@ body.modal-open {
     height: 20px;
 }
 
-.dark-mode-toggle .sun-icon {
-    display: none;
+/* Morphable theme icon: a filled "ball" + a mask cutout that creates the
+   crescent in moon state and slides off in sun state, plus 8 rays that
+   scale out from the center when the sun appears.
+
+   Defaults below = MOON (light mode shows moon, signaling "click to go dark").
+   `html.dark-mode` overrides below morph it into a SUN.
+
+   We use !important on transitions to defeat the universal
+   `html.theme-transition *` rule, which would otherwise strip our transform
+   transitions during the 550ms theme-transition window. */
+.dark-mode-toggle .theme-icon {
+    overflow: visible;
 }
 
-.dark-mode-toggle .moon-icon {
-    display: block;
+.dark-mode-toggle .theme-icon-ball {
+    transform-origin: 10px 10px;
+    transform: scale(1.15);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* Manual dark mode class */
-html.dark-mode .dark-mode-toggle .sun-icon {
-    display: block;
+.dark-mode-toggle .theme-icon-cutout {
+    transform-origin: 10px 10px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-html.dark-mode .dark-mode-toggle .moon-icon {
-    display: none;
+.dark-mode-toggle .theme-icon-rays line {
+    transform-origin: 10px 10px;
+    opacity: 0;
+    transform: scale(0) rotate(-60deg);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.2s ease !important;
 }
+
+/* Dark mode → SUN: full disc, no cutout, rays radiating */
+html.dark-mode .dark-mode-toggle .theme-icon-ball {
+    transform: scale(0.85);
+}
+
+html.dark-mode .dark-mode-toggle .theme-icon-cutout {
+    /* Slide cutout off-canvas so the ball renders as a full disc */
+    transform: translate(8px, -8px);
+}
+
+html.dark-mode .dark-mode-toggle .theme-icon-rays line {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+}
+
+/* Stagger ray reveal when going TO dark (sun appearing).
+   Going dark→light removes the dark-mode class, so transition-delay falls
+   back to 0 and rays disappear all at once — which feels right. */
+html.dark-mode .dark-mode-toggle .theme-icon-rays line:nth-child(1) { transition-delay: 0.08s !important; }
+html.dark-mode .dark-mode-toggle .theme-icon-rays line:nth-child(2) { transition-delay: 0.11s !important; }
+html.dark-mode .dark-mode-toggle .theme-icon-rays line:nth-child(3) { transition-delay: 0.14s !important; }
+html.dark-mode .dark-mode-toggle .theme-icon-rays line:nth-child(4) { transition-delay: 0.17s !important; }
+html.dark-mode .dark-mode-toggle .theme-icon-rays line:nth-child(5) { transition-delay: 0.20s !important; }
+html.dark-mode .dark-mode-toggle .theme-icon-rays line:nth-child(6) { transition-delay: 0.23s !important; }
+html.dark-mode .dark-mode-toggle .theme-icon-rays line:nth-child(7) { transition-delay: 0.26s !important; }
+html.dark-mode .dark-mode-toggle .theme-icon-rays line:nth-child(8) { transition-delay: 0.29s !important; }
 
 html.dark-mode .dark-mode-toggle {
     background: none;
@@ -1875,14 +1918,6 @@ html.light-mode .bio-portrait-dark {
 
 html.light-mode .bio-portrait {
     opacity: 1;
-}
-
-html.light-mode .dark-mode-toggle .sun-icon {
-    display: none;
-}
-
-html.light-mode .dark-mode-toggle .moon-icon {
-    display: block;
 }
 
 html.light-mode .dark-mode-toggle {
