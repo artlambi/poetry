@@ -726,30 +726,29 @@ const modalImage = document.getElementById('modalImage');
 const modalImageContainer = document.getElementById('modalImageContainer');
 const illustrationCredit = document.getElementById('illustrationCredit');
 
-// Helper function to wrap words in spans
+// Helper function to wrap words in spans, tagging each with --i for the
+// CSS-driven stagger in style.css (.words-in .word).
 function wrapWords(text) {
+    let i = 0;
     return text.split(/(<br>|\n)/).map(part => {
         if (part === '<br>' || part === '\n') {
             return '<br>';
         }
-        return part.split(' ').map((word, i) => {
+        return part.split(' ').map(word => {
             if (word.trim()) {
-                return `<span class="word">${word}</span>`;
+                return `<span class="word" style="--i:${i++}">${word}</span>`;
             }
             return word;
         }).join(' ');
     }).join('');
 }
 
-// Helper function to animate words in sequence
-function animateWordsIn(container, delay = 20) {
-    const words = container.querySelectorAll('.word');
-    words.forEach((word, index) => {
-        setTimeout(() => {
-            word.style.opacity = '1';
-            word.style.transform = 'translateY(0)';
-        }, index * delay);
-    });
+// Trigger the staggered word reveal. The actual timing is in CSS; we just
+// toggle .words-in (with a reflow) so re-entry restarts the animation.
+function animateWordsIn(container) {
+    container.classList.remove('words-in');
+    void container.offsetWidth;
+    container.classList.add('words-in');
 }
 
 // Deep linking helper functions
@@ -1153,9 +1152,9 @@ function navigatePoem(direction) {
         cardContent.classList.remove('transitioning-out');
         cardContent.classList.add('transitioning-in');
         
-        // Animate words in sequence
+        // Animate words in sequence (CSS-driven stagger; see style.css)
         setTimeout(() => {
-            animateWordsIn(modalText, 15);
+            animateWordsIn(modalText);
         }, 100);
         
         // Remove enter animation class after it completes
