@@ -1,0 +1,2051 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-color: #ecebeb;
+    --paper-color: #fff;
+    --text-primary: #000000;
+    --text-secondary: rgba(0, 0, 0, 0.4);
+    --text-muted: rgba(0, 0, 0, 0.2);
+    --text-body: rgba(0, 0, 0, 0.5);
+    --text-body-full: rgba(0, 0, 0, 0.65);
+    --divider-color: rgba(0, 0, 0, 0.3);
+    --shadow-spread: rgba(0, 0, 0, 0);
+    --shadow-spread-hover: rgba(0, 0, 0, 0.015);
+    --shadow-soft: rgba(0, 0, 0, 0.025);
+    --shadow-softer: rgba(0, 0, 0, 0.015);
+    --close-btn-hover: rgba(0, 0, 0, 0.05);
+    --close-btn-stroke: rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --paper-color: #202020;
+        --text-primary: #e5e5e5;
+        --text-secondary: rgba(255, 255, 255, 0.5);
+        --text-muted: rgba(255, 255, 255, 0.2);
+        --text-body: rgba(255, 255, 255, 0.6);
+        --text-body-full: rgba(255, 255, 255, 0.75);
+        --divider-color: rgba(255, 255, 255, 0.2);
+        --shadow-spread: rgba(0, 0, 0, 0);
+        --shadow-spread-hover: rgba(255, 255, 255, 0.05);
+        --shadow-soft: rgba(0, 0, 0, 0.3);
+        --shadow-softer: rgba(0, 0, 0, 0.2);
+        --close-btn-hover: rgba(255, 255, 255, 0.1);
+        --close-btn-stroke: rgba(255, 255, 255, 0.5);
+    }
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    padding: 60px 20px;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+}
+
+::selection {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    ::selection {
+        background: rgba(255, 255, 255, 0.2);
+    }
+}
+
+body > *:not(.page-footer):not(.bio-section) {
+    position: relative;
+    z-index: 1;
+}
+
+html.modal-open,
+body.modal-open {
+    overflow: hidden;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 104px;
+    transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+    transform-origin: center top;
+    position: relative;
+}
+
+.dark-mode-toggle {
+    position: absolute;
+    top: 0;
+    right: 110px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.dark-mode-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+.dark-mode-toggle .sun-icon {
+    display: none;
+}
+
+.dark-mode-toggle .moon-icon {
+    display: block;
+}
+
+/* Manual dark mode class */
+html.dark-mode .dark-mode-toggle .sun-icon {
+    display: block;
+}
+
+html.dark-mode .dark-mode-toggle .moon-icon {
+    display: none;
+}
+
+html.dark-mode .dark-mode-toggle {
+    background: none;
+}
+
+/* Smooth theme transition */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, opacity 0.5s ease !important;
+}
+
+@media (max-width: 768px) {
+    .dark-mode-toggle {
+        right: 10px;
+    }
+}
+
+.page-header.scrolled {
+    transform: scale(0.88);
+    opacity: 0.24;
+    filter: blur(6px);
+}
+
+.page-header .subtitle {
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 36px;
+    color: #000000;
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out forwards;
+    position: relative;
+    height: 36px;
+    overflow: hidden;
+}
+
+.page-header .subtitle-text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+}
+
+.page-header .subtitle-text.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.page-header .subtitle-text.exit {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-header h1 {
+    font-family: 'gill-sans-nova-condensed', sans-serif;
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 56px;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out forwards;
+    animation-delay: 0.15s;
+}
+
+.bio-section {
+    max-width: 1200px;
+    margin: 120px auto 0;
+    padding: 0 60px;
+}
+
+.bio-container {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+}
+
+.bio-portrait {
+    width: 360px;
+    height: auto;
+    flex-shrink: 0;
+    transform: scale(var(--bio-image-scale, 1.1));
+    transform-origin: center center;
+    transition: transform 0.15s ease-out;
+}
+
+/* Light mode - show light portrait with multiply */
+.bio-portrait-light {
+    display: block;
+    mix-blend-mode: multiply;
+}
+
+.bio-portrait-dark {
+    display: none;
+}
+
+/* Dark mode - show dark portrait with screen */
+@media (prefers-color-scheme: dark) {
+    .bio-portrait-light {
+        display: none;
+    }
+    
+    .bio-portrait-dark {
+        display: block;
+        mix-blend-mode: screen;
+    }
+}
+
+html.dark-mode .bio-portrait-light {
+    display: none;
+}
+
+html.dark-mode .bio-portrait-dark {
+    display: block;
+    mix-blend-mode: screen;
+}
+
+.bio-text {
+    flex: 1;
+    margin-top: 104px;
+}
+
+.bio-text p {
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 24px;
+    line-height: 34px;
+    color: rgba(51, 51, 51, 0.72);
+    margin: 0 0 20px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.bio-text.visible p:nth-child(1) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0s;
+}
+
+.bio-text.visible p:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.15s;
+}
+
+.bio-text.visible p:nth-child(3) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
+}
+
+.bio-text p:last-child {
+    margin-bottom: 0;
+}
+
+.bio-text strong {
+    font-weight: 600;
+    color: #000000;
+}
+
+@media (max-width: 900px) {
+    .bio-section {
+        margin-top: 80px;
+        padding: 0 40px;
+    }
+
+    .bio-container {
+        flex-direction: column;
+        gap: 24px;
+        align-items: center;
+    }
+
+    .bio-portrait {
+        width: 100%;
+        height: auto;
+        max-width: 360px;
+    }
+
+    .bio-text {
+        text-align: left;
+        margin-top: 0;
+    }
+
+    .bio-text p {
+        font-size: 20px;
+        line-height: 30px;
+    }
+}
+
+@media (max-width: 500px) {
+    .bio-section {
+        padding: 0 20px;
+    }
+
+    .bio-text p {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
+
+.page-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    padding: 80px 60px 18px 60px;
+    margin-top: 40px;
+    content-visibility: auto;
+    contain-intrinsic-size: 0 200px;
+}
+
+.page-footer .copyright {
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    color: rgba(51, 51, 51, 0.5);
+    width: 100%;
+    text-align: center;
+    order: 2;
+}
+
+.page-footer .signature {
+    width: 256px;
+    max-width: 100%;
+    height: auto;
+    order: 1;
+}
+
+.page-footer .signature path {
+    fill: none;
+    stroke: #000;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.75px;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 0;
+}
+
+/* Hover animation - only on devices with hover capability */
+@media (hover: hover) and (pointer: fine) {
+    .page-footer .signature:hover path:nth-child(1) { 
+        animation: drawSignatureReverse 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.1s; 
+    }
+    
+    /* Hover animation - Letters */
+    .page-footer .signature:hover path:nth-child(2) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.2s; 
+    }
+    .page-footer .signature:hover path:nth-child(3) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.4s; 
+    }
+    .page-footer .signature:hover path:nth-child(4) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.55s; 
+    }
+    .page-footer .signature:hover path:nth-child(5) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.65s; 
+    }
+    .page-footer .signature:hover path:nth-child(6) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.7s; 
+    }
+    .page-footer .signature:hover path:nth-child(7) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.75s; 
+    }
+    .page-footer .signature:hover path:nth-child(8) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.8s; 
+    }
+}
+
+@keyframes drawSignature {
+    0% {
+        stroke-dashoffset: 2000;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes drawSignatureReverse {
+    0% {
+        stroke-dashoffset: -2000;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.poem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 280px);
+    gap: 96px min(144px, calc((100vw - 480px - 840px) / 2));
+    margin: 0 240px;
+    justify-content: center;
+}
+
+@media (max-width: 1320px) {
+    .poem-grid {
+        gap: 96px 80px;
+        margin: 0 120px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .poem-grid {
+        grid-template-columns: repeat(2, 280px);
+        gap: 96px 80px;
+        margin: 0 80px;
+    }
+}
+
+@media (max-width: 700px) {
+    .poem-grid {
+        grid-template-columns: 280px;
+        gap: 56px;
+        margin: 0 20px;
+    }
+
+    .page-header {
+        margin-bottom: 64px;
+    }
+}
+
+.poem-card {
+    background: var(--paper-color);
+    padding: 48px 30px 0 30px;
+    cursor: pointer;
+    transition: transform 0.1s ease-out, box-shadow 0.3s ease, opacity 0.2s ease;
+    position: relative;
+    width: 280px;
+    height: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 1px 1px -1px rgba(0,0,0,0.02), 0 7px 6px -4px color(display-p3 0 0 0 / 0.06);
+    overflow: hidden;
+    mix-blend-mode: normal;
+    transform-style: preserve-3d;
+    outline: none;
+}
+
+.poem-card-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.poem-card-wrapper.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease-out, transform 0.25s ease-in-out;
+}
+
+.poem-card-wrapper {
+    perspective: 1000px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .poem-card-wrapper:hover,
+    .poem-card-wrapper:focus-within {
+        transform: scale(1.0962);
+        z-index: 10;
+    }
+
+    .poem-card-wrapper:hover .poem-card,
+    .poem-card-wrapper:focus-within .poem-card {
+        box-shadow: 0 30px 60px var(--shadow-soft), 0 15px 30px var(--shadow-softer);
+    }
+
+    .poem-card-wrapper:hover .poem-card .preview,
+    .poem-card-wrapper:focus-within .poem-card .preview {
+        color: rgba(0, 0, 0, 0.9);
+    }
+
+    .poem-card-wrapper:hover .hover-title,
+    .poem-card-wrapper:focus-within .hover-title {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.poem-card-wrapper .hover-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.8);
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    text-align: center;
+}
+
+/* Show titles on touch devices (tablets, phones) that don't support hover */
+@media (hover: none), (pointer: coarse) {
+    .poem-card-wrapper .hover-title {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 700px) {
+    .poem-card-wrapper .hover-title {
+        font-size: 1.25rem;
+    }
+}
+
+.poem-card .number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.poem-card .title {
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+    display: none;
+}
+
+.poem-card .preview {
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 13px;
+    font-style: normal;
+    color: rgba(51, 51, 51, 0.72);
+    line-height: 1.8;
+    letter-spacing: -0.01em;
+    flex: 1;
+    overflow: hidden;
+    white-space: pre-line;
+    position: relative;
+    padding-bottom: 35px;
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    transition: color 0.3s ease;
+}
+
+/* Fullscreen Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.modal-paper {
+    position: fixed;
+    background: var(--paper-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 48px 30px 0 30px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    opacity: 1;
+    outline: none;
+}
+
+.modal-paper .card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+    position: relative;
+    padding-top: 0;
+    transition: padding-top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-paper .number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-paper .title {
+    font-family: 'gill-sans-nova-condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0;
+    transform: translateY(-20px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-paper .poem-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 13px;
+    font-style: normal;
+    color: #707070;
+    line-height: 1.8;
+    white-space: pre-line;
+    padding-top: 0;
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                line-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                padding-top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-paper.fullscreen {
+    padding: 80px 120px 0 120px;
+    justify-content: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.modal-paper.fullscreen::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.50) 75%, rgba(255,255,255,0.00) 100%);
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-paper.fullscreen.scrolled::before {
+    opacity: 1;
+}
+
+
+.modal-paper.fullscreen .card-content {
+    overflow: visible;
+    padding-top: 100px;
+}
+
+.modal-paper.fullscreen .title {
+    font-family: 'gill-sans-nova-condensed', sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 56px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    transition: opacity 0.3s ease-out, top 0.3s ease-out, filter 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.modal-paper.fullscreen .title.sticky {
+    position: fixed;
+    top: -40px;
+    left: 0;
+    right: 0;
+    padding-left: 120px;
+    padding-right: 120px;
+    text-align: center;
+    font-size: 32px;
+    line-height: 40px;
+    z-index: 15;
+    opacity: 0;
+    filter: blur(6px);
+}
+
+.modal-paper.fullscreen .title.sticky.visible {
+    top: 30px;
+    opacity: 1;
+    filter: blur(0);
+}
+
+.modal-paper.fullscreen .poem-text {
+    font-size: 24px;
+    color: #000000;
+    line-height: 33px;
+    letter-spacing: -0.01em;
+    padding-bottom: 40px;
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+
+/* Word-by-word transition animations */
+.modal-paper .poem-text .word {
+    display: inline-block;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal-paper .card-content.transitioning-out .poem-text .word {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.modal-paper .card-content.transitioning-in .poem-text .word {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.modal-paper .card-content.transitioning-out .title {
+    animation: titleSlideOut 0.4s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+.modal-paper .card-content.transitioning-in .title {
+    opacity: 0;
+    animation: titleSlideIn 0.5s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+    animation-delay: 0.05s;
+}
+
+.modal-paper .card-content.transitioning-out .poem-image-container {
+    animation: imageSlideOut 0.4s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+.modal-paper .card-content.transitioning-in .poem-image-container {
+    animation: imageSlideIn 0.5s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+    animation-delay: 0.15s;
+}
+
+@keyframes titleSlideOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-15px);
+        filter: blur(3px);
+    }
+}
+
+@keyframes titleSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+        filter: blur(3px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+    }
+}
+
+@keyframes imageSlideOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.96);
+    }
+}
+
+@keyframes imageSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.96);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-paper .poem-image-container {
+    display: none;
+}
+
+.modal-paper.fullscreen .poem-image-container {
+    display: block;
+    width: 560px;
+    max-width: 100%;
+    margin-top: 40px;
+    border: 1px solid #000000;
+    overflow: hidden;
+}
+
+.modal-paper.fullscreen .poem-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: scale(var(--image-scale, 1.1));
+    transform-origin: center center;
+    transition: transform 0.15s ease-out;
+}
+
+.modal-paper.fullscreen .illustration-credit {
+    font-family: 'EB Garamond', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.4);
+    text-align: center;
+    margin-top: 12px;
+    opacity: 0;
+    transition: opacity 0.4s ease-out 0.15s;
+}
+
+.modal-paper.fullscreen .illustration-credit a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.modal-paper.fullscreen .illustration-credit a:hover {
+    color: rgba(0, 0, 0, 0.72);
+}
+
+.modal-paper.fullscreen .illustration-credit.visible {
+    opacity: 1;
+}
+
+.modal-footer {
+    display: none;
+}
+
+.modal-paper.fullscreen .modal-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 160px;
+    padding-bottom: 18px;
+}
+
+.modal-paper.fullscreen .modal-signature {
+    width: 256px;
+    max-width: 100%;
+    height: auto;
+}
+
+.modal-paper.fullscreen .modal-signature path {
+    fill: none;
+    stroke: #000;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.75px;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 0;
+}
+
+/* Modal signature hover animation - only on devices with hover capability */
+@media (hover: hover) and (pointer: fine) {
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(1) { 
+        animation: drawSignatureReverse 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.1s; 
+    }
+    
+    /* Hover animation - Letters */
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(2) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.2s; 
+    }
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(3) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.4s; 
+    }
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(4) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.55s; 
+    }
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(5) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.65s; 
+    }
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(6) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.7s; 
+    }
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(7) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.75s; 
+    }
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(8) { 
+        animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.8s; 
+    }
+}
+
+.modal-paper.fullscreen .modal-copyright {
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    color: rgba(51, 51, 51, 0.5);
+    text-align: center;
+}
+
+.poem-nav-buttons {
+    display: none;
+}
+
+/* Mobile: sticky bottom navigation on scroll up */
+@media (max-width: 768px) {
+    .modal-overlay .poem-nav-buttons {
+        display: none;
+    }
+
+    .modal-overlay.active .poem-nav-buttons {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        justify-content: center;
+        gap: 40px;
+        padding: 20px;
+        background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.72) 50%, rgba(255,255,255,0.96) 100%);
+        z-index: 100;
+        transform: translateY(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Ensure hidden by default */
+    .modal-overlay.active:not(.scrolling-up) .poem-nav-buttons {
+        transform: translateY(100%) !important;
+    }
+
+    .modal-overlay.active.scrolling-up .poem-nav-buttons {
+        transform: translateY(0) !important;
+    }
+
+    .poem-nav-btn {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+}
+
+/* Desktop: hide poem nav buttons */
+@media (min-width: 769px) {
+    .poem-nav-buttons {
+        display: none !important;
+    }
+}
+
+.poem-nav-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    position: relative;
+    transition: transform 0.15s ease-out;
+}
+
+.poem-nav-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+    opacity: 0.04;
+    z-index: -1;
+}
+
+.poem-nav-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 1px;
+    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+    opacity: 0.04;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 0;
+}
+
+.poem-nav-btn:hover {
+    transform: scale(1.05);
+}
+
+.poem-nav-btn:active {
+    transform: scale(0.97);
+}
+
+.poem-nav-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1;
+    position: relative;
+    z-index: 1;
+    opacity: 0.72;
+}
+
+.modal-controls {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.3s;
+}
+
+.modal-overlay.active .modal-controls {
+    opacity: 1;
+}
+
+.modal-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #000;
+    position: relative;
+    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0);
+    transition: box-shadow 0.5s ease, transform 0.15s ease-out;
+}
+
+.modal-btn:hover {
+    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
+}
+
+.modal-btn:active {
+    transform: scale(0.97);
+}
+
+.modal-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+    opacity: 0.04;
+    z-index: -1;
+}
+
+.modal-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 1px;
+    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+    opacity: 0.04;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 0;
+    transition: opacity 0.5s ease;
+}
+
+.modal-btn:hover::before {
+    opacity: 0;
+}
+
+.modal-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1;
+    position: relative;
+    z-index: 1;
+    opacity: 0.72;
+    transition: opacity 0.5s ease;
+}
+
+.modal-btn:hover svg {
+    opacity: 1;
+}
+
+.modal-btn .tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.72);
+    color: #fff;
+    font-family: 'gill-sans-nova', 'Gill Sans', sans-serif;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    transition-delay: 0s;
+    pointer-events: none;
+}
+
+.modal-btn:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0.7s;
+}
+
+/* Instant tooltips after first hover */
+.instant-tooltips .modal-btn:hover .tooltip {
+    transition-delay: 0s;
+}
+
+/* Close button specific */
+.modal-close svg path {
+    transition: d 0.2s ease;
+}
+
+.modal-close:hover svg path {
+    d: path("M15.25,15.25 L4.75,4.75 M15.25,4.75 L4.75,15.25");
+}
+
+/* Share button specific */
+.modal-share {
+    overflow: visible;
+}
+
+.modal-share .share-morph-icon {
+    stroke-width: 0.9;
+}
+
+.modal-share .morph-path-1,
+.modal-share .morph-path-2,
+.modal-share .morph-path-3 {
+    transition: d 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Morph to checkmark on copied state */
+.modal-share.copied .morph-path-1 {
+    d: path("M 3.75 10.4166667 L 8.33333333 16.0416667");
+}
+
+.modal-share.copied .morph-path-2 {
+    d: path("M 8.33333333 16.0416667 L 16.25 3.75");
+}
+
+.modal-share.copied .morph-path-3 {
+    d: path("M 16.25 3.75 L 16.25 3.75");
+}
+
+.modal-share .morph-path-1,
+.modal-share .morph-path-2 {
+    transform-origin: center;
+    will-change: transform;
+}
+
+.modal-share:hover:not(.copied) .morph-path-1,
+.modal-share:hover:not(.copied) .morph-path-2 {
+    animation: arrowBounce 0.3s ease;
+}
+
+@keyframes arrowBounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2.5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.modal-share .tooltip-copied {
+    opacity: 0;
+    visibility: hidden;
+    transition-delay: 0s;
+}
+
+.modal-share:hover .tooltip-copied {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.modal-share.copied .tooltip-copied {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.modal-share.copied .tooltip-share {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Navigation arrows */
+.modal-nav {
+    position: fixed;
+    top: 100px;
+    bottom: 0;
+    width: 25%; /* 25% of window width - scales proportionally */
+    min-width: 150px; /* Minimum width for very small screens */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.modal-nav.prev {
+    left: 0;
+    padding-left: 2%; /* 2% padding instead of fixed 30px */
+    justify-content: flex-start;
+}
+
+.modal-nav.next {
+    right: 0;
+    padding-right: 2%; /* 2% padding instead of fixed 30px */
+    justify-content: flex-end;
+}
+
+.modal-overlay.active .modal-nav {
+    pointer-events: auto; /* Enable to detect hover and clicks */
+}
+
+.modal-nav:hover {
+    opacity: 1;
+}
+
+.modal-nav-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #000;
+    position: relative;
+    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0);
+    transition: box-shadow 0.5s ease, transform 0.15s ease-out;
+}
+
+.modal-nav-btn:hover {
+    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
+}
+
+.modal-nav-btn:active {
+    transform: scale(0.97);
+}
+
+.modal-nav-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+    opacity: 0.04;
+    z-index: -1;
+}
+
+.modal-nav-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 1px;
+    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+    opacity: 0.04;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 0;
+    transition: opacity 0.5s ease;
+}
+
+.modal-nav-btn:hover::before {
+    opacity: 0;
+}
+
+.modal-nav-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1;
+    position: relative;
+    z-index: 1;
+    opacity: 0.72;
+    transition: opacity 0.5s ease, transform 0.2s ease;
+}
+
+.modal-nav-btn:hover svg {
+    opacity: 1;
+}
+
+.modal-nav.prev .modal-nav-btn:hover svg {
+    transform: translateX(-2px);
+}
+
+.modal-nav.next .modal-nav-btn:hover svg {
+    transform: translateX(2px);
+}
+
+/* Hide nav arrows on mobile */
+@media (max-width: 768px) {
+    .modal-nav {
+        display: none;
+    }
+}
+
+.modal-content {
+    display: none;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #121212;
+    }
+
+    .page-header .subtitle {
+        color: #cccccc;
+    }
+
+    .page-header h1 {
+        color: #cccccc;
+    }
+
+    .poem-card {
+        background: #202020;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
+    }
+
+    .poem-card .number {
+        color: rgba(255,255,255,0.2);
+    }
+
+    .poem-card .title {
+        color: #e5e5e5;
+    }
+
+    .poem-card .preview {
+        color: #cccccc;
+    }
+
+    .bio-text p {
+        color: #cccccc;
+    }
+
+    .bio-text strong {
+        color: #e5e5e5;
+    }
+
+    .poem-card-wrapper .hover-title {
+        color: #cccccc;
+    }
+
+    .modal-paper {
+        background: #202020;
+    }
+
+    .modal-paper.fullscreen::before {
+        background-image: linear-gradient(180deg, rgba(32,32,32,0.96) 0%, rgba(32,32,32,0.50) 75%, rgba(32,32,32,0.00) 100%);
+    }
+
+    .modal-paper .number {
+        color: rgba(255,255,255,0.2);
+    }
+
+    .modal-paper .title {
+        color: #cccccc;
+    }
+
+    .modal-overlay.active .modal-paper .poem-text {
+        color: #cccccc;
+    }
+
+    .modal-paper.fullscreen .poem-text {
+        color: #cccccc;
+    }
+
+    .poem-nav-btn::after {
+        background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+    }
+
+    .poem-nav-btn::before {
+        background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+    }
+
+    .poem-nav-btn {
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .modal-overlay.active .poem-nav-buttons {
+            background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.72) 50%, rgba(32,32,32,0.96) 100%);
+        }
+    }
+
+    .modal-btn {
+        color: #fff;
+    }
+
+    .modal-btn::after {
+        background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+    }
+
+    .modal-btn::before {
+        background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+    }
+
+    .modal-btn:hover::before {
+        opacity: 0;
+    }
+
+    .modal-btn:hover {
+        box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
+    }
+
+    .modal-btn .tooltip {
+        background: rgba(255, 255, 255, 0.24);
+        color: #fff;
+    }
+
+    .modal-nav-btn {
+        color: #fff;
+    }
+
+    .modal-nav-btn::after {
+        background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+    }
+
+    .modal-nav-btn::before {
+        background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+    }
+
+    .modal-nav-btn:hover::before {
+        opacity: 0;
+    }
+
+    .modal-nav-btn:hover {
+        box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
+    }
+
+    .page-footer .copyright {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .page-footer .signature path {
+        stroke: #fff;
+    }
+
+    .modal-paper.fullscreen .illustration-credit {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .modal-paper.fullscreen .illustration-credit a:hover {
+        color: rgba(255, 255, 255, 0.72);
+    }
+
+    .modal-paper.fullscreen .modal-signature path {
+        stroke: #fff;
+    }
+
+    .modal-paper.fullscreen .modal-copyright {
+        color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+@media (prefers-color-scheme: dark) and (hover: hover) and (pointer: fine) {
+    .poem-card-wrapper:hover .poem-card,
+    .poem-card-wrapper:focus-within .poem-card {
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 60px rgba(0, 0, 0, 0.08), 0 15px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .poem-card-wrapper:hover .poem-card .preview,
+    .poem-card-wrapper:focus-within .poem-card .preview {
+        color: #ffffff;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 40px 15px;
+    }
+
+    .modal-share {
+        display: none;
+    }
+
+    .modal-controls {
+        display: none;
+    }
+
+    .poem-card {
+        padding: 28px 24px;
+    }
+
+    .modal-paper {
+        padding: 28px 24px 0 24px;
+    }
+
+    .poem-card .title {
+        font-size: 1.3rem;
+    }
+
+    .poem-card-wrapper .hover-title {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .modal-paper.fullscreen {
+        padding: 60px 30px 0 30px;
+    }
+
+    .modal-paper.fullscreen .title {
+        font-size: 32px;
+        line-height: 32px;
+    }
+
+    .modal-paper.fullscreen .title.sticky {
+        font-size: 32px;
+        line-height: 32px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .modal-paper.fullscreen .poem-text {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .modal-paper.fullscreen .illustration-credit {
+        margin-top: 16px;
+        margin-bottom: 60px;
+    }
+
+    .modal-paper.fullscreen .poem-nav-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        margin-top: 80px;
+        margin-bottom: 104px;
+    }
+
+    .modal-paper.fullscreen .modal-footer {
+        margin-top: 0;
+        padding-bottom: 120px;
+    }
+
+    .page-header .subtitle {
+        font-size: 24px;
+    }
+
+    .page-header h1 {
+        font-size: 36px;
+        line-height: 1.0;
+    }
+}
+
+/* Noscript fallback styles */
+noscript .poem-article {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: var(--paper-color);
+}
+
+noscript .poem-article h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+noscript .poem-article p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    color: var(--text-body);
+    line-height: 1.8;
+}
+
+/* CRITICAL: Final dark mode override to win cascade */
+@media (prefers-color-scheme: dark) {
+    .modal-paper.fullscreen .poem-text {
+        color: #cccccc !important;
+    }
+    
+    .modal-paper .poem-text {
+        color: #cccccc !important;
+    }
+}
+
+/* Manual dark mode toggle support */
+html.dark-mode {
+    --bg-color: #121212;
+    --paper-color: #202020;
+    --text-primary: #e5e5e5;
+    --text-secondary: rgba(255, 255, 255, 0.5);
+    --text-muted: rgba(255, 255, 255, 0.2);
+    --text-body: rgba(255, 255, 255, 0.6);
+    --text-body-full: rgba(255, 255, 255, 0.75);
+    --divider-color: rgba(255, 255, 255, 0.2);
+    --shadow-spread: rgba(0, 0, 0, 0);
+    --shadow-spread-hover: rgba(255, 255, 255, 0.05);
+    --shadow-soft: rgba(0, 0, 0, 0.3);
+    --shadow-softer: rgba(0, 0, 0, 0.2);
+    --close-btn-hover: rgba(255, 255, 255, 0.1);
+    --close-btn-stroke: rgba(255, 255, 255, 0.5);
+}
+
+html.dark-mode ::selection {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+html.dark-mode .page-header .subtitle {
+    color: #cccccc;
+}
+
+html.dark-mode .page-header h1 {
+    color: #cccccc;
+}
+
+html.dark-mode .poem-card {
+    background: #202020;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
+}
+
+html.dark-mode .poem-card .number {
+    color: rgba(255,255,255,0.2);
+}
+
+html.dark-mode .poem-card .title {
+    color: #e5e5e5;
+}
+
+html.dark-mode .poem-card .preview {
+    color: #cccccc;
+}
+
+html.dark-mode .bio-text p {
+    color: #cccccc;
+}
+
+html.dark-mode .bio-text strong {
+    color: #e5e5e5;
+}
+
+html.dark-mode .poem-card-wrapper .hover-title {
+    color: #cccccc;
+}
+
+html.dark-mode .modal-paper {
+    background: #202020;
+}
+
+html.dark-mode .modal-paper.fullscreen::before {
+    background-image: linear-gradient(180deg, rgba(32,32,32,0.96) 0%, rgba(32,32,32,0.50) 75%, rgba(32,32,32,0.00) 100%);
+}
+
+html.dark-mode .modal-paper .number {
+    color: rgba(255,255,255,0.2);
+}
+
+html.dark-mode .modal-paper .title {
+    color: #cccccc;
+}
+
+html.dark-mode .modal-paper .poem-text {
+    color: #cccccc !important;
+}
+
+html.dark-mode .modal-paper.fullscreen .poem-text {
+    color: #cccccc !important;
+}
+
+html.dark-mode .modal-btn {
+    color: #fff;
+}
+
+html.dark-mode .modal-btn::after {
+    background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+}
+
+html.dark-mode .modal-btn::before {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+}
+
+html.dark-mode .modal-btn:hover::before {
+    opacity: 0;
+}
+
+html.dark-mode .modal-btn:hover {
+    box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
+}
+
+html.dark-mode .modal-btn .tooltip {
+    background: rgba(255, 255, 255, 0.24);
+    color: #fff;
+}
+
+html.dark-mode .modal-nav-btn {
+    color: #fff;
+}
+
+html.dark-mode .modal-nav-btn::after {
+    background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+}
+
+html.dark-mode .modal-nav-btn::before {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+}
+
+html.dark-mode .modal-nav-btn:hover::before {
+    opacity: 0;
+}
+
+html.dark-mode .modal-nav-btn:hover {
+    box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
+}
+
+html.dark-mode .poem-nav-btn::after {
+    background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+}
+
+html.dark-mode .poem-nav-btn::before {
+    background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
+}
+
+html.dark-mode .poem-nav-btn {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    html.dark-mode .modal-overlay.active .poem-nav-buttons {
+        background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.72) 50%, rgba(32,32,32,0.96) 100%);
+    }
+}
+
+html.dark-mode .bio-portrait {
+    opacity: 0.85;
+}
+
+html.dark-mode .page-footer .copyright {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+html.dark-mode .page-footer .signature path {
+    stroke: #fff;
+}
+
+html.dark-mode .modal-paper.fullscreen .illustration-credit {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+html.dark-mode .modal-paper.fullscreen .illustration-credit a:hover {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+html.dark-mode .modal-paper.fullscreen .modal-signature path {
+    stroke: #fff;
+}
+
+html.dark-mode .modal-paper.fullscreen .modal-copyright {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    html.dark-mode .poem-card-wrapper:hover .poem-card,
+    html.dark-mode .poem-card-wrapper:focus-within .poem-card {
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 60px rgba(0, 0, 0, 0.08), 0 15px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    html.dark-mode .poem-card-wrapper:hover .poem-card .preview,
+    html.dark-mode .poem-card-wrapper:focus-within .poem-card .preview {
+        color: #ffffff;
+    }
+}
+
+/* Force light mode (override system dark preference) */
+html.light-mode {
+    --bg-color: #ecebeb;
+    --paper-color: #fff;
+    --text-primary: #000000;
+    --text-secondary: rgba(0, 0, 0, 0.4);
+    --text-muted: rgba(0, 0, 0, 0.2);
+    --text-body: rgba(0, 0, 0, 0.5);
+    --text-body-full: rgba(0, 0, 0, 0.65);
+    --divider-color: rgba(0, 0, 0, 0.3);
+    --shadow-spread: rgba(0, 0, 0, 0);
+    --shadow-spread-hover: rgba(0, 0, 0, 0.015);
+    --shadow-soft: rgba(0, 0, 0, 0.025);
+    --shadow-softer: rgba(0, 0, 0, 0.015);
+    --close-btn-hover: rgba(0, 0, 0, 0.05);
+    --close-btn-stroke: rgba(0, 0, 0, 0.4);
+}
+
+html.light-mode ::selection {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+html.light-mode .bio-portrait-light {
+    display: block;
+    mix-blend-mode: multiply;
+}
+
+html.light-mode .bio-portrait-dark {
+    display: none;
+}
+
+html.light-mode .bio-portrait {
+    opacity: 1;
+}
+
+html.light-mode .dark-mode-toggle .sun-icon {
+    display: none;
+}
+
+html.light-mode .dark-mode-toggle .moon-icon {
+    display: block;
+}
+
+html.light-mode .dark-mode-toggle {
+    background: none;
+}
+
+
+html.light-mode body {
+    background: #ecebeb;
+}
+
+html.light-mode .page-header .subtitle {
+    color: #000000;
+}
+
+html.light-mode .page-header h1 {
+    color: #000000;
+}
+
+html.light-mode .poem-card {
+    background: #fff;
+    box-shadow: 0 1px 1px -1px rgba(0,0,0,0.02), 0 7px 6px -4px color(display-p3 0 0 0 / 0.06);
+}
+
+html.light-mode .poem-card .number {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+html.light-mode .poem-card .title {
+    color: #000000;
+}
+
+html.light-mode .poem-card .preview {
+    color: rgba(51, 51, 51, 0.72);
+}
+
+html.light-mode .bio-text p {
+    color: rgba(51, 51, 51, 0.72);
+}
+
+html.light-mode .bio-text strong {
+    color: #000000;
+}
+
+html.light-mode .poem-card-wrapper .hover-title {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+html.light-mode .modal-paper {
+    background: #fff;
+}
+
+html.light-mode .modal-paper.fullscreen::before {
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.50) 75%, rgba(255,255,255,0.00) 100%);
+}
+
+html.light-mode .modal-paper .number {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+html.light-mode .modal-paper .title {
+    color: #000000;
+}
+
+html.light-mode .modal-paper .poem-text {
+    color: #707070 !important;
+}
+
+html.light-mode .modal-paper.fullscreen .poem-text {
+    color: #000000 !important;
+}
+
+html.light-mode .poem-nav-btn {
+    color: #000;
+}
+
+html.light-mode .poem-nav-btn::after {
+    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+}
+
+html.light-mode .poem-nav-btn::before {
+    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+}
+
+@media (max-width: 768px) {
+    html.light-mode .modal-overlay.active .poem-nav-buttons {
+        background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.72) 50%, rgba(255,255,255,0.96) 100%);
+    }
+}
+
+html.light-mode .modal-btn {
+    color: #000;
+}
+
+html.light-mode .modal-btn::after {
+    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+}
+
+html.light-mode .modal-btn::before {
+    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+}
+
+html.light-mode .modal-btn:hover {
+    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
+}
+
+html.light-mode .modal-btn .tooltip {
+    background: rgba(0, 0, 0, 0.72);
+    color: #fff;
+}
+
+html.light-mode .modal-nav-btn {
+    color: #000;
+}
+
+html.light-mode .modal-nav-btn::after {
+    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+}
+
+html.light-mode .modal-nav-btn::before {
+    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+}
+
+html.light-mode .modal-nav-btn:hover {
+    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
+}
+
+html.light-mode .page-footer .copyright {
+    color: rgba(51, 51, 51, 0.5);
+}
+
+html.light-mode .page-footer .signature path {
+    stroke: #000;
+}
+
+html.light-mode .modal-paper.fullscreen .illustration-credit {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+html.light-mode .modal-paper.fullscreen .illustration-credit a:hover {
+    color: rgba(0, 0, 0, 0.72);
+}
+
+html.light-mode .modal-paper.fullscreen .modal-signature path {
+    stroke: #000;
+}
+
+html.light-mode .modal-paper.fullscreen .modal-copyright {
+    color: rgba(51, 51, 51, 0.5);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    html.light-mode .poem-card-wrapper:hover .poem-card,
+    html.light-mode .poem-card-wrapper:focus-within .poem-card {
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.025), 0 15px 30px rgba(0, 0, 0, 0.015);
+    }
+
+    html.light-mode .poem-card-wrapper:hover .poem-card .preview,
+    html.light-mode .poem-card-wrapper:focus-within .poem-card .preview {
+        color: rgba(0, 0, 0, 0.9);
+    }
+}
