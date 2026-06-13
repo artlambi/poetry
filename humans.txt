@@ -9,7 +9,7 @@ Website: artlambi.be
 Languages: French, Dutch, Italian
 Standards: HTML5, CSS3, JavaScript
 Software: Custom design and development
-Last update: 2026/02/05
+Last update: 2026/06/12
 
 /* THANKS */
 Fonts: EB Garamond (Google Fonts), Gill Sans Nova (Adobe Fonts)
