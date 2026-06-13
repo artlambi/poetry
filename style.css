@@ -4,41 +4,83 @@
     box-sizing: border-box;
 }
 
+/* Theme palette. Each variable resolves per theme via light-dark(); the
+   active scheme comes from `color-scheme`: the OS preference by default,
+   forced by the manual html.light-mode / html.dark-mode classes (set on load
+   and on toggle by the boot script in index.html). Every themed rule below
+   references these variables and is written once.
+
+   Only the three --portrait-* variables hold non-color values, which
+   light-dark() can't express — they're mirrored in the two small dark-context
+   blocks further down. */
 :root {
-    --bg-color: #ecebeb;
-    --paper-color: #fff;
-    --text-primary: #000000;
-    --text-secondary: rgba(0, 0, 0, 0.4);
-    --text-muted: rgba(0, 0, 0, 0.2);
-    --text-body: rgba(0, 0, 0, 0.5);
-    --text-body-full: rgba(0, 0, 0, 0.65);
-    --divider-color: rgba(0, 0, 0, 0.3);
-    --shadow-spread: rgba(0, 0, 0, 0);
-    --shadow-spread-hover: rgba(0, 0, 0, 0.015);
-    --shadow-soft: rgba(0, 0, 0, 0.025);
-    --shadow-softer: rgba(0, 0, 0, 0.015);
-    --close-btn-hover: rgba(0, 0, 0, 0.05);
-    --close-btn-stroke: rgba(0, 0, 0, 0.4);
+    color-scheme: light dark;
+    --bg-color: light-dark(#ecebeb, #121212);
+    --paper-color: light-dark(#fff, #202020);
+    --text-primary: light-dark(#000000, #e5e5e5);
+    --text-body: light-dark(rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.6));
+    --heading-color: light-dark(#000000, #cccccc);
+    --text-soft: light-dark(rgba(51, 51, 51, 0.72), #cccccc);
+    --hover-title-color: light-dark(rgba(0, 0, 0, 0.8), #cccccc);
+    --preview-hover-color: light-dark(rgba(0, 0, 0, 0.9), #ffffff);
+    --poem-text-preview: light-dark(#707070, #cccccc);
+    --poem-text-full: light-dark(#000000, #cccccc);
+    --selection-bg: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.2));
+    --copyright-color: light-dark(rgba(51, 51, 51, 0.5), rgba(255, 255, 255, 0.5));
+    --signature-stroke: light-dark(#000, #fff);
+    --credit-color: light-dark(rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.4));
+    --credit-hover-color: light-dark(rgba(0, 0, 0, 0.72), rgba(255, 255, 255, 0.72));
+    --btn-color: light-dark(#000, #fff);
+    --btn-bg-gradient: linear-gradient(180deg,
+        light-dark(#000000, #FFFFFF) 0%,
+        light-dark(#FFFFFF, #000000) 100%);
+    --btn-border-gradient: linear-gradient(180deg,
+        light-dark(#000000, #FFFFFF) 0%,
+        light-dark(#000000, #FFFFFF) 100%);
+    --btn-hover-bg: light-dark(rgba(0, 0, 0, 0.03), rgba(255, 255, 255, 0.03));
+    --tooltip-bg: light-dark(rgba(0, 0, 0, 0.72), rgba(255, 255, 255, 0.24));
+    --card-shadow: 0 1px 1px -1px light-dark(rgba(0, 0, 0, 0.02), transparent),
+                   0 7px 6px -4px light-dark(color(display-p3 0 0 0 / 0.06), transparent);
+    --card-hover-shadow: 0 0 0 1px light-dark(transparent, rgba(255, 255, 255, 0.03)),
+                         0 30px 60px light-dark(rgba(0, 0, 0, 0.025), rgba(0, 0, 0, 0.08)),
+                         0 15px 30px light-dark(rgba(0, 0, 0, 0.015), rgba(0, 0, 0, 0.05));
+    --top-fade: linear-gradient(180deg,
+        light-dark(rgba(255, 255, 255, 0.96), rgba(32, 32, 32, 0.96)) 0%,
+        light-dark(rgba(255, 255, 255, 0.50), rgba(32, 32, 32, 0.50)) 75%,
+        light-dark(rgba(255, 255, 255, 0.00), rgba(32, 32, 32, 0.00)) 100%);
+    --mobile-nav-fade: linear-gradient(180deg,
+        light-dark(rgba(255, 255, 255, 0), rgba(32, 32, 32, 0)) 0%,
+        light-dark(rgba(255, 255, 255, 0.72), rgba(32, 32, 32, 0.72)) 50%,
+        light-dark(rgba(255, 255, 255, 0.96), rgba(32, 32, 32, 0.96)) 100%);
+    --portrait-light-display: block;
+    --portrait-dark-display: none;
+    --portrait-opacity: 1;
 }
 
-/* Apply dark vars when system prefers dark, unless user explicitly picked light. */
+/* Manual theme override: forcing the scheme flips every light-dark() above. */
+html.light-mode {
+    color-scheme: light;
+}
+
+html.dark-mode {
+    color-scheme: dark;
+}
+
+/* Non-color portrait values — the only part light-dark() can't express, so
+   the two dark contexts (OS preference unless light is forced, and the
+   manual toggle) each carry a copy. Keep these two small blocks in sync. */
 @media (prefers-color-scheme: dark) {
     :root:not(.light-mode) {
-        --bg-color: #121212;
-        --paper-color: #202020;
-        --text-primary: #e5e5e5;
-        --text-secondary: rgba(255, 255, 255, 0.5);
-        --text-muted: rgba(255, 255, 255, 0.2);
-        --text-body: rgba(255, 255, 255, 0.6);
-        --text-body-full: rgba(255, 255, 255, 0.75);
-        --divider-color: rgba(255, 255, 255, 0.2);
-        --shadow-spread: rgba(0, 0, 0, 0);
-        --shadow-spread-hover: rgba(255, 255, 255, 0.05);
-        --shadow-soft: rgba(0, 0, 0, 0.3);
-        --shadow-softer: rgba(0, 0, 0, 0.2);
-        --close-btn-hover: rgba(255, 255, 255, 0.1);
-        --close-btn-stroke: rgba(255, 255, 255, 0.5);
+        --portrait-light-display: none;
+        --portrait-dark-display: block;
+        --portrait-opacity: 0.85;
     }
+}
+
+html.dark-mode {
+    --portrait-light-display: none;
+    --portrait-dark-display: block;
+    --portrait-opacity: 0.85;
 }
 
 html, body {
@@ -48,22 +90,15 @@ html, body {
 body {
     min-height: 100vh;
     background: var(--bg-color);
-    font-family: 'Inter', sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     padding: 60px 20px;
     position: relative;
     -webkit-font-smoothing: antialiased;
-    -moz-font-smoothing: antialiased;
-    -o-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-    background: rgba(0, 0, 0, 0.1);
-}
-
-@media (prefers-color-scheme: dark) {
-    ::selection {
-        background: rgba(255, 255, 255, 0.2);
-    }
+    background: var(--selection-bg);
 }
 
 body > *:not(.page-footer):not(.bio-section) {
@@ -177,10 +212,6 @@ html.dark-mode .dark-mode-toggle .theme-icon-rays .ray:nth-child(6) { transition
 html.dark-mode .dark-mode-toggle .theme-icon-rays .ray:nth-child(7) { transition-delay: 0.26s !important; }
 html.dark-mode .dark-mode-toggle .theme-icon-rays .ray:nth-child(8) { transition-delay: 0.29s !important; }
 
-html.dark-mode .dark-mode-toggle {
-    background: none;
-}
-
 /* Smooth theme transition */
 html.theme-transition,
 html.theme-transition *,
@@ -206,7 +237,7 @@ html.theme-transition *::after {
     font-size: 30px;
     font-weight: 600;
     line-height: 36px;
-    color: #000000;
+    color: var(--heading-color);
     margin-bottom: 8px;
     opacity: 0;
     transform: translateY(20px);
@@ -247,7 +278,7 @@ html.theme-transition *::after {
     font-weight: 900;
     font-size: 56px;
     line-height: 56px;
-    color: #000000;
+    color: var(--heading-color);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 0;
@@ -273,39 +304,21 @@ html.theme-transition *::after {
     width: 360px;
     height: auto;
     flex-shrink: 0;
+    opacity: var(--portrait-opacity);
     transform: scale(var(--bio-image-scale, 1.1));
     transform-origin: center center;
     transition: transform 0.15s ease-out;
 }
 
-/* Light mode - show light portrait with multiply */
+/* Light mode shows the light portrait (multiply); dark mode swaps to the
+   dark portrait (screen). The display values come from the theme vars. */
 .bio-portrait-light {
-    display: block;
+    display: var(--portrait-light-display);
     mix-blend-mode: multiply;
 }
 
 .bio-portrait-dark {
-    display: none;
-}
-
-/* Dark mode - show dark portrait with screen */
-@media (prefers-color-scheme: dark) {
-    .bio-portrait-light {
-        display: none;
-    }
-    
-    .bio-portrait-dark {
-        display: block;
-        mix-blend-mode: screen;
-    }
-}
-
-html.dark-mode .bio-portrait-light {
-    display: none;
-}
-
-html.dark-mode .bio-portrait-dark {
-    display: block;
+    display: var(--portrait-dark-display);
     mix-blend-mode: screen;
 }
 
@@ -318,7 +331,7 @@ html.dark-mode .bio-portrait-dark {
     font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
     font-size: 24px;
     line-height: 34px;
-    color: rgba(51, 51, 51, 0.72);
+    color: var(--text-soft);
     margin: 0 0 20px 0;
     opacity: 0;
     transform: translateY(20px);
@@ -349,7 +362,7 @@ html.dark-mode .bio-portrait-dark {
 
 .bio-text strong {
     font-weight: 600;
-    color: #000000;
+    color: var(--text-primary);
 }
 
 @media (max-width: 900px) {
@@ -406,7 +419,7 @@ html.dark-mode .bio-portrait-dark {
 .page-footer .copyright {
     font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
     font-size: 16px;
-    color: rgba(51, 51, 51, 0.5);
+    color: var(--copyright-color);
     width: 100%;
     text-align: center;
     order: 2;
@@ -421,7 +434,7 @@ html.dark-mode .bio-portrait-dark {
 
 .page-footer .signature path {
     fill: none;
-    stroke: #000;
+    stroke: var(--signature-stroke);
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.75px;
@@ -431,39 +444,39 @@ html.dark-mode .bio-portrait-dark {
 
 /* Hover animation - only on devices with hover capability */
 @media (hover: hover) and (pointer: fine) {
-    .page-footer .signature:hover path:nth-child(1) { 
+    .page-footer .signature:hover path:nth-child(1) {
         animation: drawSignatureReverse 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.1s; 
+        animation-delay: 0.1s;
     }
-    
+
     /* Hover animation - Letters */
-    .page-footer .signature:hover path:nth-child(2) { 
+    .page-footer .signature:hover path:nth-child(2) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.2s; 
+        animation-delay: 0.2s;
     }
-    .page-footer .signature:hover path:nth-child(3) { 
+    .page-footer .signature:hover path:nth-child(3) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.4s; 
+        animation-delay: 0.4s;
     }
-    .page-footer .signature:hover path:nth-child(4) { 
+    .page-footer .signature:hover path:nth-child(4) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.55s; 
+        animation-delay: 0.55s;
     }
-    .page-footer .signature:hover path:nth-child(5) { 
+    .page-footer .signature:hover path:nth-child(5) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.65s; 
+        animation-delay: 0.65s;
     }
-    .page-footer .signature:hover path:nth-child(6) { 
+    .page-footer .signature:hover path:nth-child(6) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.7s; 
+        animation-delay: 0.7s;
     }
-    .page-footer .signature:hover path:nth-child(7) { 
+    .page-footer .signature:hover path:nth-child(7) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.75s; 
+        animation-delay: 0.75s;
     }
-    .page-footer .signature:hover path:nth-child(8) { 
+    .page-footer .signature:hover path:nth-child(8) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.8s; 
+        animation-delay: 0.8s;
     }
 }
 
@@ -532,9 +545,8 @@ html.dark-mode .bio-portrait-dark {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    box-shadow: 0 1px 1px -1px rgba(0,0,0,0.02), 0 7px 6px -4px color(display-p3 0 0 0 / 0.06);
+    box-shadow: var(--card-shadow);
     overflow: hidden;
-    mix-blend-mode: normal;
     transform-style: preserve-3d;
     outline: none;
 }
@@ -568,12 +580,12 @@ html.dark-mode .bio-portrait-dark {
 
     .poem-card-wrapper:hover .poem-card,
     .poem-card-wrapper:focus-within .poem-card {
-        box-shadow: 0 30px 60px var(--shadow-soft), 0 15px 30px var(--shadow-softer);
+        box-shadow: var(--card-hover-shadow);
     }
 
     .poem-card-wrapper:hover .poem-card .preview,
     .poem-card-wrapper:focus-within .poem-card .preview {
-        color: rgba(0, 0, 0, 0.9);
+        color: var(--preview-hover-color);
     }
 
     .poem-card-wrapper:hover .hover-title,
@@ -587,7 +599,7 @@ html.dark-mode .bio-portrait-dark {
     font-family: 'EB Garamond', serif;
     font-size: 1.1rem;
     font-weight: 500;
-    color: rgba(0, 0, 0, 0.8);
+    color: var(--hover-title-color);
     margin-top: 20px;
     opacity: 0;
     transform: translateY(-10px);
@@ -609,13 +621,6 @@ html.dark-mode .bio-portrait-dark {
     }
 }
 
-.poem-card .number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-}
-
 .poem-card .title {
     font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
     font-size: 17px;
@@ -630,7 +635,7 @@ html.dark-mode .bio-portrait-dark {
     font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
     font-size: 13px;
     font-style: normal;
-    color: rgba(51, 51, 51, 0.72);
+    color: var(--text-soft);
     line-height: 1.8;
     letter-spacing: -0.01em;
     flex: 1;
@@ -692,19 +697,11 @@ html.dark-mode .bio-portrait-dark {
     transition: padding-top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.modal-paper .number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .modal-paper .title {
     font-family: 'gill-sans-nova-condensed', sans-serif;
     font-size: 2rem;
     font-weight: 800;
-    color: #000000;
+    color: var(--heading-color);
     text-transform: uppercase;
     letter-spacing: 1px;
     opacity: 0;
@@ -721,13 +718,13 @@ html.dark-mode .bio-portrait-dark {
     font-family: 'EB Garamond', serif;
     font-size: 13px;
     font-style: normal;
-    color: #707070;
+    color: var(--poem-text-preview);
     line-height: 1.8;
     white-space: pre-line;
     padding-top: 0;
     -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-    transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+    transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                 color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                 line-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                 padding-top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -747,7 +744,7 @@ html.dark-mode .bio-portrait-dark {
     left: 0;
     right: 0;
     height: 100px;
-    background-image: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.50) 75%, rgba(255,255,255,0.00) 100%);
+    background-image: var(--top-fade);
     pointer-events: none;
     z-index: 10;
     opacity: 0;
@@ -800,7 +797,7 @@ html.dark-mode .bio-portrait-dark {
 
 .modal-paper.fullscreen .poem-text {
     font-size: 24px;
-    color: #000000;
+    color: var(--poem-text-full);
     line-height: 33px;
     letter-spacing: -0.01em;
     padding-bottom: 40px;
@@ -930,7 +927,7 @@ html.dark-mode .bio-portrait-dark {
     font-family: 'EB Garamond', serif;
     font-size: 15px;
     font-weight: 400;
-    color: rgba(0, 0, 0, 0.4);
+    color: var(--credit-color);
     text-align: center;
     margin-top: 12px;
     opacity: 0;
@@ -944,7 +941,7 @@ html.dark-mode .bio-portrait-dark {
 }
 
 .modal-paper.fullscreen .illustration-credit a:hover {
-    color: rgba(0, 0, 0, 0.72);
+    color: var(--credit-hover-color);
 }
 
 .modal-paper.fullscreen .illustration-credit.visible {
@@ -972,7 +969,7 @@ html.dark-mode .bio-portrait-dark {
 
 .modal-paper.fullscreen .modal-signature path {
     fill: none;
-    stroke: #000;
+    stroke: var(--signature-stroke);
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.75px;
@@ -982,46 +979,46 @@ html.dark-mode .bio-portrait-dark {
 
 /* Modal signature hover animation - only on devices with hover capability */
 @media (hover: hover) and (pointer: fine) {
-    .modal-paper.fullscreen .modal-signature:hover path:nth-child(1) { 
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(1) {
         animation: drawSignatureReverse 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.1s; 
+        animation-delay: 0.1s;
     }
-    
+
     /* Hover animation - Letters */
-    .modal-paper.fullscreen .modal-signature:hover path:nth-child(2) { 
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(2) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.2s; 
+        animation-delay: 0.2s;
     }
-    .modal-paper.fullscreen .modal-signature:hover path:nth-child(3) { 
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(3) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.4s; 
+        animation-delay: 0.4s;
     }
-    .modal-paper.fullscreen .modal-signature:hover path:nth-child(4) { 
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(4) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.55s; 
+        animation-delay: 0.55s;
     }
-    .modal-paper.fullscreen .modal-signature:hover path:nth-child(5) { 
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(5) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.65s; 
+        animation-delay: 0.65s;
     }
-    .modal-paper.fullscreen .modal-signature:hover path:nth-child(6) { 
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(6) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.7s; 
+        animation-delay: 0.7s;
     }
-    .modal-paper.fullscreen .modal-signature:hover path:nth-child(7) { 
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(7) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.75s; 
+        animation-delay: 0.75s;
     }
-    .modal-paper.fullscreen .modal-signature:hover path:nth-child(8) { 
+    .modal-paper.fullscreen .modal-signature:hover path:nth-child(8) {
         animation: drawSignature 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.8s; 
+        animation-delay: 0.8s;
     }
 }
 
 .modal-paper.fullscreen .modal-copyright {
     font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
     font-size: 16px;
-    color: rgba(51, 51, 51, 0.5);
+    color: var(--copyright-color);
     text-align: center;
 }
 
@@ -1044,7 +1041,7 @@ html.dark-mode .bio-portrait-dark {
         justify-content: center;
         gap: 40px;
         padding: 20px;
-        background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.72) 50%, rgba(255,255,255,0.96) 100%);
+        background: var(--mobile-nav-fade);
         z-index: 100;
         transform: translateY(100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1082,7 +1079,7 @@ html.dark-mode .bio-portrait-dark {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #000;
+    color: var(--btn-color);
     position: relative;
     transition: transform 0.15s ease-out;
 }
@@ -1092,7 +1089,7 @@ html.dark-mode .bio-portrait-dark {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+    background: var(--btn-bg-gradient);
     opacity: 0.04;
     z-index: -1;
 }
@@ -1103,7 +1100,7 @@ html.dark-mode .bio-portrait-dark {
     inset: 0;
     border-radius: 50%;
     padding: 1px;
-    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+    background: var(--btn-border-gradient);
     opacity: 0.04;
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -1153,14 +1150,14 @@ html.dark-mode .bio-portrait-dark {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    color: #000;
+    color: var(--btn-color);
     position: relative;
     box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0);
     transition: box-shadow 0.5s ease, transform 0.15s ease-out;
 }
 
 .modal-btn:hover {
-    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
+    box-shadow: inset 0 0 0 40px var(--btn-hover-bg);
 }
 
 .modal-btn:active {
@@ -1172,7 +1169,7 @@ html.dark-mode .bio-portrait-dark {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+    background: var(--btn-bg-gradient);
     opacity: 0.04;
     z-index: -1;
 }
@@ -1183,7 +1180,7 @@ html.dark-mode .bio-portrait-dark {
     inset: 0;
     border-radius: 50%;
     padding: 1px;
-    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+    background: var(--btn-border-gradient);
     opacity: 0.04;
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -1215,7 +1212,7 @@ html.dark-mode .bio-portrait-dark {
     top: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.72);
+    background: var(--tooltip-bg);
     color: #fff;
     font-family: 'gill-sans-nova', 'Gill Sans', sans-serif;
     font-size: 14px;
@@ -1368,14 +1365,14 @@ html.dark-mode .bio-portrait-dark {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    color: #000;
+    color: var(--btn-color);
     position: relative;
     box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0);
     transition: box-shadow 0.5s ease, transform 0.15s ease-out;
 }
 
 .modal-nav-btn:hover {
-    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
+    box-shadow: inset 0 0 0 40px var(--btn-hover-bg);
 }
 
 .modal-nav-btn:active {
@@ -1387,7 +1384,7 @@ html.dark-mode .bio-portrait-dark {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
+    background: var(--btn-bg-gradient);
     opacity: 0.04;
     z-index: -1;
 }
@@ -1398,7 +1395,7 @@ html.dark-mode .bio-portrait-dark {
     inset: 0;
     border-radius: 50%;
     padding: 1px;
-    background: linear-gradient(180deg, #000000 0%, #000000 100%);
+    background: var(--btn-border-gradient);
     opacity: 0.04;
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -1437,177 +1434,6 @@ html.dark-mode .bio-portrait-dark {
 @media (max-width: 768px) {
     .modal-nav {
         display: none;
-    }
-}
-
-.modal-content {
-    display: none;
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-    body {
-        background: #121212;
-    }
-
-    .page-header .subtitle {
-        color: #cccccc;
-    }
-
-    .page-header h1 {
-        color: #cccccc;
-    }
-
-    .poem-card {
-        background: #202020;
-        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
-    }
-
-    .poem-card .number {
-        color: rgba(255,255,255,0.2);
-    }
-
-    .poem-card .title {
-        color: #e5e5e5;
-    }
-
-    .poem-card .preview {
-        color: #cccccc;
-    }
-
-    .bio-text p {
-        color: #cccccc;
-    }
-
-    .bio-text strong {
-        color: #e5e5e5;
-    }
-
-    .poem-card-wrapper .hover-title {
-        color: #cccccc;
-    }
-
-    .modal-paper {
-        background: #202020;
-    }
-
-    .modal-paper.fullscreen::before {
-        background-image: linear-gradient(180deg, rgba(32,32,32,0.96) 0%, rgba(32,32,32,0.50) 75%, rgba(32,32,32,0.00) 100%);
-    }
-
-    .modal-paper .number {
-        color: rgba(255,255,255,0.2);
-    }
-
-    .modal-paper .title {
-        color: #cccccc;
-    }
-
-    .modal-overlay.active .modal-paper .poem-text {
-        color: #cccccc;
-    }
-
-    .modal-paper.fullscreen .poem-text {
-        color: #cccccc;
-    }
-
-    .poem-nav-btn::after {
-        background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
-    }
-
-    .poem-nav-btn::before {
-        background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
-    }
-
-    .poem-nav-btn {
-        color: #fff;
-    }
-
-    @media (max-width: 768px) {
-        .modal-overlay.active .poem-nav-buttons {
-            background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.72) 50%, rgba(32,32,32,0.96) 100%);
-        }
-    }
-
-    .modal-btn {
-        color: #fff;
-    }
-
-    .modal-btn::after {
-        background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
-    }
-
-    .modal-btn::before {
-        background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
-    }
-
-    .modal-btn:hover::before {
-        opacity: 0;
-    }
-
-    .modal-btn:hover {
-        box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
-    }
-
-    .modal-btn .tooltip {
-        background: rgba(255, 255, 255, 0.24);
-        color: #fff;
-    }
-
-    .modal-nav-btn {
-        color: #fff;
-    }
-
-    .modal-nav-btn::after {
-        background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
-    }
-
-    .modal-nav-btn::before {
-        background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
-    }
-
-    .modal-nav-btn:hover::before {
-        opacity: 0;
-    }
-
-    .modal-nav-btn:hover {
-        box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
-    }
-
-    .page-footer .copyright {
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    .page-footer .signature path {
-        stroke: #fff;
-    }
-
-    .modal-paper.fullscreen .illustration-credit {
-        color: rgba(255, 255, 255, 0.4);
-    }
-
-    .modal-paper.fullscreen .illustration-credit a:hover {
-        color: rgba(255, 255, 255, 0.72);
-    }
-
-    .modal-paper.fullscreen .modal-signature path {
-        stroke: #fff;
-    }
-
-    .modal-paper.fullscreen .modal-copyright {
-        color: rgba(255, 255, 255, 0.5);
-    }
-}
-
-@media (prefers-color-scheme: dark) and (hover: hover) and (pointer: fine) {
-    .poem-card-wrapper:hover .poem-card,
-    .poem-card-wrapper:focus-within .poem-card {
-        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 60px rgba(0, 0, 0, 0.08), 0 15px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    .poem-card-wrapper:hover .poem-card .preview,
-    .poem-card-wrapper:focus-within .poem-card .preview {
-        color: #ffffff;
     }
 }
 
@@ -1711,381 +1537,4 @@ noscript .poem-article p {
     font-style: italic;
     color: var(--text-body);
     line-height: 1.8;
-}
-
-/* CRITICAL: Final dark mode override to win cascade */
-@media (prefers-color-scheme: dark) {
-    .modal-paper.fullscreen .poem-text {
-        color: #cccccc !important;
-    }
-    
-    .modal-paper .poem-text {
-        color: #cccccc !important;
-    }
-}
-
-/* Manual dark mode toggle support */
-html.dark-mode {
-    --bg-color: #121212;
-    --paper-color: #202020;
-    --text-primary: #e5e5e5;
-    --text-secondary: rgba(255, 255, 255, 0.5);
-    --text-muted: rgba(255, 255, 255, 0.2);
-    --text-body: rgba(255, 255, 255, 0.6);
-    --text-body-full: rgba(255, 255, 255, 0.75);
-    --divider-color: rgba(255, 255, 255, 0.2);
-    --shadow-spread: rgba(0, 0, 0, 0);
-    --shadow-spread-hover: rgba(255, 255, 255, 0.05);
-    --shadow-soft: rgba(0, 0, 0, 0.3);
-    --shadow-softer: rgba(0, 0, 0, 0.2);
-    --close-btn-hover: rgba(255, 255, 255, 0.1);
-    --close-btn-stroke: rgba(255, 255, 255, 0.5);
-}
-
-html.dark-mode ::selection {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-html.dark-mode .page-header .subtitle {
-    color: #cccccc;
-}
-
-html.dark-mode .page-header h1 {
-    color: #cccccc;
-}
-
-html.dark-mode .poem-card {
-    background: #202020;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0);
-}
-
-html.dark-mode .poem-card .number {
-    color: rgba(255,255,255,0.2);
-}
-
-html.dark-mode .poem-card .title {
-    color: #e5e5e5;
-}
-
-html.dark-mode .poem-card .preview {
-    color: #cccccc;
-}
-
-html.dark-mode .bio-text p {
-    color: #cccccc;
-}
-
-html.dark-mode .bio-text strong {
-    color: #e5e5e5;
-}
-
-html.dark-mode .poem-card-wrapper .hover-title {
-    color: #cccccc;
-}
-
-html.dark-mode .modal-paper {
-    background: #202020;
-}
-
-html.dark-mode .modal-paper.fullscreen::before {
-    background-image: linear-gradient(180deg, rgba(32,32,32,0.96) 0%, rgba(32,32,32,0.50) 75%, rgba(32,32,32,0.00) 100%);
-}
-
-html.dark-mode .modal-paper .number {
-    color: rgba(255,255,255,0.2);
-}
-
-html.dark-mode .modal-paper .title {
-    color: #cccccc;
-}
-
-html.dark-mode .modal-paper .poem-text {
-    color: #cccccc !important;
-}
-
-html.dark-mode .modal-paper.fullscreen .poem-text {
-    color: #cccccc !important;
-}
-
-html.dark-mode .modal-btn {
-    color: #fff;
-}
-
-html.dark-mode .modal-btn::after {
-    background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
-}
-
-html.dark-mode .modal-btn::before {
-    background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
-}
-
-html.dark-mode .modal-btn:hover::before {
-    opacity: 0;
-}
-
-html.dark-mode .modal-btn:hover {
-    box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
-}
-
-html.dark-mode .modal-btn .tooltip {
-    background: rgba(255, 255, 255, 0.24);
-    color: #fff;
-}
-
-html.dark-mode .modal-nav-btn {
-    color: #fff;
-}
-
-html.dark-mode .modal-nav-btn::after {
-    background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
-}
-
-html.dark-mode .modal-nav-btn::before {
-    background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
-}
-
-html.dark-mode .modal-nav-btn:hover::before {
-    opacity: 0;
-}
-
-html.dark-mode .modal-nav-btn:hover {
-    box-shadow: inset 0 0 0 40px rgba(255, 255, 255, 0.03);
-}
-
-html.dark-mode .poem-nav-btn::after {
-    background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
-}
-
-html.dark-mode .poem-nav-btn::before {
-    background: linear-gradient(180deg, #FFFFFF 0%, #000000 100%);
-}
-
-html.dark-mode .poem-nav-btn {
-    color: #fff;
-}
-
-@media (max-width: 768px) {
-    html.dark-mode .modal-overlay.active .poem-nav-buttons {
-        background: linear-gradient(180deg, rgba(32,32,32,0) 0%, rgba(32,32,32,0.72) 50%, rgba(32,32,32,0.96) 100%);
-    }
-}
-
-html.dark-mode .bio-portrait {
-    opacity: 0.85;
-}
-
-html.dark-mode .page-footer .copyright {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-html.dark-mode .page-footer .signature path {
-    stroke: #fff;
-}
-
-html.dark-mode .modal-paper.fullscreen .illustration-credit {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-html.dark-mode .modal-paper.fullscreen .illustration-credit a:hover {
-    color: rgba(255, 255, 255, 0.72);
-}
-
-html.dark-mode .modal-paper.fullscreen .modal-signature path {
-    stroke: #fff;
-}
-
-html.dark-mode .modal-paper.fullscreen .modal-copyright {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    html.dark-mode .poem-card-wrapper:hover .poem-card,
-    html.dark-mode .poem-card-wrapper:focus-within .poem-card {
-        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 60px rgba(0, 0, 0, 0.08), 0 15px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    html.dark-mode .poem-card-wrapper:hover .poem-card .preview,
-    html.dark-mode .poem-card-wrapper:focus-within .poem-card .preview {
-        color: #ffffff;
-    }
-}
-
-/* Force light mode (override system dark preference).
-   Vars are inherited from :root since the @media dark block now skips html.light-mode. */
-html.light-mode ::selection {
-    background: rgba(0, 0, 0, 0.1);
-}
-
-html.light-mode .bio-portrait-light {
-    display: block;
-    mix-blend-mode: multiply;
-}
-
-html.light-mode .bio-portrait-dark {
-    display: none;
-}
-
-html.light-mode .bio-portrait {
-    opacity: 1;
-}
-
-html.light-mode .dark-mode-toggle {
-    background: none;
-}
-
-
-html.light-mode body {
-    background: #ecebeb;
-}
-
-html.light-mode .page-header .subtitle {
-    color: #000000;
-}
-
-html.light-mode .page-header h1 {
-    color: #000000;
-}
-
-html.light-mode .poem-card {
-    background: #fff;
-    box-shadow: 0 1px 1px -1px rgba(0,0,0,0.02), 0 7px 6px -4px color(display-p3 0 0 0 / 0.06);
-}
-
-html.light-mode .poem-card .number {
-    color: rgba(0, 0, 0, 0.2);
-}
-
-html.light-mode .poem-card .title {
-    color: #000000;
-}
-
-html.light-mode .poem-card .preview {
-    color: rgba(51, 51, 51, 0.72);
-}
-
-html.light-mode .bio-text p {
-    color: rgba(51, 51, 51, 0.72);
-}
-
-html.light-mode .bio-text strong {
-    color: #000000;
-}
-
-html.light-mode .poem-card-wrapper .hover-title {
-    color: rgba(0, 0, 0, 0.8);
-}
-
-html.light-mode .modal-paper {
-    background: #fff;
-}
-
-html.light-mode .modal-paper.fullscreen::before {
-    background-image: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.50) 75%, rgba(255,255,255,0.00) 100%);
-}
-
-html.light-mode .modal-paper .number {
-    color: rgba(0, 0, 0, 0.2);
-}
-
-html.light-mode .modal-paper .title {
-    color: #000000;
-}
-
-html.light-mode .modal-paper .poem-text {
-    color: #707070 !important;
-}
-
-html.light-mode .modal-paper.fullscreen .poem-text {
-    color: #000000 !important;
-}
-
-html.light-mode .poem-nav-btn {
-    color: #000;
-}
-
-html.light-mode .poem-nav-btn::after {
-    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
-}
-
-html.light-mode .poem-nav-btn::before {
-    background: linear-gradient(180deg, #000000 0%, #000000 100%);
-}
-
-@media (max-width: 768px) {
-    html.light-mode .modal-overlay.active .poem-nav-buttons {
-        background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.72) 50%, rgba(255,255,255,0.96) 100%);
-    }
-}
-
-html.light-mode .modal-btn {
-    color: #000;
-}
-
-html.light-mode .modal-btn::after {
-    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
-}
-
-html.light-mode .modal-btn::before {
-    background: linear-gradient(180deg, #000000 0%, #000000 100%);
-}
-
-html.light-mode .modal-btn:hover {
-    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
-}
-
-html.light-mode .modal-btn .tooltip {
-    background: rgba(0, 0, 0, 0.72);
-    color: #fff;
-}
-
-html.light-mode .modal-nav-btn {
-    color: #000;
-}
-
-html.light-mode .modal-nav-btn::after {
-    background: linear-gradient(180deg, #000000 0%, #FFFFFF 100%);
-}
-
-html.light-mode .modal-nav-btn::before {
-    background: linear-gradient(180deg, #000000 0%, #000000 100%);
-}
-
-html.light-mode .modal-nav-btn:hover {
-    box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.03);
-}
-
-html.light-mode .page-footer .copyright {
-    color: rgba(51, 51, 51, 0.5);
-}
-
-html.light-mode .page-footer .signature path {
-    stroke: #000;
-}
-
-html.light-mode .modal-paper.fullscreen .illustration-credit {
-    color: rgba(0, 0, 0, 0.4);
-}
-
-html.light-mode .modal-paper.fullscreen .illustration-credit a:hover {
-    color: rgba(0, 0, 0, 0.72);
-}
-
-html.light-mode .modal-paper.fullscreen .modal-signature path {
-    stroke: #000;
-}
-
-html.light-mode .modal-paper.fullscreen .modal-copyright {
-    color: rgba(51, 51, 51, 0.5);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    html.light-mode .poem-card-wrapper:hover .poem-card,
-    html.light-mode .poem-card-wrapper:focus-within .poem-card {
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.025), 0 15px 30px rgba(0, 0, 0, 0.015);
-    }
-
-    html.light-mode .poem-card-wrapper:hover .poem-card .preview,
-    html.light-mode .poem-card-wrapper:focus-within .poem-card .preview {
-        color: rgba(0, 0, 0, 0.9);
-    }
 }
