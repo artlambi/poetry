@@ -4,16 +4,16 @@
 
 Christian Lambillotte était fils, frère, père, grand-père, scout, franc-maçon, écrivain et poète amateur. Gantois passionné par l'Afrique, à laquelle il a consacré une partie de sa vie professionnelle, il nourrissait un vif intérêt pour les langues et attachait une grande importance à l'amitié, au débat et aux moments simples partagés avec ceux qui l'entouraient.
 
-Le site présente 15 poèmes répartis en trois langues : 7 en français, 7 en néerlandais et 1 en italien. Chaque poème peut être lu en plein écran avec un mode clair et un mode sombre.
+Le site présente 14 poèmes répartis en trois langues : 7 en français, 6 en néerlandais et 1 en italien. Chaque poème peut être lu en plein écran avec un mode clair et un mode sombre.
 
 ## Poèmes en français
 
-- [30 ans en 30 lignes](https://www.christianlambillotte.be/30-ans-en-30-lignes.html): Réflexion sur le cap des trente ans, le parcours de vie, les choix et le bagage accumulé.
-- [L'essentiel retrouvé ?](https://www.christianlambillotte.be/l-essentiel-retrouve.html): Méditation sur l'humanité, l'amitié et la fraternité oubliées au profit de l'ambition et du nationalisme.
-- [Anaïs](https://www.christianlambillotte.be/anais.html): Poème d'un grand-père à sa petite-fille, célébrant sa naissance et lui souhaitant courage et bonheur.
 - [Le foetus et le squelette](https://www.christianlambillotte.be/le-foetus-et-le-squelette.html): Dialogue imaginaire entre un fœtus et un squelette sur la vie, la mort et ce qui se trouve entre les deux.
+- [Anaïs](https://www.christianlambillotte.be/anais.html): Poème d'un grand-père à sa petite-fille, célébrant sa naissance et lui souhaitant courage et bonheur.
+- [30 ans en 30 lignes](https://www.christianlambillotte.be/30-ans-en-30-lignes.html): Réflexion sur le cap des trente ans, le parcours de vie, les choix et le bagage accumulé.
 - [Ode à la pomme de terre](https://www.christianlambillotte.be/ode-a-la-pomme-de-terre.html): Hommage humoristique et tendre à la pomme de terre sous toutes ses formes.
-- [L'Orpheline de guerre](https://www.christianlambillotte.be/l-orpheline-de-guerre.html): Le récit poignant d'une enfant de neuf ans qui ne comprend pas pourquoi ses parents ne reviennent pas.
+- [L'essentiel retrouvé ?](https://www.christianlambillotte.be/l-essentiel-retrouve.html): Méditation sur l'humanité, l'amitié et la fraternité oubliées au profit de l'ambition et du nationalisme.
+- [L'Orpheline de guerre...](https://www.christianlambillotte.be/l-orpheline-de-guerre.html): Le récit poignant d'une enfant de neuf ans qui ne comprend pas pourquoi ses parents ne reviennent pas.
 - [Membre de l'humanité](https://www.christianlambillotte.be/membre-de-l-humanite.html): Réflexion sur 200.000 ans d'histoire humaine, entre violence et espoir.
 
 ## Poème en italien
