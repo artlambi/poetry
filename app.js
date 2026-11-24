@@ -230,6 +230,10 @@ displayPoems.forEach((poem, index) => {
     grid.appendChild(wrapper);
 });
 
+// The grid now has its real height, so the bio and footer can be shown
+// without appearing right under the header first (see style.css).
+document.documentElement.classList.add('poems-ready');
+
 // Cancel a poem navigation that is still in its fade-out window. Without
 // this, the pending timeout in navigatePoem fires after the modal is closed
 // or reopened: it swaps the modal content, rewrites the hash, and hides the
@@ -833,6 +837,14 @@ modalPaper.addEventListener('scroll', rafThrottle(function() {
 
 // Dark mode toggle
 const darkModeToggle = document.querySelector('.dark-mode-toggle');
+// Remember the manual theme choice. localStorage throws when the browser
+// blocks site data; the toggle still works, it just isn't remembered.
+function saveTheme(theme) {
+    try {
+        localStorage.setItem('theme', theme);
+    } catch (e) {}
+}
+
 if (darkModeToggle) {
     darkModeToggle.addEventListener('click', function() {
         if (window._haptics) window._haptics.trigger('light');
@@ -846,12 +858,12 @@ if (darkModeToggle) {
         if (isDark) {
             html.classList.remove('dark-mode');
             html.classList.add('light-mode');
-            localStorage.setItem('theme', 'light');
+            saveTheme('light');
             window._setFavicon(false);
         } else {
             html.classList.remove('light-mode');
             html.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
+            saveTheme('dark');
             window._setFavicon(true);
         }
 

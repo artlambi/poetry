@@ -149,7 +149,13 @@
         // Apply saved theme immediately to prevent flash of wrong theme
         (function() {
             var html = document.documentElement;
-            var saved = localStorage.getItem('theme');
+            // Marks that JS is running so style.css can hold back the bio and
+            // footer until app.js has built the poem grid (see .poems-ready).
+            html.classList.add('js');
+            // localStorage throws (SecurityError) when the browser blocks
+            // site data; treat that as "no saved theme" and follow the OS.
+            var saved = null;
+            try { saved = localStorage.getItem('theme'); } catch (e) {}
 
             function setFavicon(isDark) {
                 var color = isDark ? '%23ffffff' : '%23000000';
@@ -182,7 +188,7 @@
             // Follow OS theme changes. Any manual override is cleared the moment
             // the OS theme changes — the OS pref is the source of truth.
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-                localStorage.removeItem('theme');
+                try { localStorage.removeItem('theme'); } catch (err) {}
 
                 html.classList.add('theme-transition');
                 html.classList.remove('dark-mode', 'light-mode');
@@ -875,8 +881,7 @@ Die Kus…</p>
 
     <section class="bio-section">
         <div class="bio-container">
-            <img src="img/portrait.jpg" alt="Portrait de Christian Lambillotte" class="bio-portrait bio-portrait-light">
-            <img src="img/portrait-dark.jpg" alt="Portrait de Christian Lambillotte" class="bio-portrait bio-portrait-dark">
+            <img src="img/portrait.jpg" alt="Portrait de Christian Lambillotte" class="bio-portrait">
             <div class="bio-text">
                 <p><strong>Christian Lambillotte</strong> (1957-2026) était fils, frère, père, grand-père, scout, franc-maçon, écrivain et poète amateur.</p>
                 <p>Gantois passionné par l'Afrique, à laquelle il a consacré une partie de sa vie professionnelle, il nourrissait un vif intérêt pour les langues et attachait une grande importance à l'amitié, au débat et aux moments simples partagés avec ceux qui l'entouraient.</p>
@@ -982,7 +987,9 @@ Die Kus…</p>
         window._haptics = haptics;
     </script>
 
-    <script src="poems.js"></script>
-    <script src="app.js"></script>
+    <!-- If either script fails to load, show the bio and footer right away
+         instead of waiting for the CSS fallback timer (see .poems-ready). -->
+    <script src="poems.js" onerror="document.documentElement.classList.add('poems-ready')"></script>
+    <script src="app.js" onerror="document.documentElement.classList.add('poems-ready')"></script>
 </body>
 </html>
