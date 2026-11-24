@@ -10,7 +10,7 @@
    and on toggle by the boot script in index.html). Every themed rule below
    references these variables and is written once.
 
-   Only the two --portrait-* variables hold non-color values, which
+   Only the --portrait-* variables hold non-color values, which
    light-dark() can't express — they're mirrored in the two small dark-context
    blocks further down. */
 :root {
@@ -54,6 +54,11 @@
         light-dark(rgba(255, 255, 255, 0.96), rgba(32, 32, 32, 0.96)) 100%);
     --portrait-blend: multiply;
     --portrait-opacity: 1;
+    --portrait-mask: none;
+    /* Dark mode's "spotlight": fully lit over the face, falling off to
+       transparent before the image edges so the paper fades into the page. */
+    --portrait-spotlight: radial-gradient(closest-side ellipse at 50% 42%,
+        #000 20%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.2) 75%, transparent 95%);
 }
 
 /* Manual theme override: forcing the scheme flips every light-dark() above. */
@@ -71,13 +76,15 @@ html.dark-mode {
 @media (prefers-color-scheme: dark) {
     :root:not(.light-mode) {
         --portrait-blend: normal;
-        --portrait-opacity: 0.85;
+        --portrait-opacity: 0.9;
+        --portrait-mask: var(--portrait-spotlight);
     }
 }
 
 html.dark-mode {
     --portrait-blend: normal;
-    --portrait-opacity: 0.85;
+    --portrait-opacity: 0.9;
+    --portrait-mask: var(--portrait-spotlight);
 }
 
 html, body {
@@ -318,9 +325,11 @@ html.theme-transition *::after {
     flex-shrink: 0;
     opacity: var(--portrait-opacity);
     /* Light mode multiplies the drawing's white paper into the page. In dark
-       mode, multiply would sink it into the background, so it's shown as a
-       plain, slightly dimmed print instead. */
+       mode, multiply would sink it into the background, so it's shown
+       unblended under a radial mask, as if a light were shining on it. */
     mix-blend-mode: var(--portrait-blend);
+    -webkit-mask-image: var(--portrait-mask);
+    mask-image: var(--portrait-mask);
     transform: scale(var(--bio-image-scale, 1.1));
     transform-origin: center center;
     transition: transform 0.15s ease-out;
