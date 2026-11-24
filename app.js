@@ -737,13 +737,17 @@ if (bioText) {
     observer.observe(bioText);
 }
 
-// Bio image zoom effect on scroll (disabled on mobile)
-const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-if (!isMobile) {
+// Bio image zoom effect on scroll. Skipped while the bio is stacked (the
+// same 900px breakpoint as style.css, which drops the transform there). The
+// query is checked on every update rather than once at load, so the zoom
+// picks up again after a resize or a rotation into the side-by-side layout.
+{
+    const bioStacked = window.matchMedia('(max-width: 900px)');
     const bioPortraits = document.querySelectorAll('.bio-portrait');
     
     function updateBioImageZoom() {
+        if (bioStacked.matches) return;
+
         bioPortraits.forEach(portrait => {
             const rect = portrait.getBoundingClientRect();
             const windowHeight = window.innerHeight;
@@ -763,6 +767,8 @@ if (!isMobile) {
 
     // Update on scroll
     window.addEventListener('scroll', rafThrottle(updateBioImageZoom));
+    // Leaving the stacked layout: catch up without waiting for a scroll
+    bioStacked.addEventListener('change', updateBioImageZoom);
     // Initial update
     updateBioImageZoom();
 }

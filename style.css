@@ -403,14 +403,17 @@ html.theme-transition *::after {
 
     .bio-container {
         flex-direction: column;
-        gap: 24px;
+        gap: 32px;
         align-items: center;
     }
 
+    /* No scroll zoom in the stacked layout (app.js skips it at this width):
+       a scaled portrait would overflow into the gap above the text. */
     .bio-portrait {
         width: 100%;
         height: auto;
         max-width: 360px;
+        transform: none;
     }
 
     .bio-text {
