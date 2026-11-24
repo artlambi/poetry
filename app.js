@@ -58,6 +58,7 @@ function rafThrottle(handler) {
 const state = {
     currentIndex: 0,
     clickedCard: null,
+    openedWithKeyboard: false,
     savedScrollPosition: 0,
     lastModalScrollTop: 0,
     isScrollingUp: false,
@@ -200,7 +201,7 @@ displayPoems.forEach((poem, index) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             if (window._haptics) window._haptics.trigger('medium');
-            openModal(index, card);
+            openModal(index, card, true);
             updateHash();
         }
     });
@@ -249,10 +250,11 @@ function cancelPendingNavigation() {
     modalPaper.querySelector('.card-content').classList.remove('transitioning-out', 'transitioning-in');
 }
 
-function openModal(index, card) {
+function openModal(index, card, viaKeyboard = false) {
     cancelPendingNavigation();
     state.currentIndex = index;
     state.clickedCard = card;
+    state.openedWithKeyboard = viaKeyboard;
 
     const poem = displayPoems[state.currentIndex];
     
@@ -328,6 +330,18 @@ function openModal(index, card) {
     }, 100);
 }
 
+// Hand focus back to the poem's card when the modal closes, so Tab carries on
+// from there. The card's focus style is the same lift as its hover style, so
+// it must only show for someone who opened the poem from the keyboard: a
+// mouse user would otherwise see the card stay lifted, title showing, with
+// the cursor nowhere near it. `focusVisible` says so explicitly, because the
+// browser's own guess is wrong after Escape (a key press, so it would show
+// the focus style even though the poem was opened with a click).
+function restoreCardFocus() {
+    if (!state.clickedCard) return;
+    state.clickedCard.focus({ preventScroll: true, focusVisible: state.openedWithKeyboard });
+}
+
 function closeModal() {
     cancelPendingNavigation();
 
@@ -378,7 +392,7 @@ function closeModal() {
                 // Reset modal state
                 modal.classList.remove('active');
                 modal.setAttribute('aria-hidden', 'true');
-                if (state.clickedCard) state.clickedCard.focus({ preventScroll: true });
+                restoreCardFocus();
                 modalPaper.classList.remove('fullscreen');
                 modalPaper.style.cssText = '';
 
@@ -432,7 +446,7 @@ function closeModal() {
                 setTimeout(() => {
                     modal.classList.remove('active');
                     modal.setAttribute('aria-hidden', 'true');
-                    if (state.clickedCard) state.clickedCard.focus({ preventScroll: true });
+                    restoreCardFocus();
                     modalPaper.style.cssText = '';
                     cardContent.style.cssText = '';
                     modalControls.style.cssText = '';
@@ -448,7 +462,7 @@ function closeModal() {
         document.body.classList.remove('modal-open');
         document.body.style.top = '';
         window.scrollTo(0, state.savedScrollPosition);
-        if (state.clickedCard) state.clickedCard.focus({ preventScroll: true });
+        restoreCardFocus();
     }
 }
 

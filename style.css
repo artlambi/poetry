@@ -606,23 +606,23 @@ html.theme-transition *::after {
 
 @media (hover: hover) and (pointer: fine) {
     .poem-card-wrapper:hover,
-    .poem-card-wrapper:focus-within {
+    .poem-card-wrapper:has(.poem-card:focus-visible) {
         transform: scale(1.0962);
         z-index: 10;
     }
 
     .poem-card-wrapper:hover .poem-card,
-    .poem-card-wrapper:focus-within .poem-card {
+    .poem-card-wrapper:has(.poem-card:focus-visible) .poem-card {
         box-shadow: var(--card-hover-shadow);
     }
 
     .poem-card-wrapper:hover .poem-card .preview,
-    .poem-card-wrapper:focus-within .poem-card .preview {
+    .poem-card-wrapper:has(.poem-card:focus-visible) .poem-card .preview {
         color: var(--preview-hover-color);
     }
 
     .poem-card-wrapper:hover .hover-title,
-    .poem-card-wrapper:focus-within .hover-title {
+    .poem-card-wrapper:has(.poem-card:focus-visible) .hover-title {
         opacity: 1;
         transform: translateY(0);
     }
