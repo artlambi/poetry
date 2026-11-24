@@ -424,6 +424,18 @@ html.theme-transition *::after {
     }
 }
 
+/* The scroll zoom is off at this width (see app.js), so the portrait would
+   stay at its 1.1 start scale and overflow into the gap above the text. */
+@media (max-width: 768px) {
+    .bio-container {
+        gap: 32px;
+    }
+
+    .bio-portrait {
+        transform: none;
+    }
+}
+
 @media (max-width: 500px) {
     .bio-section {
         padding: 0 20px;
