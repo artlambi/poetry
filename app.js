@@ -230,6 +230,10 @@ displayPoems.forEach((poem, index) => {
     grid.appendChild(wrapper);
 });
 
+// The grid now has its real height, so the bio and footer can be shown
+// without appearing right under the header first (see style.css).
+document.documentElement.classList.add('poems-ready');
+
 // Cancel a poem navigation that is still in its fade-out window. Without
 // this, the pending timeout in navigatePoem fires after the modal is closed
 // or reopened: it swaps the modal content, rewrites the hash, and hides the

@@ -149,6 +149,9 @@
         // Apply saved theme immediately to prevent flash of wrong theme
         (function() {
             var html = document.documentElement;
+            // Marks that JS is running so style.css can hold back the bio and
+            // footer until app.js has built the poem grid (see .poems-ready).
+            html.classList.add('js');
             var saved = localStorage.getItem('theme');
 
             function setFavicon(isDark) {

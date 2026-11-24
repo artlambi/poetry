@@ -288,6 +288,21 @@ html.theme-transition *::after {
     animation-delay: 0.15s;
 }
 
+/* Until app.js has filled the poem grid, the grid is empty and the bio
+   would paint directly under the header, then jump down. Hide it (and the
+   footer) until then. Only applies when JS is running (.js is set in the
+   <head>), and reveals itself after a few seconds anyway in case app.js
+   never runs, so the content can't stay hidden for good. */
+.js:not(.poems-ready) .bio-section,
+.js:not(.poems-ready) .page-footer {
+    visibility: hidden;
+    animation: reveal-fallback 0s 3s forwards;
+}
+
+@keyframes reveal-fallback {
+    to { visibility: visible; }
+}
+
 .bio-section {
     max-width: 1200px;
     margin: 120px auto 0;
