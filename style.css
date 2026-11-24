@@ -263,6 +263,12 @@ html.theme-transition *::after {
     opacity: 0;
 }
 
+/* Set by the inline script in index.html while the header fonts load. */
+.fonts-pending .page-header .subtitle,
+.fonts-pending .page-header h1 {
+    animation-play-state: paused;
+}
+
 @keyframes fadeInUp {
     to {
         opacity: 1;

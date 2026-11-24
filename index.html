@@ -35,7 +35,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://use.typekit.net" crossorigin>
-    
+
+    <!-- Preload the two font files the header needs (name + subtitle), so they
+         download in parallel with the font stylesheets instead of after them.
+         These URLs must match what the stylesheets below serve: if the header
+         fonts ever flash again, re-check them against the two CSS files. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://use.typekit.net/af/d9acf1/00000000000000007735bb8e/31/l?primer=7fa3915bdafdf03041871920a205bef951d72bf64dd4c4460fb992e3ecc3a862&amp;fvd=n9&amp;v=3">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/ebgaramond/v33/SlGUmQSNjdsmc35JDF1K5GR1SDk_YAPI.woff2">
+
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     <!-- Adobe Fonts -->
     <link rel="stylesheet" href="https://use.typekit.net/siy1nvj.css">
@@ -152,6 +159,20 @@
             // Marks that JS is running so style.css can hold back the bio and
             // footer until app.js has built the poem grid (see .poems-ready).
             html.classList.add('js');
+
+            // Hold the header's entrance animation until its two fonts are
+            // ready, so the name and subtitle never appear in a fallback font
+            // and then swap (see .fonts-pending in style.css). Capped so a
+            // slow or blocked font host can't keep the header hidden.
+            if (document.fonts && document.fonts.load) {
+                html.classList.add('fonts-pending');
+                var showHeader = function() { html.classList.remove('fonts-pending'); };
+                Promise.all([
+                    document.fonts.load('900 56px "gill-sans-nova-condensed"'),
+                    document.fonts.load('600 30px "EB Garamond"')
+                ]).then(showHeader, showHeader);
+                setTimeout(showHeader, 2500);
+            }
             // localStorage throws (SecurityError) when the browser blocks
             // site data; treat that as "no saved theme" and follow the OS.
             var saved = null;
