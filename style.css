@@ -10,7 +10,7 @@
    and on toggle by the boot script in index.html). Every themed rule below
    references these variables and is written once.
 
-   Only the three --portrait-* variables hold non-color values, which
+   Only the two --portrait-* variables hold non-color values, which
    light-dark() can't express — they're mirrored in the two small dark-context
    blocks further down. */
 :root {
@@ -52,8 +52,7 @@
         light-dark(rgba(255, 255, 255, 0), rgba(32, 32, 32, 0)) 0%,
         light-dark(rgba(255, 255, 255, 0.72), rgba(32, 32, 32, 0.72)) 50%,
         light-dark(rgba(255, 255, 255, 0.96), rgba(32, 32, 32, 0.96)) 100%);
-    --portrait-light-display: block;
-    --portrait-dark-display: none;
+    --portrait-blend: multiply;
     --portrait-opacity: 1;
 }
 
@@ -71,15 +70,13 @@ html.dark-mode {
    manual toggle) each carry a copy. Keep these two small blocks in sync. */
 @media (prefers-color-scheme: dark) {
     :root:not(.light-mode) {
-        --portrait-light-display: none;
-        --portrait-dark-display: block;
+        --portrait-blend: normal;
         --portrait-opacity: 0.85;
     }
 }
 
 html.dark-mode {
-    --portrait-light-display: none;
-    --portrait-dark-display: block;
+    --portrait-blend: normal;
     --portrait-opacity: 0.85;
 }
 
@@ -320,21 +317,13 @@ html.theme-transition *::after {
     height: auto;
     flex-shrink: 0;
     opacity: var(--portrait-opacity);
+    /* Light mode multiplies the drawing's white paper into the page. In dark
+       mode, multiply would sink it into the background, so it's shown as a
+       plain, slightly dimmed print instead. */
+    mix-blend-mode: var(--portrait-blend);
     transform: scale(var(--bio-image-scale, 1.1));
     transform-origin: center center;
     transition: transform 0.15s ease-out;
-}
-
-/* Light mode shows the light portrait (multiply); dark mode swaps to the
-   dark portrait (screen). The display values come from the theme vars. */
-.bio-portrait-light {
-    display: var(--portrait-light-display);
-    mix-blend-mode: multiply;
-}
-
-.bio-portrait-dark {
-    display: var(--portrait-dark-display);
-    mix-blend-mode: screen;
 }
 
 .bio-text {
