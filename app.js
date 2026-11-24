@@ -837,6 +837,14 @@ modalPaper.addEventListener('scroll', rafThrottle(function() {
 
 // Dark mode toggle
 const darkModeToggle = document.querySelector('.dark-mode-toggle');
+// Remember the manual theme choice. localStorage throws when the browser
+// blocks site data; the toggle still works, it just isn't remembered.
+function saveTheme(theme) {
+    try {
+        localStorage.setItem('theme', theme);
+    } catch (e) {}
+}
+
 if (darkModeToggle) {
     darkModeToggle.addEventListener('click', function() {
         if (window._haptics) window._haptics.trigger('light');
@@ -850,12 +858,12 @@ if (darkModeToggle) {
         if (isDark) {
             html.classList.remove('dark-mode');
             html.classList.add('light-mode');
-            localStorage.setItem('theme', 'light');
+            saveTheme('light');
             window._setFavicon(false);
         } else {
             html.classList.remove('light-mode');
             html.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
+            saveTheme('dark');
             window._setFavicon(true);
         }
 

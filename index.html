@@ -152,7 +152,10 @@
             // Marks that JS is running so style.css can hold back the bio and
             // footer until app.js has built the poem grid (see .poems-ready).
             html.classList.add('js');
-            var saved = localStorage.getItem('theme');
+            // localStorage throws (SecurityError) when the browser blocks
+            // site data; treat that as "no saved theme" and follow the OS.
+            var saved = null;
+            try { saved = localStorage.getItem('theme'); } catch (e) {}
 
             function setFavicon(isDark) {
                 var color = isDark ? '%23ffffff' : '%23000000';
@@ -185,7 +188,7 @@
             // Follow OS theme changes. Any manual override is cleared the moment
             // the OS theme changes — the OS pref is the source of truth.
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-                localStorage.removeItem('theme');
+                try { localStorage.removeItem('theme'); } catch (err) {}
 
                 html.classList.add('theme-transition');
                 html.classList.remove('dark-mode', 'light-mode');
@@ -984,7 +987,9 @@ Die Kus…</p>
         window._haptics = haptics;
     </script>
 
-    <script src="poems.js"></script>
-    <script src="app.js"></script>
+    <!-- If either script fails to load, show the bio and footer right away
+         instead of waiting for the CSS fallback timer (see .poems-ready). -->
+    <script src="poems.js" onerror="document.documentElement.classList.add('poems-ready')"></script>
+    <script src="app.js" onerror="document.documentElement.classList.add('poems-ready')"></script>
 </body>
 </html>
