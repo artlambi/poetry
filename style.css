@@ -403,14 +403,17 @@ html.theme-transition *::after {
 
     .bio-container {
         flex-direction: column;
-        gap: 24px;
+        gap: 32px;
         align-items: center;
     }
 
+    /* No scroll zoom in the stacked layout (app.js skips it at this width):
+       a scaled portrait would overflow into the gap above the text. */
     .bio-portrait {
         width: 100%;
         height: auto;
         max-width: 360px;
+        transform: none;
     }
 
     .bio-text {
@@ -421,18 +424,6 @@ html.theme-transition *::after {
     .bio-text p {
         font-size: 20px;
         line-height: 30px;
-    }
-}
-
-/* The scroll zoom is off at this width (see app.js), so the portrait would
-   stay at its 1.1 start scale and overflow into the gap above the text. */
-@media (max-width: 768px) {
-    .bio-container {
-        gap: 32px;
-    }
-
-    .bio-portrait {
-        transform: none;
     }
 }
 
