@@ -769,8 +769,9 @@ if (!isMobile) {
 
 // Dark-mode portrait flashlight (see --portrait-flashlight in style.css).
 // With a mouse, the beam trails the pointer over the bio section and settles
-// back to its resting point when the pointer leaves. Touch screens and
-// reduced-motion users keep the resting beam from the stylesheet.
+// back to its resting point when the pointer leaves. On a phone, the beam
+// moves as the device is tilted. Reduced-motion users keep the resting beam
+// from the stylesheet.
 (function initPortraitFlashlight() {
     const portrait = document.querySelector('.bio-portrait');
     const section = document.querySelector('.bio-section');
@@ -832,6 +833,76 @@ if (!isMobile) {
         schedule();
     });
     section.addEventListener('pointerleave', release);
+
+    // ---- Phones: tilt the device to move the beam ----
+    if (!('DeviceOrientationEvent' in window)) return;
+    if (!window.matchMedia('(pointer: coarse)').matches) return;
+
+    const TILT_RANGE = 25;  // degrees of tilt, either way, for the full travel
+    const TILT_TRAVEL = 45; // how far the beam moves from its resting point, in %
+    let inView = false;
+    let neutral = null;     // how the phone was held when the portrait came into view
+    let lit = false;
+    let litCheckedAt = 0;
+
+    function clampUnit(value) {
+        return Math.max(-1, Math.min(1, value));
+    }
+
+    function onTilt(event) {
+        if (!inView || event.beta === null || event.gamma === null) return;
+
+        // The theme can change at any time; re-reading styles on every sensor
+        // reading would be wasteful, so look at most twice a second.
+        const now = performance.now();
+        if (now - litCheckedAt > 500) {
+            lit = isLit();
+            litCheckedAt = now;
+        }
+        if (!lit) { release(); return; }
+
+        // Map the device's axes to the screen's, whichever way up it is held.
+        const angle = (screen.orientation && screen.orientation.angle) || 0;
+        let across = event.gamma;
+        let down = event.beta;
+        if (angle === 90) { across = event.beta; down = -event.gamma; }
+        else if (angle === 270) { across = -event.beta; down = event.gamma; }
+        else if (angle === 180) { across = -event.gamma; down = -event.beta; }
+
+        // Tilt is measured from how the phone was being held, not from flat.
+        if (!neutral || neutral.angle !== angle) {
+            neutral = { across: across, down: down, angle: angle };
+        }
+        target = {
+            x: BEAM_HOME.x + clampUnit((across - neutral.across) / TILT_RANGE) * TILT_TRAVEL,
+            y: BEAM_HOME.y + clampUnit((down - neutral.down) / TILT_RANGE) * TILT_TRAVEL
+        };
+        schedule();
+    }
+
+    function listenForTilt() {
+        window.addEventListener('deviceorientation', onTilt);
+        new IntersectionObserver((entries) => {
+            inView = entries[0].isIntersecting;
+            neutral = null;
+            if (!inView) release();
+        }, { threshold: 0.25 }).observe(portrait);
+    }
+
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // iOS only hands out motion data after a tap and a system prompt, so
+        // ask the first time the lit portrait is tapped.
+        const askOnTap = () => {
+            if (!isLit()) return;
+            portrait.removeEventListener('click', askOnTap);
+            DeviceOrientationEvent.requestPermission()
+                .then((answer) => { if (answer === 'granted') listenForTilt(); })
+                .catch(() => {});
+        };
+        portrait.addEventListener('click', askOnTap);
+    } else {
+        listenForTilt();
+    }
 })();
 
 // Modal scroll handler for top fade effect and image zoom
