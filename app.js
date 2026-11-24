@@ -767,6 +767,73 @@ if (!isMobile) {
     updateBioImageZoom();
 }
 
+// Dark-mode portrait flashlight (see --portrait-flashlight in style.css).
+// With a mouse, the beam trails the pointer over the bio section and settles
+// back to its resting point when the pointer leaves. Touch screens and
+// reduced-motion users keep the resting beam from the stylesheet.
+(function initPortraitFlashlight() {
+    const portrait = document.querySelector('.bio-portrait');
+    const section = document.querySelector('.bio-section');
+    if (!portrait || !section) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const BEAM_HOME = { x: 50, y: 32 }; // keep in sync with --beam-x / --beam-y
+    const EASE = 0.14;
+    const beam = { x: BEAM_HOME.x, y: BEAM_HOME.y };
+    let target = null;
+    let frame = 0;
+
+    // The mask only exists in dark mode; in light mode there is no beam to move.
+    function isLit() {
+        const style = getComputedStyle(portrait);
+        const mask = style.maskImage || style.webkitMaskImage;
+        return !!mask && mask !== 'none';
+    }
+
+    function step() {
+        frame = 0;
+        const goal = target || BEAM_HOME;
+        beam.x += (goal.x - beam.x) * EASE;
+        beam.y += (goal.y - beam.y) * EASE;
+        const settled = Math.abs(goal.x - beam.x) < 0.1 && Math.abs(goal.y - beam.y) < 0.1;
+
+        if (settled && !target) {
+            // Back home: hand the beam back to the stylesheet.
+            beam.x = BEAM_HOME.x;
+            beam.y = BEAM_HOME.y;
+            portrait.style.removeProperty('--beam-x');
+            portrait.style.removeProperty('--beam-y');
+            return;
+        }
+        portrait.style.setProperty('--beam-x', beam.x.toFixed(1) + '%');
+        portrait.style.setProperty('--beam-y', beam.y.toFixed(1) + '%');
+        if (!settled) frame = requestAnimationFrame(step);
+    }
+
+    function schedule() {
+        if (!frame) frame = requestAnimationFrame(step);
+    }
+
+    function release() {
+        if (!target) return;
+        target = null;
+        schedule();
+    }
+
+    section.addEventListener('pointermove', (event) => {
+        if (event.pointerType !== 'mouse') return;
+        if (!isLit()) { release(); return; }
+        const rect = portrait.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        target = {
+            x: Math.max(-15, Math.min(115, (event.clientX - rect.left) / rect.width * 100)),
+            y: Math.max(-15, Math.min(115, (event.clientY - rect.top) / rect.height * 100))
+        };
+        schedule();
+    });
+    section.addEventListener('pointerleave', release);
+})();
+
 // Modal scroll handler for top fade effect and image zoom
 modalPaper.addEventListener('scroll', rafThrottle(function() {
     const currentScrollTop = this.scrollTop;

@@ -67,17 +67,28 @@ html.dark-mode {
 
 /* Non-color portrait values — the only part light-dark() can't express, so
    the two dark contexts (OS preference unless light is forced, and the
-   manual toggle) each carry a copy. Keep these two small blocks in sync. */
+   manual toggle) each carry a copy, along with the rule that switches on
+   the portrait's flashlight mask. Keep the two contexts in sync. */
 @media (prefers-color-scheme: dark) {
     :root:not(.light-mode) {
         --portrait-blend: normal;
-        --portrait-opacity: 0.85;
+        --portrait-opacity: 0.92;
+    }
+
+    :root:not(.light-mode) .bio-portrait {
+        -webkit-mask-image: var(--portrait-flashlight);
+        mask-image: var(--portrait-flashlight);
     }
 }
 
 html.dark-mode {
     --portrait-blend: normal;
-    --portrait-opacity: 0.85;
+    --portrait-opacity: 0.92;
+}
+
+html.dark-mode .bio-portrait {
+    -webkit-mask-image: var(--portrait-flashlight);
+    mask-image: var(--portrait-flashlight);
 }
 
 html, body {
@@ -321,8 +332,20 @@ html.theme-transition *::after {
     opacity: var(--portrait-opacity);
     /* Light mode multiplies the drawing's white paper into the page. In dark
        mode, multiply would sink it into the background, so it's shown as a
-       plain, slightly dimmed print instead. */
+       plain print lit by the flashlight mask below instead. */
     mix-blend-mode: var(--portrait-blend);
+    /* The torch: full light at the beam's centre, falling off towards the
+       corners but never to nothing, so the paper keeps its edges and the
+       signature stays legible. Applied as a mask by the two dark contexts
+       near the top of this file. --beam-x / --beam-y are where the beam
+       rests; app.js moves them to follow a mouse pointer (keep its BEAM_HOME
+       in sync). They are declared here, not on :root, so that changing them
+       re-resolves the gradient on this element only. */
+    --beam-x: 50%;
+    --beam-y: 32%;
+    --portrait-flashlight: radial-gradient(ellipse 133% 167% at var(--beam-x) var(--beam-y),
+        #000 0%, #000 12%, rgba(0, 0, 0, 0.87) 34%,
+        rgba(0, 0, 0, 0.73) 60%, rgba(0, 0, 0, 0.66) 100%);
     transform: scale(var(--bio-image-scale, 1.1));
     transform-origin: center center;
     transition: transform 0.15s ease-out;
