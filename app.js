@@ -776,19 +776,39 @@ if (!isMobile) {
     const portrait = document.querySelector('.bio-portrait');
     const section = document.querySelector('.bio-section');
     if (!portrait || !section) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const BEAM_HOME = { x: 50, y: 32 }; // keep in sync with --beam-x / --beam-y
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // The beam rests where the stylesheet puts it (--beam-x / --beam-y).
+    const restingStyle = getComputedStyle(portrait);
+    const BEAM_HOME = {
+        x: parseFloat(restingStyle.getPropertyValue('--beam-x')) || 50,
+        y: parseFloat(restingStyle.getPropertyValue('--beam-y')) || 32
+    };
     const EASE = 0.14;
     const beam = { x: BEAM_HOME.x, y: BEAM_HOME.y };
     let target = null;
     let frame = 0;
 
-    // The mask only exists in dark mode; in light mode there is no beam to move.
-    function isLit() {
-        const style = getComputedStyle(portrait);
-        const mask = style.maskImage || style.webkitMaskImage;
-        return !!mask && mask !== 'none';
+    // The mask only exists in dark mode; in light mode there is no beam to
+    // move. The theme can change at any time, but reading computed style on
+    // every pointer or sensor event would force needless style work, so the
+    // answer is reused for half a second.
+    let lit = false;
+    let litCheckedAt = -Infinity;
+    function isLit(fresh) {
+        const now = performance.now();
+        if (fresh || now - litCheckedAt > 500) {
+            const style = getComputedStyle(portrait);
+            const mask = style.maskImage || style.webkitMaskImage;
+            lit = !!mask && mask !== 'none';
+            litCheckedAt = now;
+        }
+        return lit;
+    }
+
+    function canMove() {
+        return !reducedMotion.matches && isLit();
     }
 
     function step() {
@@ -823,7 +843,7 @@ if (!isMobile) {
 
     section.addEventListener('pointermove', (event) => {
         if (event.pointerType !== 'mouse') return;
-        if (!isLit()) { release(); return; }
+        if (!canMove()) { release(); return; }
         const rect = portrait.getBoundingClientRect();
         if (!rect.width || !rect.height) return;
         target = {
@@ -840,64 +860,88 @@ if (!isMobile) {
 
     const TILT_RANGE = 25;  // degrees of tilt, either way, for the full travel
     const TILT_TRAVEL = 45; // how far the beam moves from its resting point, in %
-    let inView = false;
+    const RAD = Math.PI / 180;
     let neutral = null;     // how the phone was held when the portrait came into view
-    let lit = false;
-    let litCheckedAt = 0;
 
     function clampUnit(value) {
         return Math.max(-1, Math.min(1, value));
     }
 
-    function onTilt(event) {
-        if (!inView || event.beta === null || event.gamma === null) return;
-
-        // The theme can change at any time; re-reading styles on every sensor
-        // reading would be wasteful, so look at most twice a second.
-        const now = performance.now();
-        if (now - litCheckedAt > 500) {
-            lit = isLit();
-            litCheckedAt = now;
+    // Which way up the page is shown: 0, 90, 180 or 270.
+    function screenAngle() {
+        let angle = 0;
+        if (screen.orientation && typeof screen.orientation.angle === 'number') {
+            angle = screen.orientation.angle;
+        } else if (typeof window.orientation === 'number') {
+            angle = window.orientation; // older iOS Safari
         }
-        if (!lit) { release(); return; }
+        return ((angle % 360) + 360) % 360;
+    }
+
+    function onTilt(event) {
+        if (event.beta === null || event.gamma === null) return;
+        if (!canMove()) { release(); return; }
+
+        // beta and gamma jump when the phone passes vertical (gamma flips sign
+        // as beta crosses 90), which would throw the beam across the sheet.
+        // The direction of gravity they describe has no such jump, so the tilt
+        // is taken from that: roll is side to side, pitch is front to back.
+        const beta = event.beta * RAD;
+        const gamma = event.gamma * RAD;
+        const roll = Math.asin(clampUnit(Math.cos(beta) * Math.sin(gamma))) / RAD;
+        const pitch = Math.atan2(Math.sin(beta), Math.cos(beta) * Math.cos(gamma)) / RAD;
 
         // Map the device's axes to the screen's, whichever way up it is held.
-        const angle = (screen.orientation && screen.orientation.angle) || 0;
-        let across = event.gamma;
-        let down = event.beta;
-        if (angle === 90) { across = event.beta; down = -event.gamma; }
-        else if (angle === 270) { across = -event.beta; down = event.gamma; }
-        else if (angle === 180) { across = -event.gamma; down = -event.beta; }
+        const angle = screenAngle();
+        let across = roll;
+        let down = pitch;
+        if (angle === 90) { across = pitch; down = -roll; }
+        else if (angle === 270) { across = -pitch; down = roll; }
+        else if (angle === 180) { across = -roll; down = -pitch; }
 
         // Tilt is measured from how the phone was being held, not from flat.
         if (!neutral || neutral.angle !== angle) {
             neutral = { across: across, down: down, angle: angle };
         }
+        // Pitch wraps at 180 degrees (screen facing the floor); take the short way round.
+        const wrap = (degrees) => ((degrees + 540) % 360) - 180;
         target = {
-            x: BEAM_HOME.x + clampUnit((across - neutral.across) / TILT_RANGE) * TILT_TRAVEL,
-            y: BEAM_HOME.y + clampUnit((down - neutral.down) / TILT_RANGE) * TILT_TRAVEL
+            x: BEAM_HOME.x + clampUnit(wrap(across - neutral.across) / TILT_RANGE) * TILT_TRAVEL,
+            y: BEAM_HOME.y + clampUnit(wrap(down - neutral.down) / TILT_RANGE) * TILT_TRAVEL
         };
         schedule();
     }
 
+    // The orientation sensor only runs while the portrait is on screen.
     function listenForTilt() {
-        window.addEventListener('deviceorientation', onTilt);
         new IntersectionObserver((entries) => {
-            inView = entries[0].isIntersecting;
             neutral = null;
-            if (!inView) release();
+            if (entries[0].isIntersecting) {
+                isLit(true);
+                window.addEventListener('deviceorientation', onTilt);
+            } else {
+                window.removeEventListener('deviceorientation', onTilt);
+                release();
+            }
         }, { threshold: 0.25 }).observe(portrait);
     }
 
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         // iOS only hands out motion data after a tap and a system prompt, so
-        // ask the first time the lit portrait is tapped.
+        // ask when the lit portrait is tapped. Once there is an answer the
+        // tap is no longer needed; if the request itself fails, a later tap
+        // can try again.
+        let asking = false;
         const askOnTap = () => {
-            if (!isLit()) return;
-            portrait.removeEventListener('click', askOnTap);
+            if (asking || !canMove()) return;
+            asking = true;
             DeviceOrientationEvent.requestPermission()
-                .then((answer) => { if (answer === 'granted') listenForTilt(); })
-                .catch(() => {});
+                .then((answer) => {
+                    portrait.removeEventListener('click', askOnTap);
+                    if (answer === 'granted') listenForTilt();
+                })
+                .catch(() => {})
+                .then(() => { asking = false; });
         };
         portrait.addEventListener('click', askOnTap);
     } else {

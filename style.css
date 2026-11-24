@@ -338,9 +338,10 @@ html.theme-transition *::after {
        corners but never to nothing, so the paper keeps its edges and the
        signature stays legible. Applied as a mask by the two dark contexts
        near the top of this file. --beam-x / --beam-y are where the beam
-       rests; app.js moves them to follow a mouse pointer (keep its BEAM_HOME
-       in sync). They are declared here, not on :root, so that changing them
-       re-resolves the gradient on this element only. */
+       rests; app.js reads them, then moves them to follow a mouse pointer
+       or, on a phone, the tilt of the device. They are declared here, not
+       on :root, so that changing them re-resolves the gradient on this
+       element only. */
     --beam-x: 50%;
     --beam-y: 32%;
     --portrait-flashlight: radial-gradient(ellipse 133% 167% at var(--beam-x) var(--beam-y),
