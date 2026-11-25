@@ -613,7 +613,7 @@ html.theme-transition *::after {
 .poem-card-wrapper.visible {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.6s ease-out, transform 0.25s ease-in-out;
+    transition: opacity 0.6s ease-out, transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .poem-card-wrapper {
@@ -728,7 +728,12 @@ html.theme-transition *::after {
     align-items: center;
     text-align: center;
     padding: 48px 30px 0 30px;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                left 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     opacity: 1;
     outline: none;
@@ -862,9 +867,11 @@ html.theme-transition *::after {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.modal-paper .card-content.transitioning-out .poem-text .word {
+.modal-paper .card-content.transitioning-out .poem-text {
     opacity: 0;
     transform: translateY(-10px);
+    transition: opacity 0.2s cubic-bezier(0.23, 1, 0.32, 1),
+                transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .modal-paper .card-content.transitioning-in .poem-text .word {
@@ -880,11 +887,11 @@ html.theme-transition *::after {
 
 .modal-paper .poem-text.words-in .word {
     animation: word-fade-in 0.3s ease both;
-    animation-delay: calc(var(--i, 0) * 15ms);
+    animation-delay: calc(var(--i, 0) * var(--word-step, 15ms));
 }
 
 .modal-paper .card-content.transitioning-out .title {
-    animation: titleSlideOut 0.4s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+    animation: titleSlideOut 0.25s cubic-bezier(0.4, 0, 0.6, 1) forwards;
 }
 
 .modal-paper .card-content.transitioning-in .title {
@@ -894,7 +901,7 @@ html.theme-transition *::after {
 }
 
 .modal-paper .card-content.transitioning-out .poem-image-container {
-    animation: imageSlideOut 0.4s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+    animation: imageSlideOut 0.25s cubic-bezier(0.4, 0, 0.6, 1) forwards;
 }
 
 .modal-paper .card-content.transitioning-in .poem-image-container {
@@ -1157,8 +1164,10 @@ html.theme-transition *::after {
     z-index: 0;
 }
 
-.poem-nav-btn:hover {
-    transform: scale(1.05);
+@media (hover: hover) and (pointer: fine) {
+    .poem-nav-btn:hover {
+        transform: scale(1.05);
+    }
 }
 
 .poem-nav-btn:active {
@@ -1202,11 +1211,13 @@ html.theme-transition *::after {
     color: var(--btn-color);
     position: relative;
     box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0);
-    transition: box-shadow 0.5s ease, transform 0.15s ease-out;
+    transition: box-shadow 0.2s ease, transform 0.15s ease-out;
 }
 
-.modal-btn:hover {
-    box-shadow: inset 0 0 0 40px var(--btn-hover-bg);
+@media (hover: hover) and (pointer: fine) {
+    .modal-btn:hover {
+        box-shadow: inset 0 0 0 40px var(--btn-hover-bg);
+    }
 }
 
 .modal-btn:active {
@@ -1235,11 +1246,13 @@ html.theme-transition *::after {
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     z-index: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.2s ease;
 }
 
-.modal-btn:hover::before {
-    opacity: 0;
+@media (hover: hover) and (pointer: fine) {
+    .modal-btn:hover::before {
+        opacity: 0;
+    }
 }
 
 .modal-btn svg {
@@ -1249,11 +1262,13 @@ html.theme-transition *::after {
     position: relative;
     z-index: 1;
     opacity: 0.72;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.2s ease;
 }
 
-.modal-btn:hover svg {
-    opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+    .modal-btn:hover svg {
+        opacity: 1;
+    }
 }
 
 .modal-btn .tooltip {
@@ -1275,15 +1290,19 @@ html.theme-transition *::after {
     pointer-events: none;
 }
 
-.modal-btn:hover .tooltip {
-    opacity: 1;
-    visibility: visible;
-    transition-delay: 0.7s;
+@media (hover: hover) and (pointer: fine) {
+    .modal-btn:hover .tooltip {
+        opacity: 1;
+        visibility: visible;
+        transition-delay: 0.7s;
+    }
 }
 
 /* Instant tooltips after first hover */
-.instant-tooltips .modal-btn:hover .tooltip {
-    transition-delay: 0s;
+@media (hover: hover) and (pointer: fine) {
+    .instant-tooltips .modal-btn:hover .tooltip {
+        transition-delay: 0s;
+    }
 }
 
 /* Close button specific */
@@ -1291,8 +1310,10 @@ html.theme-transition *::after {
     transition: d 0.2s ease;
 }
 
-.modal-close:hover svg path {
-    d: path("M15.25,15.25 L4.75,4.75 M15.25,4.75 L4.75,15.25");
+@media (hover: hover) and (pointer: fine) {
+    .modal-close:hover svg path {
+        d: path("M15.25,15.25 L4.75,4.75 M15.25,4.75 L4.75,15.25");
+    }
 }
 
 /* Share button specific */
@@ -1329,9 +1350,11 @@ html.theme-transition *::after {
     will-change: transform;
 }
 
-.modal-share:hover:not(.copied) .morph-path-1,
-.modal-share:hover:not(.copied) .morph-path-2 {
-    animation: arrowBounce 0.3s ease;
+@media (hover: hover) and (pointer: fine) {
+    .modal-share:hover:not(.copied) .morph-path-1,
+    .modal-share:hover:not(.copied) .morph-path-2 {
+        animation: arrowBounce 0.3s ease;
+    }
 }
 
 @keyframes arrowBounce {
@@ -1352,9 +1375,11 @@ html.theme-transition *::after {
     transition-delay: 0s;
 }
 
-.modal-share:hover .tooltip-copied {
-    opacity: 0;
-    visibility: hidden;
+@media (hover: hover) and (pointer: fine) {
+    .modal-share:hover .tooltip-copied {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
 
 .modal-share.copied .tooltip-copied {
@@ -1400,8 +1425,17 @@ html.theme-transition *::after {
     pointer-events: auto; /* Enable to detect hover and clicks */
 }
 
-.modal-nav:hover {
-    opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+    .modal-nav:hover {
+        opacity: 1;
+    }
+}
+
+/* Touch devices can't hover, so the edge arrows are always shown there. */
+@media (hover: none), (pointer: coarse) {
+    .modal-overlay.active .modal-nav {
+        opacity: 1;
+    }
 }
 
 .modal-nav-btn {
@@ -1417,11 +1451,13 @@ html.theme-transition *::after {
     color: var(--btn-color);
     position: relative;
     box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0);
-    transition: box-shadow 0.5s ease, transform 0.15s ease-out;
+    transition: box-shadow 0.2s ease, transform 0.15s ease-out;
 }
 
-.modal-nav-btn:hover {
-    box-shadow: inset 0 0 0 40px var(--btn-hover-bg);
+@media (hover: hover) and (pointer: fine) {
+    .modal-nav-btn:hover {
+        box-shadow: inset 0 0 0 40px var(--btn-hover-bg);
+    }
 }
 
 .modal-nav-btn:active {
@@ -1450,11 +1486,13 @@ html.theme-transition *::after {
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     z-index: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.2s ease;
 }
 
-.modal-nav-btn:hover::before {
-    opacity: 0;
+@media (hover: hover) and (pointer: fine) {
+    .modal-nav-btn:hover::before {
+        opacity: 0;
+    }
 }
 
 .modal-nav-btn svg {
@@ -1464,19 +1502,25 @@ html.theme-transition *::after {
     position: relative;
     z-index: 1;
     opacity: 0.72;
-    transition: opacity 0.5s ease, transform 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.modal-nav-btn:hover svg {
-    opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+    .modal-nav-btn:hover svg {
+        opacity: 1;
+    }
 }
 
-.modal-nav.prev .modal-nav-btn:hover svg {
-    transform: translateX(-2px);
+@media (hover: hover) and (pointer: fine) {
+    .modal-nav.prev .modal-nav-btn:hover svg {
+        transform: translateX(-2px);
+    }
 }
 
-.modal-nav.next .modal-nav-btn:hover svg {
-    transform: translateX(2px);
+@media (hover: hover) and (pointer: fine) {
+    .modal-nav.next .modal-nav-btn:hover svg {
+        transform: translateX(2px);
+    }
 }
 
 /* Hide nav arrows on mobile */
@@ -1586,4 +1630,119 @@ noscript .poem-article p {
     font-style: italic;
     color: var(--text-body);
     line-height: 1.8;
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion. Fades and colour changes stay; movement, zoom and
+   blur go. Kept at the end of the file so it wins on source order.
+   ------------------------------------------------------------------ */
+@keyframes reduced-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes reduced-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Page-load and scroll entrances fade in place. */
+    .page-header .subtitle,
+    .page-header h1,
+    .poem-card-wrapper,
+    .poem-card-wrapper .hover-title,
+    .bio-text p {
+        transform: none;
+    }
+
+    /* The rotating subtitle cross-fades instead of sliding. */
+    .page-header .subtitle-text,
+    .page-header .subtitle-text.active,
+    .page-header .subtitle-text.exit {
+        transform: none;
+    }
+
+    /* The header only dims on scroll. */
+    .page-header.scrolled {
+        transform: none;
+        filter: none;
+    }
+
+    /* No 3D tilt (app.js sets it inline, hence !important). */
+    .poem-card {
+        transform: none !important;
+    }
+
+    /* No scroll-linked zoom. */
+    .bio-portrait,
+    .modal-paper.fullscreen .poem-image {
+        transform: none;
+    }
+
+    /* The poem opens and closes with a fade (see app.js); its contents
+       must not morph underneath. */
+    .modal-paper .card-content,
+    .modal-paper .poem-text {
+        transition: none;
+    }
+
+    /* The sticky title fades in where it sits. */
+    .modal-paper.fullscreen .title {
+        transition: opacity 0.3s ease-out;
+    }
+
+    .modal-paper.fullscreen .title.sticky {
+        filter: none;
+    }
+
+    /* Changing poem: fade out, fade in, no sliding, no stagger. */
+    .modal-paper .card-content.transitioning-out .poem-text {
+        transform: none;
+        transition: opacity 0.2s ease;
+    }
+
+    .modal-paper .card-content.transitioning-out .title,
+    .modal-paper .card-content.transitioning-out .poem-image-container {
+        animation-name: reduced-fade-out;
+    }
+
+    .modal-paper .card-content.transitioning-in .title,
+    .modal-paper .card-content.transitioning-in .poem-image-container {
+        animation-name: reduced-fade-in;
+    }
+
+    .modal-paper .card-content.transitioning-in .poem-text .word {
+        transform: none;
+    }
+
+    .modal-paper .poem-text.words-in .word {
+        animation-name: reduced-fade-in;
+        animation-delay: 0s;
+    }
+
+    /* Decorative hover animations are dropped. */
+    .page-footer .signature path,
+    .modal-paper.fullscreen .modal-signature path,
+    .modal-share .morph-path-1,
+    .modal-share .morph-path-2 {
+        animation: none !important;
+    }
+}
+
+/* The phone navigation bar fades instead of sliding up. */
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+    .modal-overlay.active .poem-nav-buttons {
+        transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.active:not(.scrolling-up) .poem-nav-buttons {
+        transform: none !important;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .modal-overlay.active.scrolling-up .poem-nav-buttons {
+        opacity: 1;
+    }
 }

@@ -55,6 +55,15 @@ function rafThrottle(handler) {
     };
 }
 
+// Visitors who ask for reduced motion get fades in place of movement. The
+// stylesheet handles most of it (see the end of style.css); the script only
+// needs this for the poem's open/close and for keyboard scrolling.
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function scrollBehavior() {
+    return prefersReducedMotion.matches ? 'auto' : 'smooth';
+}
+
 const state = {
     currentIndex: 0,
     clickedCard: null,
@@ -64,6 +73,8 @@ const state = {
     isScrollingUp: false,
     isNavigating: false,
     navTimeout: null,
+    wordsTimeout: null,
+    enterTimeout: null,
 };
 const grid = document.getElementById('grid');
 const modal = document.getElementById('modal');
@@ -109,6 +120,9 @@ function wrapWords(text) {
 // Trigger the staggered word reveal. The actual timing is in CSS; we just
 // toggle .words-in (with a reflow) so re-entry restarts the animation.
 function animateWordsIn(container) {
+    // Spread the reveal over at most 400ms, whatever the poem's length.
+    const count = container.querySelectorAll('.word').length || 1;
+    container.style.setProperty('--word-step', Math.min(15, 400 / count).toFixed(2) + 'ms');
     container.classList.remove('words-in');
     void container.offsetWidth;
     container.classList.add('words-in');
@@ -239,12 +253,23 @@ document.documentElement.classList.add('poems-ready');
 // this, the pending timeout in navigatePoem fires after the modal is closed
 // or reopened: it swaps the modal content, rewrites the hash, and hides the
 // target poem's grid card (opacity 0) with nothing left to restore it.
+// Stop the timers that finish a poem's entrance, and undo what they would
+// have undone, so an interrupted entrance can't act on the next poem.
+function clearEnterTimers() {
+    clearTimeout(state.wordsTimeout);
+    clearTimeout(state.enterTimeout);
+    state.wordsTimeout = null;
+    state.enterTimeout = null;
+    modalTitle.style.opacity = '';
+}
+
 function cancelPendingNavigation() {
     if (state.navTimeout) {
         clearTimeout(state.navTimeout);
         state.navTimeout = null;
     }
     state.isNavigating = false;
+    clearEnterTimers();
     // Drop the fade-out/fade-in classes so their `forwards` animations can't
     // leave the next modal's title and words invisible.
     modalPaper.querySelector('.card-content').classList.remove('transitioning-out', 'transitioning-in');
@@ -289,6 +314,7 @@ function openModal(index, card, viaKeyboard = false) {
     
     // Set initial position to match the card
     modalPaper.style.transition = 'none';
+    if (prefersReducedMotion.matches) modalPaper.style.opacity = '0';
     modalPaper.classList.remove('fullscreen');
     modalPaper.style.top = rect.top + 'px';
     modalPaper.style.left = rect.left + 'px';
@@ -303,13 +329,14 @@ function openModal(index, card, viaKeyboard = false) {
     modal.setAttribute('aria-hidden', 'false');
     
     // Animate to fullscreen
-    modalPaper.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+    modalPaper.style.transition = prefersReducedMotion.matches ? 'opacity 0.2s ease' : '';
     modalPaper.style.top = '0';
     modalPaper.style.left = '0';
     modalPaper.style.width = '100vw';
     modalPaper.style.height = '100vh';
     modalPaper.style.bottom = '';
     modalPaper.classList.add('fullscreen');
+    if (prefersReducedMotion.matches) modalPaper.style.opacity = '1';
     modal.classList.remove('scrolling-up'); // Ensure nav is hidden on open
 
     // Reset scroll tracking
@@ -352,7 +379,8 @@ function closeModal() {
     // Reset share button state
     shareBtn.classList.remove('copied');
 
-    const isMobile = window.innerWidth <= 768;
+    // The fade-only close: phones, and anyone who asked for reduced motion.
+    const fadeOnly = window.innerWidth <= 768 || prefersReducedMotion.matches;
     
     if (state.clickedCard) {
         // Reset modal scroll position and remove scrolled class
@@ -377,7 +405,7 @@ function closeModal() {
         }
         
         // Remove settled so inline styles take effect again for close animation
-        if (isMobile) {
+        if (fadeOnly) {
             // On mobile: fade out modal, then restore scroll, then show card
             modalPaper.style.transition = 'opacity 0.25s ease';
             modalPaper.style.opacity = '0';
@@ -513,6 +541,10 @@ function navigatePoem(direction) {
 
     const cardContent = modalPaper.querySelector('.card-content');
 
+    // A previous poem may still be arriving: end its entrance cleanly first.
+    clearEnterTimers();
+    cardContent.classList.remove('transitioning-in');
+
     // Start exit animation
     cardContent.classList.add('transitioning-out');
 
@@ -531,6 +563,7 @@ function navigatePoem(direction) {
         modalTitle.style.opacity = '0';
 
         // Wrap words and set initial state (invisible)
+        modalText.classList.remove('words-in');
         modalText.innerHTML = wrapWords(poem.text);
 
         // Update image if available
@@ -566,17 +599,17 @@ function navigatePoem(direction) {
         cardContent.classList.add('transitioning-in');
         
         // Animate words in sequence (CSS-driven stagger; see style.css)
-        setTimeout(() => {
+        state.wordsTimeout = setTimeout(() => {
             animateWordsIn(modalText);
         }, 100);
         
         // Remove enter animation class after it completes
-        setTimeout(() => {
+        state.enterTimeout = setTimeout(() => {
             cardContent.classList.remove('transitioning-in');
             // Reset title opacity
             modalTitle.style.opacity = '';
         }, 1000);
-    }, 400);
+    }, 250);
 }
 
 modal.addEventListener('click', (e) => {
@@ -617,11 +650,11 @@ document.addEventListener('keydown', (e) => {
     } else if (e.key === 'ArrowUp') {
         // Scroll up
         e.preventDefault();
-        modalPaper.scrollBy({ top: -40, behavior: 'smooth' });
+        modalPaper.scrollBy({ top: -40, behavior: scrollBehavior() });
     } else if (e.key === 'ArrowDown') {
         // Scroll down
         e.preventDefault();
-        modalPaper.scrollBy({ top: 40, behavior: 'smooth' });
+        modalPaper.scrollBy({ top: 40, behavior: scrollBehavior() });
     } else if (e.key === 'ArrowLeft') {
         // Navigate to previous poem (always works)
         e.preventDefault();
@@ -634,16 +667,16 @@ document.addEventListener('keydown', (e) => {
         navigatePoem(1);
     } else if (e.key === 'PageUp') {
         e.preventDefault();
-        modalPaper.scrollBy({ top: -window.innerHeight * 0.8, behavior: 'smooth' });
+        modalPaper.scrollBy({ top: -window.innerHeight * 0.8, behavior: scrollBehavior() });
     } else if (e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
-        modalPaper.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
+        modalPaper.scrollBy({ top: window.innerHeight * 0.8, behavior: scrollBehavior() });
     } else if (e.key === 'Home') {
         e.preventDefault();
-        modalPaper.scrollTo({ top: 0, behavior: 'smooth' });
+        modalPaper.scrollTo({ top: 0, behavior: scrollBehavior() });
     } else if (e.key === 'End') {
         e.preventDefault();
-        modalPaper.scrollTo({ top: modalPaper.scrollHeight, behavior: 'smooth' });
+        modalPaper.scrollTo({ top: modalPaper.scrollHeight, behavior: scrollBehavior() });
     }
 });
 
@@ -730,7 +763,7 @@ cardWrappers.forEach((wrapper, index) => {
     const row = Math.floor(index / cardsPerRow);
     setTimeout(() => {
         wrapper.classList.add('visible');
-    }, 500 + (row * 120));
+    }, 300 + (row * 120));
 });
 
 // Bio text scroll animation
