@@ -100,7 +100,10 @@ html, body {
    the body is position: fixed (the scroll lock below), which makes it a
    stacking context; the portrait's multiply blend then only sees what is
    painted inside the body, and without this it loses the page colour and
-   shows its white paper. */
+   shows its white paper.
+   Keep this background identical to the body's: outside a poem the body only
+   paints its own box, one viewport tall, and the rest of the page shows this
+   one, so a difference would draw a seam across the page. */
 html {
     background: var(--bg-color);
 }
@@ -124,18 +127,15 @@ body > *:not(.page-footer):not(.bio-section) {
     z-index: 1;
 }
 
-html.modal-open,
+/* Scroll lock while a poem is open (app.js sets the class and `top`). The
+   height is auto, not the usual 100%, so the locked body grows to its content
+   and its background reaches the portrait further down the page (see the html
+   rule above). */
 body.modal-open {
     overflow: hidden;
-    height: 100%;
+    height: auto;
     position: fixed;
     width: 100%;
-}
-
-/* Let the locked body grow to its content so its background reaches the
-   portrait further down the page (see the html rule above). */
-body.modal-open {
-    height: auto;
 }
 
 .page-header {
