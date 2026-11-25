@@ -95,6 +95,16 @@ html, body {
     height: 100%;
 }
 
+/* The page colour is on <html> as well as <body> so that the body paints its
+   own background instead of handing it to the canvas. While a poem is open
+   the body is position: fixed (the scroll lock below), which makes it a
+   stacking context; the portrait's multiply blend then only sees what is
+   painted inside the body, and without this it loses the page colour and
+   shows its white paper. */
+html {
+    background: var(--bg-color);
+}
+
 body {
     min-height: 100vh;
     background: var(--bg-color);
@@ -120,6 +130,12 @@ body.modal-open {
     height: 100%;
     position: fixed;
     width: 100%;
+}
+
+/* Let the locked body grow to its content so its background reaches the
+   portrait further down the page (see the html rule above). */
+body.modal-open {
+    height: auto;
 }
 
 .page-header {
