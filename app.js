@@ -249,10 +249,6 @@ displayPoems.forEach((poem, index) => {
 // without appearing right under the header first (see style.css).
 document.documentElement.classList.add('poems-ready');
 
-// Cancel a poem navigation that is still in its fade-out window. Without
-// this, the pending timeout in navigatePoem fires after the modal is closed
-// or reopened: it swaps the modal content, rewrites the hash, and hides the
-// target poem's grid card (opacity 0) with nothing left to restore it.
 // Stop the timers that finish a poem's entrance, and undo what they would
 // have undone, so an interrupted entrance can't act on the next poem.
 function clearEnterTimers() {
@@ -263,6 +259,10 @@ function clearEnterTimers() {
     modalTitle.style.opacity = '';
 }
 
+// Cancel a poem navigation that is still in its fade-out window. Without
+// this, the pending timeout in navigatePoem fires after the modal is closed
+// or reopened: it swaps the modal content, rewrites the hash, and hides the
+// target poem's grid card (opacity 0) with nothing left to restore it.
 function cancelPendingNavigation() {
     if (state.navTimeout) {
         clearTimeout(state.navTimeout);
