@@ -346,6 +346,7 @@ function openModal(index, card, viaKeyboard = false) {
     // Lock body scroll
     document.body.style.top = `-${state.savedScrollPosition}px`;
     document.body.classList.add('modal-open');
+    document.documentElement.classList.add('poem-open');
 
     // Update theme-color to match modal background so Safari toolbar is seamless
     var isDark = document.documentElement.classList.contains('dark-mode');
@@ -372,6 +373,9 @@ function restoreCardFocus() {
 function closeModal() {
     cancelPendingNavigation();
 
+    // Give the page its own colour back; it fades while the poem closes.
+    document.documentElement.classList.remove('poem-open');
+
     // Restore theme-color to match page background
     var isDark = document.documentElement.classList.contains('dark-mode');
     document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121212' : '#ecebeb');
@@ -379,8 +383,9 @@ function closeModal() {
     // Reset share button state
     shareBtn.classList.remove('copied');
 
-    // The fade-only close: phones, and anyone who asked for reduced motion.
-    const fadeOnly = window.innerWidth <= 768 || prefersReducedMotion.matches;
+    // Visitors who asked for reduced motion get a plain fade; everyone else,
+    // phones included, sees the poem shrink back onto its card.
+    const fadeOnly = prefersReducedMotion.matches;
     
     if (state.clickedCard) {
         // Reset modal scroll position and remove scrolled class
@@ -406,7 +411,7 @@ function closeModal() {
         
         // Remove settled so inline styles take effect again for close animation
         if (fadeOnly) {
-            // On mobile: fade out modal, then restore scroll, then show card
+            // Fade out the poem, then restore scroll, then show the card
             modalPaper.style.transition = 'opacity 0.25s ease';
             modalPaper.style.opacity = '0';
             
@@ -437,7 +442,7 @@ function closeModal() {
                 navNext.style.cssText = '';
             }, 250);
         } else {
-            // On desktop: full position animation
+            // Shrink the poem back onto its card
             // Unlock scroll and restore position
             
             document.body.classList.remove('modal-open');

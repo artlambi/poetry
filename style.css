@@ -108,6 +108,21 @@ html {
     background: var(--bg-color);
 }
 
+/* While a poem is open the page behind it takes the poem's colour, fading
+   in step with the poem growing from its card. Safari paints the strips
+   behind the status bar and the address bar from the page background (it
+   ignores theme-color in a normal tab), so without this they stay grey
+   above and below the white poem. */
+html,
+body {
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.poem-open,
+html.poem-open body {
+    background-color: var(--paper-color);
+}
+
 body {
     min-height: 100vh;
     background: var(--bg-color);
