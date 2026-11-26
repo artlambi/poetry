@@ -120,9 +120,6 @@ function wrapWords(text) {
 // Trigger the staggered word reveal. The actual timing is in CSS; we just
 // toggle .words-in (with a reflow) so re-entry restarts the animation.
 function animateWordsIn(container) {
-    // Spread the reveal over at most 400ms, whatever the poem's length.
-    const count = container.querySelectorAll('.word').length || 1;
-    container.style.setProperty('--word-step', Math.min(15, 400 / count).toFixed(2) + 'ms');
     container.classList.remove('words-in');
     void container.offsetWidth;
     container.classList.add('words-in');
@@ -609,7 +606,7 @@ function navigatePoem(direction) {
             // Reset title opacity
             modalTitle.style.opacity = '';
         }, 1000);
-    }, 250);
+    }, 400);
 }
 
 modal.addEventListener('click', (e) => {
